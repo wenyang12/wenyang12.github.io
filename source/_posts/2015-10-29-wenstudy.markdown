@@ -1,0 +1,26 @@
+---
+layout: post
+title: "wenstudy"
+date: 2015-10-29 15:41:51 +0800
+comments: true
+categories: [html,js]
+---
+# 我是一级标题
+## 我是二级标题
+
+**加粗**
+
+`标量`
+
+- 我是列表
+	- 我是二级列表
+	- 我是二级列表
+- 我是列表
+
+>引用
+
+[极客学院](http://www.jikexueyuan.com/)
+
+![image](http://cdn.w3cfuns.com/resource/images/extend/logo/w3cfuns_logo_hd.png)
+
+{% video http://static-jkxy.qiniudn.com/event/jkxy_profile20150318.mp4 640 320  %}

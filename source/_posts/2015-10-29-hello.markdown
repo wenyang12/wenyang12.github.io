@@ -1,0 +1,8 @@
+---
+layout: post
+title: "hello"
+date: 2015-10-29 15:41:51 +0800
+comments: true
+categories: [html,js]
+---
+# hello my name is wen
