@@ -1,11 +1,11 @@
 $blockquote: $type-border !default;
-$sans: "PT Sans", "Helvetica Neue", Arial, sans-serif !default;
+$sans: Lato,"Microsoft Jhenghei","Hiragino Sans GB","Microsoft YaHei",sans-serif !default;
 $serif: "PT Serif", Georgia, Times, "Times New Roman", serif !default;
 $mono: Menlo, Monaco, "Andale Mono", "lucida console", "Courier New", monospace !default;
-$heading-font-family: "PT Serif", "Georgia", "Helvetica Neue", Arial, sans-serif !default;
+$heading-font-family: Lato,"Microsoft Jhenghei","Hiragino Sans GB","Microsoft YaHei",sans-serif !default;
 $header-title-font-family: $heading-font-family !default;
 $header-subtitle-font-family: $heading-font-family !default;
-
+$lato: Lato,"Microsoft Jhenghei","Hiragino Sans GB","Microsoft YaHei",sans-serif !default;
 // Fonts
 .heading {
   font-family: $heading-font-family;

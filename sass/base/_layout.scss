@@ -45,7 +45,6 @@ $header-padding-bottom: 1.5em !default;
 
 body {
   -webkit-text-size-adjust: none;
-  max-width: $max-width;
   position: relative;
   margin: 0 auto;
   > header, > nav, > footer, #content > article, #content > div > article, #content > div > section {
@@ -136,6 +135,7 @@ body.sidebar-footer {
   #main {
     padding: 0;
     margin: 0 auto;
+    max-width:$max-width;
   }
   #content {
     overflow: visible;
@@ -188,5 +188,9 @@ body.sidebar-footer {
   @media only screen and (min-width: 768px) {
     ul, ol { margin-left: 0; }
   }
+}
+.wrapper,body>header>hgroup {
+  max-width: $max-width;
+  margin: 0 auto;
 }
 
