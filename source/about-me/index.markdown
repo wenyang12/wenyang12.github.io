@@ -15,7 +15,7 @@ footer: true
 >QQ: 408523614
 
 ## 基本信息
->男/88后/射手座
+>男/88/射手座
 
 >所在城市：广东省深圳市
 
@@ -33,7 +33,7 @@ footer: true
 >喜欢专研javascript和Node.js以及目前很火的ReactJS
 
 ## 技能清单
->前端框架：jQuery/Zepto/Boostrap/ReactJS/Angularjs/requirejs
+>前端框架：jQuery/Zepto/Bootstrap/ReactJS/Angularjs/requirejs
 
 >前端工具：LESS/SASS
 

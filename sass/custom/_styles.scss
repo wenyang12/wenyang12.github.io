@@ -1,2 +1,80 @@
 // This File is imported last, and will override other styles in the cascade
 // Add styles here to make changes without digging in too much
+$img-url:image-url("me.jpg");
+$time-node-rotate:rotate(-75deg);
+.about-me{
+  >.thumb{
+    >span{
+      background: $img-url no-repeat;
+      background-size: 12.5em 10em;
+      width: 12.5em;
+      height: 10em;
+      margin: 1em auto 0.5em;
+      display: block;
+    }
+    >p{
+      width: 100%;
+      text-align: center;
+    }
+  }
+  >p{
+    text-align: center;
+  }
+  >p > a{
+    margin-right: 5px;
+  }
+}
+header{
+  >.time-node {
+    position: absolute;
+    display: inline-block;
+    height: 32px;
+    margin: 15px;
+    overflow: hidden;
+    width: 32px;
+    left: -5em;
+    top: -1em;
+    -webkit-transform: $time-node-rotate;
+    -moz-transform: $time-node-rotate;
+    -ms-transform: $time-node-rotate;
+    -o-transform: $time-node-rotate;
+    transform: $time-node-rotate;
+    >.golf_stick{
+      background: #333 ;
+      border-radius: 50px 50px 10px 10px;
+      bottom: 2px;
+      height: 25px;
+      left: 15px;
+      position: absolute;
+      width: 2px;
+    }
+    >.golf_ball{
+      background: #333 ;
+      border-radius: 50px;
+      height: 14px;
+      left: 9px;
+      position: absolute;
+      top: 2px;
+      width: 14px;
+    }
+    >.golf_ball:after{
+      background: #ddd ;
+      border-radius: 50px;
+      content: "";
+      height: 3px;
+      left: 3px;
+      position: absolute;
+      top: 3px;
+      width: 3px;
+    }
+    >.golf_stick:after{
+      background: #333 ;
+      bottom: 0;
+      content: "";
+      height: 2px;
+      left: -3px;
+      position: absolute;
+      width: 8px;
+    }
+  }
+}

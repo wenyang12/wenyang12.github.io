@@ -3,17 +3,17 @@
 # ----------------------- #
 
 url: http://wenyang12.github.io
-title: 温衡曲的博客
-subtitle: 不断记录，不断前行，不断反思。。。
-author: 温衡曲
+title: 爱码钱湍的博客
+subtitle: 不断记录，不断反思，不断前行。。。
+author: 爱码钱湍
 simple_search: https://www.baidu.com
-description:
+description: 爱码钱湍的博客，用于记录博客，分享博客，在阅读中不断前行
 
 # Default date format is "ordinal" (resulting in "July 22nd 2007")
 # You can customize the format as defined in
 # http://www.ruby-doc.org/core-1.9.2/Time.html#method-i-strftime
 # Additionally, %o will give you the ordinal representation of the day
-date_format: "ordinal"
+date_format: "%Y年%m月%d日"
 
 # RSS / Email (optional) subscription links (change if using something like Feedburner)
 subscribe_rss: /atom.xml
@@ -51,7 +51,7 @@ titlecase: true       # Converts page and post titles to titlecase
 
 # list each of the sidebar modules you want to include, in the order you want them to appear.
 # To add custom asides, create files in /source/_includes/custom/asides/ and add them to the list like 'custom/asides/custom_aside_name.html'
-default_asides: [asides/recent_posts.html, asides/github.html, asides/delicious.html, asides/pinboard.html, asides/googleplus.html]
+default_asides: [asides/recent_posts.html, asides/github.html, asides/delicious.html, asides/pinboard.html, asides/googleplus.html, custom/asides/about.html]
 
 # Each layout uses the default asides, but they can have their own asides instead. Simply uncomment the lines below
 # and add an array with the asides you want to use.
