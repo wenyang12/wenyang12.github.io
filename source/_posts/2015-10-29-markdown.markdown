@@ -3,7 +3,8 @@ layout: post
 title: "markdown语法示例"
 date: 2015-10-29 15:41:51 +0800
 comments: true
-categories: [markdown,js]
+categories: [markdown]
+tags: [markdown]
 ---
     # 我是一级标题
 # 我是一级标题

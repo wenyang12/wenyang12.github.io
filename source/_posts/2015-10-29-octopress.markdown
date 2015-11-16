@@ -3,7 +3,8 @@ layout: post
 title: "octopress 搭建博客静态网站"
 date: 2015-10-29 15:41:51 +0800
 comments: true
-categories: [octopress，markdown]
+categories: [octopress, markdown]
+tags: [octopress, markdown]
 ---
 ## 一、环境配置
 - 安装以下软件
@@ -13,7 +14,7 @@ categories: [octopress，markdown]
         - MarkdownPad windows下Markdown语法编辑器
 
 ## 二、开始安装Octopress
-- 克隆 Octopress 至本地  可以到[Octopress](http://http://octopress.org/)官网，也有介绍
+- 克隆 Octopress 至本地  可以到[Octopress](http://octopress.org/)官网，也有介绍
 ```
 git clone git://github.com/imathis/octopress.git octopress
 ```
