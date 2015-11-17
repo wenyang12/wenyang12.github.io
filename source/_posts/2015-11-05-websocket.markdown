@@ -4,7 +4,7 @@ title: "websocket 聊天室"
 date: 2015-11-05 13:51:10 +0800
 comments: true
 categories: [websoket, 聊天室, html5]
-tag: [websoket, 聊天室, html5]
+tags: [websoket, 聊天室, html5]
 ---
 ## 一、目录结构如下
 - websocket

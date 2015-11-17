@@ -1,0 +1,245 @@
+---
+layout: post
+title: "less和sass的比较"
+date: 2015-11-17 10:12:15 +0800
+comments: true
+categories: [less, sass, css预处理器]
+tags: [less, sass, css预处理器]
+---
+## 定义比较
+>LESS 将 CSS 赋予了动态语言的特性，如 变量， 继承， 运算， 函数. LESS 既可以在 客户端 上运行 (支持IE 6+, Webkit, Firefox)，也可以借助Node.js或者Rhino在服务端运行。
+
+>Sass 是对 CSS 的扩展，让 CSS 语言更强大、优雅。 它允许你使用变量、嵌套规则、 mixins、导入等众多功能， 并且完全兼容 CSS 语法。 Sass 有助于保持大型样式表结构良好， 同时也让你能够快速开始小型项目， 特别是在搭配 Compass 样式库一同使用时。
+
+##用法比较
+`变量`
+>变量允许我们单独定义一系列通用的样式，然后在需要的时候去调用。所以在做全局样式调整的时候我们可能只需要修改几行代码就可以了。
+
+```css
+//less
+@color: #ff0000;
+#header{
+    color: @color;
+}
+```
+```css
+//sass
+$color: #ff0000;
+#header{
+    color: @color;
+}
+```
+```css
+//生成的css
+#header{
+    color:#ff0000;
+}
+```
+解析：唯一的区别就是使用的前缀不一样，less使用`@` 作为变量前缀，而sass使用`$`
+
+`混合(mixin)`
+>混合可以将一个定义好的class A轻松的引入到另一个class B中，从而简单实现class B继承class A中的所有属性。我们还可以带参数地调用，就像使用函数一样。
+
+>sass中可用mixin定义一些代码片段，且可传参数，方便日后根据需求调用。从此处理css3的前缀兼容轻松便捷。
+
+```css
+//less
+.rounded-corners(@radius: 5px){
+    border-radius: @radius;
+    -webkit-border-radius: @radius;
+    -moz-border-radius: @radius;
+}
+#header{
+    .rounded-corners(10px);
+}
+#footer{
+    .rounded-corners;
+}
+```
+```css
+//sass
+@mixin rounded-corners($radius: 5px){
+           border-radius: $radius;
+           -webkit-border-radius: $radius;
+           -moz-border-radius: $radius;
+       }
+#header{
+    @include rounded-corners(10px);
+}
+#footer{
+    @include rounded-corners;
+}
+```
+```css
+//生成的css
+#header{
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+}
+#footer{
+    border-radius: 5px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+}
+```
+解析：less直接定义了一个类，然后加入变量，后边类引用的时候直接写入引用类即可；而sass定义一个类时，需要在前边加上`@mixin`,后边类引入的时候加入`@include`
+
+`扩展和继承`
+>sass可通过@extend来实现代码组合声明，使代码更加优越简洁。（less直接引入类即可）这里说白了也属于混合中的，但是这里生成的css两者不一样所以得提取出来写写。
+```css
+//less
+.btn{
+    border: none;
+    width:200px;
+    height:30px;
+}
+.btn-gray{
+    .btn;
+    background-color: #ff0000;
+}
+//sass
+.btn{
+    border: none;
+    width:200px;
+    height:30px;
+}
+.btn-gray{
+    @extend .btn;
+    background-color: #ff0000;
+}
+```
+```css
+//less生成的css
+.btn{
+    border: none;
+    width:200px;
+    height:30px;
+}
+.btn-gray{
+    border: none;
+    width:200px;
+    height:30px;
+    background-color: #ff0000;
+}
+//sass 生成的css
+.btn, .btn-gray{
+    border: none;
+    width:200px;
+    height:30px;
+}
+.btn-gray{
+    background-color: #ff0000;
+}
+```
+
+解析：从生成的css可以看出，sass在这方面是优于less的。两者区别就是引用的时候less直接引用类，而sass要在类前边加`@extend`
+
+
+`嵌套规则`
+>我们可以在一个选择器中嵌套另一个选择器来实现继承，这样很大程度减少了代码量，并且代码看起来更加的清晰。
+
+```css
+//less && sass
+#header{
+    h1{
+        font-weight: normal;
+        font-size: 24px;
+    }
+    p{
+        font-size: 12px;
+        line-height: 1.2;
+        a{
+            color:#ff0000;
+        }
+    }
+}
+```
+```css
+#header h1{
+    font-weight: normal;
+    font-size: 24px;
+}
+#header p{
+    font-size: 12px;
+    line-height: 1.2;
+}
+#header p a{
+    color:#ff0000;
+}
+```
+解析：嵌套规则less和sass是一样的
+
+`函数 & 运算`
+>运算提供了加，减，乘，除操作；我们可以做属性值和颜色的运算，这样就可以实现属性值之间的复杂关系。LESS中的函数一一映射了JavaScript代码，如果你愿意的话可以操作属性值。
+
+>sass可进行简单的加减乘除运算等
+
+```css
+//less & sass
+.container { width: 100%; }
+article[role="main"] {
+  float: left;
+  width: 600px / 960px * 100%;
+}
+aside[role="complimentary"] {
+  float: right;
+  width: 300px / 960px * 100%;
+}
+```
+```css
+//生成的css
+#header {
+  color: #333;
+  border-left: 1px;
+  border-right: 2px;
+}
+#footer {
+  color: #114411;
+  border-color: #7d2717;
+}
+```
+解析：两者基本一致，在含有变量的运算时，记得less是`@`前缀，sass是`$`前缀即可
+
+`导入`
+>sass（less）中如导入其他sass（less）文件，最后编译为一个css文件，优于纯css的@import
+
+```css _reset.less && _reset.scss
+body,h1,h2,p{
+    margin: 0;
+    padding: 0;
+}
+```
+```css
+//less
+@import "_reset";
+#or
+@impot "_reset.less";
+//sass
+@import "reset";
+#or
+@import "_reset";
+#or
+@import "reset.scss";
+#or
+@import "_reset.scss";
+```
+```css
+// 生成的css
+body,h1,h2,p{
+    margin: 0;
+    padding: 0;
+}
+```
+解析：less中导入的 .less 文件, .less 后缀可带可不带;而sass中可以省略 .scss文件中的前缀`_` 下划线（less中不能省略下划线，必须全名），后缀.scss可带可不带
+
+##总结：
+less和sass各有其优缺点，两者语法相差不大，都是css预处理器，less是基于javscript的，而sass是基于ruby，在编译大文件当中，sass会稍微略胜于less，但整体上几乎一样；对于底层的像bootstrap.css这样的底层文件，
+用的是sass开发的，因为sass的功能，很多扩展，稍微比less强大一点，而且sass生成的样式表，整个对应的标签嵌套的也比较专业；而less比较简洁，跟我们写css基本一样；小项目，不是大工程构建一个css出来给大家用的，用less就ok，所以看自己喜好来用吧。
+
+## 参考文献
+><http://www.bootcss.com/p/lesscss/>
+
+>[sass中文文档参考手册](http://sass.bootcss.com/docs/sass-reference/)
+
+>[sass十分钟入门](http://www.w3cplus.com/sassguide/)
