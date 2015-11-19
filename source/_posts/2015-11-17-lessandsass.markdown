@@ -6,6 +6,14 @@ comments: true
 categories: [less, sass, css预处理器]
 tags: [less, sass, css预处理器]
 ---
+## 前言
+>CSS预处理器(CSS Preprocessor)，是一种构架于css之上的高级语言，可以通过脚本编译生成CSS代码，其目的是为了让CSS开发者的工作更简单有趣，当前已经进入了较为成熟的阶段，基本上新的web开发项目大都已普遍使用。
+
+>[SASS](http://sass-lang.com/) 2007年诞生，最早也是最成熟的CSS预处理器，拥有ruby社区的支持和[compass](http://compass-style.org/)这一最强大的css框架，目前受LESS影响，已经进化到了全面兼容CSS的SCSS，著名的Twitter [Bootstrap](http://www.bootcss.com/)就是采用SASS做底层语言的。
+
+>[LESS](http://lesscss.org/) 2009年出现，受SASS的影响较大，但又使用CSS的语法，让大部分开发者和设计师更容易上手，在ruby社区之外支持者远超过SASS，其缺点是比起SASS来，可编程功能不够，不过优点是简单和兼容CSS，反过来也影响了SASS演变到了SCSS的时代。
+
+
 ## 定义比较
 >LESS 将 CSS 赋予了动态语言的特性，如 变量， 继承， 运算， 函数. LESS 既可以在 客户端 上运行 (支持IE 6+, Webkit, Firefox)，也可以借助Node.js或者Rhino在服务端运行。
 
@@ -243,3 +251,5 @@ less和sass各有其优缺点，两者语法相差不大，都是css预处理器
 >[sass中文文档参考手册](http://sass.bootcss.com/docs/sass-reference/)
 
 >[sass十分钟入门](http://www.w3cplus.com/sassguide/)
+
+>[compass百科](http://baike.baidu.com/link?url=pwijLMZhF8w6szgLafH1VzyFKNzcacdWzpItOG7A105kD4zM3wZbHvr-naNwa_8wXQ-iweMA85ZQ7wIrYjLHvGHa-ZiFKbF5C3Y8ISoJ-Su)
