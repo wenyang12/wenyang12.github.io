@@ -8,8 +8,10 @@ tags: [倒计时, jQuery插件]
 ---
 ## 前言
 当想在前端显示一个后端传过来的剩余毫秒数时，可不可以自动让传入的值直接显示为倒计时呢？
+
 ## 代码实现思路
-- html结构为`<div data-time="[后端传过来的剩余毫秒数]" data-id="time"><span class="t_d"></span><span class="t_h"></span><span class="t_m"></span><span class="t_s"></span></div>`
+> html结构为`<div data-time="[后端传过来的剩余毫秒数]" data-id="time"><span class="t_d"></span><span class="t_h"></span><span class="t_m"></span><span class="t_s"></span></div>`
+
 ##实现代码
 ```javascript
 /*倒计时 start*/
@@ -19,39 +21,50 @@ tags: [倒计时, jQuery插件]
      * 例如：<div data=time ="60" data-id="time"><span class="t_d"></span><span class="t_h"></span><span class="t_m"></span><span class="t_s"></span></div>
      * */
     $.fn.countDown =function(ms) {//ms为传入的剩余秒数
-        var self=this;
-        var timerHandle = function() {
-            var day=0,
-                hour= 0,
-                allhour=0,
-                minute=0,
-                second=0;//时间默认值
-            if(ms > 0){
-                day = Math.floor(ms / (60 * 60 * 24));
-                hour = Math.floor(ms / (60 * 60)) - (day * 24);
-                allhour =Math.floor(ms / (60 * 60));
-                minute = Math.floor(ms / 60) - (day * 24 * 60) - (hour * 60);
-                second = Math.floor(ms) - (day * 24 * 60 * 60) - (hour * 60 * 60) - (minute * 60);
-            }
-            if (minute <= 9) minute = '0' + minute;
-            if (second <= 9) second = '0' + second;
-            if (allhour <= 10) allhour = '00' + allhour;
-            if (allhour <= 100 && allhour >10) allhour = '0' + allhour;
-            self.children('.t_d').html(day+'\u5929');
-            self.children('.t_h').html(hour+'\u65f6');
-            self.children('.t_allh').html(allhour+'\u65f6');
-            self.children('.t_m').html(minute+'\u5206');
-            self.children('.t_s').html(second+'\u79d2');
-            ms--;
-        };
-        timerHandle();
-        window.setInterval(timerHandle, 1000);
+            var Timer;
+            var self=this;
+            var timerHandle = function() {
+                if(!Number(ms)){//当剩余时间为0时
+                    clearInterval(Timer);
+                    self.html('-');
+                    return false;
+                }
+                var day=0,
+                    hour= 0,
+                    allhour=0,
+                    minute=0,
+                    second=0;//时间默认值
+                if(ms > 0){
+                    day = Math.floor(ms / (60 * 60 * 24));
+                    hour = Math.floor(ms / (60 * 60)) - (day * 24);
+                    allhour =Math.floor(ms / (60 * 60));
+                    minute = Math.floor(ms / 60) - (day * 24 * 60) - (hour * 60);
+                    second = Math.floor(ms) - (day * 24 * 60 * 60) - (hour * 60 * 60) - (minute * 60);
+                }
+                if (minute <= 9) minute = '0' + minute;
+                if (second <= 9) second = '0' + second;
+                if (hour <= 9) hour = '0' + hour;
+                if (allhour <= 9) allhour = '00' + allhour;
+                if (allhour <= 99 && allhour >=10) allhour = '0' + allhour;
+                self.children('.t_d').html(day+'\u5929');
+                self.children('.t_h').html(hour+'\u65f6');
+                self.children('.t_allh').html(allhour+'\u65f6');
+                self.children('.t_m').html(minute+'\u5206');
+                self.children('.t_s').html(second+'\u79d2');
+                ms--;
+            };
+            timerHandle();
+            Timer=window.setInterval(timerHandle, 1000);
     };
-    if($("[data-id='time']").length){//运用
+    if($("[data-id='time']").length){
         var timeEle=$("[data-id='time']");
         for(var i = 0,len =timeEle.length; i < len; i++){
-            var time = timeEle.eq(i).attr('data-time');
-            timeEle.eq(i).countDown(time);
+            var timeEleItem = timeEle.eq(i);
+            var time = timeEleItem.attr('data-time');
+            if(!timeEleItem.attr('flag')){
+                timeEleItem.countDown(time);
+            }
+            timeEleItem.attr('flag',true);//添加一个属性，用于判断是否添加了倒计时，方便异步加载的时候遍历，可以不重复加载倒计时。
         }
     }
     /*倒计时 end*/
