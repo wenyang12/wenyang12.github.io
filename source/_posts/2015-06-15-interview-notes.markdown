@@ -1,0 +1,157 @@
+---
+layout: post
+title: "面试笔记"
+date: 2015-06-15 16:55:14 +0800
+categories: [面试]
+tags: [面试]
+comments: true
+---
+## javascript有几种弹出框，各有什么区别？
+
+>alert() 显示带有一段消息和一个确认按钮的警告框。
+
+>confirm() 显示带有一段信息以及确认和取消按钮的对话框。
+
+>prompt() 显示可提示用户输入的对话框。
+
+## 最常用的数组方法有哪些？
+
+>unshift(), shift(), push(), pop(), silce(), splice(), join(), srot(), concat().
+
+## javascript如何实现继承？
+
+### 类式继承
+
+代码：
+```
+//一、类式继承：
+//定义一个类式继承的扩展函数
+function extend(subClass, superClass) {
+    var F = function(){};
+    F.prototype = superClass.prototype;
+    subClass.prototype = new F();
+    subClass.superClass = superClass.prototype;
+    subClass.constructor = subClass;
+    if(superClass.prototype.constructor === Object.prototype.constructor) {
+        superClass.prototype.constructor = superClass;
+    }
+}
+//定义一个父类
+function Person(name) {
+    this.name = name;
+}
+Person.prototype.getName=function(){
+    console.log(this.name);
+};
+//定义一个子类
+function Author(name ,city) {
+    var superClass = Author.superClass.constructor;//引用父类
+    superClass.call(this, name);//用对象冒充的方法，把子类的this和参数传递给父类.从而达到继承父类的属性
+    this.city = city;
+}
+extend(Author, Person);//继承父类的方法
+//定义一个自己的方法
+Author.prototype.getCity=function(){
+    console.log(this.city);
+};
+//测试
+var newAuthor = new Author('wen', 'hainan');
+newAuthor.getName();
+newAuthor.getCity();
+```
+
+### 原型式继承
+
+代码：
+```
+//二、原型继承：
+//定义一个用于原型继承的函数
+function clone(object) {
+    var F = function(){};
+    F.prototype = object;
+    return new F();
+}
+//定义一个对象
+var PersonObject = {
+    name : 'name',
+    getName : function() {
+        console.log(this.name);
+    }
+};
+var AuthorObject = clone(PersonObject);//继承父类Person的属性和方法
+//测试
+AuthorObject.name = 'wen';//定义一个自己的属性name用于覆盖父类的name属性，也可以定义一个自己的方法，用于覆盖父类的方法（ 注：父类的属性和方法还是不会改变，因为子类定义自己的属性和方法只是一个覆盖，而不是修改父类的属性和方法）
+AuthorObject.getName();
+```
+## 面向对象有几种写法？
+
+面向对象的4种写法
+代码：
+```
+//第一种：
+function CicleOne(r) {
+    this.r = r;
+    this.area = function() {
+        console.log('第一种：'+Math.PI * this.r * this.r) ;
+    };
+}
+//测试
+var newCicle = new CicleOne(2);
+newCicle.area();
+```
+```
+//第二种：
+function CicleTwo(r){
+    this.r = r;
+}
+CicleTwo.prototype.area = function () {
+    console.log('第二种：'+Math.PI * this.r * this.r) ;
+};
+//测试
+var newCicleTwo = new CicleTwo(3);
+newCicleTwo.area();
+```
+```
+//第三种：
+var cicleObjectOne = {
+    r : 1,
+    area : function() {
+     console.log('第三种：'+Math.PI*this.r*this.r)
+    }
+};
+//测试
+cicleObjectOne.r = 6;
+cicleObjectOne.area();
+```
+```
+    //第四种：
+    var cicleObjectTwo = {};
+    cicleObjectTwo.r = 5;
+    cicleObjectTwo.area = function() {
+        console.log('第四种：'+Math.PI*this.r*this.r);
+    };
+    //测试
+    cicleObjectTwo.area();
+```
+## 使用过哪些javascript框架，各有什么作用？
+
+- jquery:
+    jquery是javascript的函数库，封装了很多方法。然我们写少的代码，做更多的事。
+- AngularJS ：
+    AngularJS 通过新的属性和表达式扩展了 HTML。
+    AngularJS 可以构建一个单一页面应用程序。
+
+## jquery中的attr()和prop()有什么区别？
+
+>当你用attr()获取复选框的checked属性（其中复选框没有设置checked属性）时，它会返回undefined，无论你勾选复选框或取消复选框，它都给你返回undefined；要是给复选框设置了checked属性，则它不管你选中或未选中复选框，他都会返回checked，这不是我们想要的结果。
+而当你使用prop获取复选框的checked属性时，它会对应你选中或未选中返回true或false；
+所以，当我们需要处理内置属性的值是true或false时，使用prop()就可以达到我们预期想要的处理效果。
+
+## 什么是xss攻击，如何防御xss攻击？
+
+xss攻击是跨站脚本攻击。xss是经常出现在web应用中的安全漏洞，它允许恶意web用户将代码植入到提供给其他用户使用的页面中。
+防御：
+-对用户提交的代码进行匹配检查，对提交的信息含有“javascript”的代码进行过滤。
+-对所有用户提交内容进行可靠的输入验证，包括对URL、查询关键字、HTTP头、POST数据等，仅接受指定长度范围内、采用适当格式、采用所预期的字符的内容提交，对其他的一律过滤。
+-实现Session标记(session tokens)、CAPTCHA系统或者HTTP引用头检查，以防功能被第三方网站所执行。
+-确认接收的的内容被妥善的规范化，仅包含最小的、安全的标签(没有javascript)，去掉任何对远程内容的引用(尤其是样式表和javascript)。

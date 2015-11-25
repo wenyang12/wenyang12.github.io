@@ -1,0 +1,75 @@
+---
+layout: post
+title: "grunt构建工具的测试用例"
+date: 2015-09-14 11:14:30 +0800
+categories: [前端构建工具, grunt]
+tags: [前端构建工具, grunt]
+comments: true
+---
+源码在我的[github](https://github.com/wenyang12/gruntTest/tree/one)上
+用于快速搭建grunt构建工具的测试例子
+## 安装
+>npm install
+
+## 在目录下新建两个文件夹(其中bulid文件夹是用来装编译过的压缩文件，dest文件夹是用来装最终生成合并压缩后的文件)
+>mkdir bulid
+mkdir dest
+
+## 运行所有任务，逐步执行的任务是检查js，压缩js，合并js，监听文件改变来自动执行任务
+>grunt default
+
+## 执行单个任务
+>grunt jshint
+grunt uglify
+grunt concat
+grunt watch
+
+## Gruntfile.js文件源码为：
+```javascript
+/**
+ * Created by Administrator on 2015/9/11.
+ */
+module.exports = function(grunt) {
+    //Project configuration
+    grunt.initConfig({
+        pkg: grunt.file.readJSON('package.json'),//引入package.json文件
+        uglify:{// 压缩js的配置
+            options:{
+                banner:'/*! create by <%= grunt.template.today("yyyy-mm-dd")%>*/\n'//压缩后文件里的第一行会添加这一行注释
+            },
+            static_mappings:{
+                files:[{
+                    src:'js/index.js',//js的位置
+                    dest:'build/index.min.js' //js编译后要放的位置
+                },{
+                    src:'js/main.js',
+                    dest:'build/main.min.js'
+                }]
+            }
+        },
+        concat:{//合并js配置
+            bar:{
+                src:['build/*.js'],//要合并的js文件（这里指定了build文件夹下的所有后缀为js的文件）
+                dest:'dest/all.min.js'//合并后把js文件起了一个名为“all.min.js”然后放入文件夹dest下
+            }
+        },
+        watch:{//自动监听任务
+            files:['js/*.js'],//要监听的js文件（这里指的是监听js下的所有后缀为js的文件）
+            tasks:['uglify','concat']//js文件发生改变时，要执行的任务，这里配置执行的任务为uglify（压缩js）concat（合并js）
+        },
+        jshint:{//检查js的错误
+            all:['js/*.js']//配置要检查的js文件（这里指的是js文件夹下所有后最为js的文件）
+        }
+    });
+    //加载包含“uglify"任务插件
+    grunt.loadNpmTasks('grunt-contrib-uglify');
+    //加载包含“concat"任务插件
+    grunt.loadNpmTasks('grunt-contrib-concat');
+    //加载包含“watch"任务插件
+    grunt.loadNpmTasks('grunt-contrib-watch');
+    //加载包含“jshint"任务插件
+    grunt.loadNpmTasks('grunt-contrib-jshint');
+    //默认被执行的任务列表
+    grunt.registerTask('default', ['jshint','uglify','concat','watch']);
+};
+```
