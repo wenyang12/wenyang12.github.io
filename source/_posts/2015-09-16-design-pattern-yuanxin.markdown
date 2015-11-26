@@ -53,19 +53,20 @@ comments: true
         return result;
     }
     //深克隆（修改拷贝出来的对象的任何属性，都不会影响到原对象）
-    function cloneDeep(obj) {
+    function deepClone(obj) {
         var result;
-        if((result=(obj instanceof Array)) || obj instanceof Object){
-            result = result?[]:{};
-            for(var key in obj){
-                if((obj[key] instanceof Array) || obj[key] instanceof Object){
-                    result[key] = cloneDeep(obj[key]);
+        var _toString = Object.prototype.toString;
+        if((result=(_toString.call(obj) ==='[object Array]')) || _toString.call(obj) === '[object Object]'){
+            result = result ? [] : {};
+            for(var key in obj) {
+                if(_toString.call(obj[key]) === '[object Array]' || _toString.call(obj[key]) === '[object Object]'){
+                    result[key] = deepClone(obj[key]);
                 }else{
                     result[key] = obj[key];
                 }
             }
         }
-        return result
+        return result;
     }
     //es5 原型模式
     // Object.create() 方法创建一个拥有指定原型和若干个指定属性的对象。用于创建原型模式
@@ -88,7 +89,7 @@ comments: true
     console.log("原型模式"+aa.obj.innerObj+' '+aa.str);
     console.log("原型模式"+myObj.obj.innerObj+' '+myObj.str);//未改变
     //深克隆测试
-    var sObj = cloneDeep(myObj);
+    var sObj = deepClone(myObj);
     sObj.obj.innerObj="深克隆";//修改了拷贝出来的qianObj的第二层属性（即指的深层属性）时
     console.log(sObj.obj.innerObj)//“深克隆”
     console.log(myObj.obj.innerObj)//{num：5}（未被改变）
@@ -101,4 +102,4 @@ comments: true
 </body>
 </html>
 ```
-
+>以上信息来自[极客学院](http://www.jikexueyuan.com/)的视频观看，属于个人记录，以及添加了一些个人理解。
