@@ -43,3 +43,5 @@ footer: true
 
 >版本管理、文档和自动化部署工具：Svn/Git/Grunt/Gulp
 
+## [简历预览]({{ root_url }}/resume)
+

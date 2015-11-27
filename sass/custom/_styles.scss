@@ -84,3 +84,6 @@ header{
 article h2{
   color: #ff3300;
 }
+a[href$='.doc']{
+  float: right;
+}
