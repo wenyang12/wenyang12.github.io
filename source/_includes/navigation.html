@@ -6,10 +6,9 @@
   {% endif %}
 </ul>
   {% if site.simple_search %}
-<form action="{{ site.simple_search }}" method="get">
+<form>
   <fieldset role="search">
-    <input type="hidden" name="sitesearch" value="{{ site.url | shorthand_url }}">
-    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+    <input class="search" id="bdcsMain" type="text" placeholder="Search"/>
   </fieldset>
 </form>
   {% endif %}
