@@ -24,6 +24,7 @@ tags: [spm, 瀑布流, 模块包]
 
 >spm install moving-water
 
+<!--more-->
 **js引入**
 
 ```javascript
@@ -45,7 +46,6 @@ function callback(parent) {
     });
 }
 ```
-
 **本地运行**
 
 >spm server

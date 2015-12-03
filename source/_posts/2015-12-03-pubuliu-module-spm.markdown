@@ -21,7 +21,7 @@ tags: [spm, 瀑布流, 模块包]
  // use movingWater
 
 ## 构建包开始
-
+<!--more-->
 ### 安装spm
 >$ npm install -g spm
 

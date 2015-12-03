@@ -29,6 +29,7 @@ tags: [git]
 
 >git config --global alias.lol "log --oneline"  给输出一行日志取了别名lol
 
+<!--more-->
 ## git 基本的工作流程
 
 >建立仓库 git init wen  建立了一个wen文件夹，在wen目录下有一个.git目录（里边即为git的工作区间）
