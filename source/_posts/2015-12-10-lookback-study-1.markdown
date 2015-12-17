@@ -3,8 +3,8 @@ layout: post
 title: "Node.js框架lookback学习一"
 date: 2015-12-10 10:41:59 +0800
 comments: true
-categories: [node框架，loopback, mongodb]
-tags: [node框架，loopback, mongodb]
+categories: [node框架, loopback, mongodb]
+tags: [node框架, loopback, mongodb]
 ---
 
 + [loopback与express的关系](#1)
