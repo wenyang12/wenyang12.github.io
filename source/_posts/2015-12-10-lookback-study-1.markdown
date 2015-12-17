@@ -453,6 +453,8 @@ exports.mongodb = {
 
 [菜鸟教程mongodb安装](http://www.runoob.com/mongodb/mongodb-window-install.html)
 
+以上源码可以到我的github上下载[loopback测试](https://github.com/wenyang12/loopback-email-test/tree/source)
+
 
 
 
