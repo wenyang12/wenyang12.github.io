@@ -2,8 +2,8 @@
 layout: post
 title: "Node.js框架lookback学习三"
 date: 2015-12-16 16:37:56 +0800
-categories: [node框架, loopback, mongodb]
-tags: [node框架, loopback, mongodb]
+categories: [Node.js框架, loopback, mongodb]
+tags: [Node.js框架, loopback, mongodb]
 ---
 
 ## loopback注册后发送邮箱验证

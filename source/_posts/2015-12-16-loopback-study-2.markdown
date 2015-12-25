@@ -2,8 +2,8 @@
 layout: post
 title: "Node.js框架lookback学习二"
 date: 2015-12-16 15:51:35 +0800
-categories: [node框架, loopback, mongodb]
-tags: [node框架, loopback, mongodb]
+categories: [Node.js框架, loopback, mongodb]
+tags: [Node.js框架, loopback, mongodb]
 ---
 
 ## 绑定github账号登陆
