@@ -186,6 +186,8 @@ echo "hello world";
 <name>wen</name>
 ```
 
+> 以上用到的源码可以到我的github下载[ajax-text](https://github.com/wenyang12/ajax-test)
+
 ##参考链接
 [菜鸟教程-AJAX教程](http://www.runoob.com/ajax/ajax-tutorial.html)
 
