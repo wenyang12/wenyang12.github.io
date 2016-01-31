@@ -7,15 +7,17 @@ categories: [spm, 瀑布流, 模块包]
 tags: [spm, 瀑布流, 模块包]
 ---
 这里是如何使用模块包，想要了解如何构建模块包可以看[构建spm瀑布流模块包](/blog/2015/12/03/pubuliu-module-spm/)
-##源码结构 源码可以在我的github上下载<https://github.com/wenyang12/bupuliu/tree/v1>
 
+##源码结构(前端写的静态页面一般都是如下结构，即可在自己的这个结构上进行spm引用包辅助开发,然后下边会用到`$ spm build`命令来构建这些代码，从而生成我们要的最终代码，放在dist文件夹里)
 - pubuliu
     - css
     - images
     - index.html
     - index.js
+    
+源码可以在我的github上下载<https://github.com/wenyang12/bupuliu/tree/v1>
 
-## 引入瀑布流模块测试
+## 引入瀑布流模块测试（在下载以上源码后，进入这个源码文件夹pubuliu，在这里边开发测试）
 **安装spm包管理**
 
 >npm install -g spm
@@ -25,7 +27,7 @@ tags: [spm, 瀑布流, 模块包]
 >spm install moving-water
 
 <!--more-->
-**js引入**
+**js引入（源码中我已经在`index.js`中放入了下边的js代码了）**
 
 ```javascript
 var movingWater = require('moving-water');//引入瀑布流模块
