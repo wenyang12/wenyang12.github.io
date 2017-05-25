@@ -12,7 +12,7 @@ comments: true
 
 ## 实现代码如下：
 
-```javascript
+```
     (function($){
         $.fn.extend({
                 /* @method alertMsg({title,html,btnvalue,width,callback})
@@ -65,6 +65,7 @@ comments: true
                 }
         })
     })(jQuery)
+    
 ```
 ## 如何使用：
 ### 调用弹出框示例：
@@ -88,7 +89,7 @@ comments: true
 
 html代码如：
 
-```html
+```
 <!--star选项卡的内容-->
 <div class="tab-box tab-box-1">
         <div class="tabbox-title">
@@ -108,7 +109,7 @@ html代码如：
 ```
 样式代码如下：
 
-```CSS
+```
  body{
             font-family: "microsoft YaHei", Arial, "Lucida Grande", sans-serif;
         }

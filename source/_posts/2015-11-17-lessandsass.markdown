@@ -212,12 +212,16 @@ aside[role="complimentary"] {
 `导入`
 >sass（less）中如导入其他sass（less）文件，最后编译为一个css文件，优于纯css的@import
 
-``` _reset.less && _reset.scss
+_reset.less && _reset.scss
+
+```
 body,h1,h2,p{
     margin: 0;
     padding: 0;
 }
 ```
+
+
 ```
 //less
 @import "_reset";
@@ -232,6 +236,8 @@ body,h1,h2,p{
 #or
 @import "_reset.scss";
 ```
+
+
 ```
 // 生成的css
 body,h1,h2,p{
@@ -239,6 +245,7 @@ body,h1,h2,p{
     padding: 0;
 }
 ```
+
 解析：less中导入的 .less 文件, .less 后缀可带可不带;而sass中可以省略 .scss文件中的前缀`_` 下划线（less中不能省略下划线，必须全名），后缀.scss可带可不带
 
 ##总结：

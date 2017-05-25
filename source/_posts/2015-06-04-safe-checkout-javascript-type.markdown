@@ -9,7 +9,7 @@ comments: true
 
 ## 实现代码
 
-```javascript
+```
 //参数：o表示监测的值
 /*返回值：返回字符串“undefined”, "number", "boolean", "string" ,"function", "regexp" ,"array", "date", "error", "object" 或 "null" */
 function typeOf(o){

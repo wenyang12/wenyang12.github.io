@@ -5,18 +5,19 @@ date: 2015-10-29 15:41:51 +0800
 comments: true
 categories: [markdown]
 tags: [markdown]
----
-    # 我是一级标题
+----------------
+
+`# 我是一级标题`
 # 我是一级标题
 
-    ## 我是二级标题
+`## 我是二级标题`
 ## 我是二级标题
 
-    **加粗**
+`**加粗**`
 **加粗**
 
 
-    `标量`
+\`标量\`
 `标量`
 
 ```
@@ -31,49 +32,25 @@ tags: [markdown]
 - 我是列表
 
 
-    \>引用
+`>引用`
 >引用
 
 ```
 [wordpress温洋博客](http://ywenblog.sinaapp.com/)
+
 ```
 [wordpress温洋博客](http://ywenblog.sinaapp.com/)
 
 ```
 ![image](http://1.ywenblog.sinaapp.com/wp-content/themes/twentyeleven/images/headers/willow.jpg)
+
 ```
 ![image](http://1.ywenblog.sinaapp.com/wp-content/themes/twentyeleven/images/headers/willow.jpg)
 
-
-\{\% video http://static-jkxy.qiniudn.com/event/jkxy_profile20150318.mp4 640 320  \%\}
-
+```
+{% video http://static-jkxy.qiniudn.com/event/jkxy_profile20150318.mp4 640 320  %}
+```
 
 {% video http://static-jkxy.qiniudn.com/event/jkxy_profile20150318.mp4 640 320  %}
 
 
-
-
-\`\`\`javascript this is javascript http://ywenblog.sinaapp.com/ ywen博客
-
-function hello(){
-    console.log("hello")
-}
-
-\`\`\`
-
-``` this is javascript http://ywenblog.sinaapp.com/ ywen博客
-function hello(){
-    console.log("hello")
-}
-```
-\{\% codeblock lang:javascript this is javsscript http://ywenblog.sinaapp.com/ ywen博客 \%\}
-function hello(){
-    console.log("hello")
-}
-\{\% endcodeblock\%\}
-
-{% codeblock lang:javascript this is javsscript http://ywenblog.sinaapp.com/ ywen博客 %}
-function hello(){
-    console.log("hello")
-}
-{% endcodeblock%}

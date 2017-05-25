@@ -19,6 +19,7 @@ Internet Explorer 10, Firefox, Chrome, Safari 和 Opera 都支持Web workers.
 - 不是每个浏览器都支持这个新特性。
 
 ## 测试用例 代码如下：
+
 ```
 <!DOCTYPE html>
 <html>
@@ -58,9 +59,10 @@ Internet Explorer 10, Firefox, Chrome, Safari 和 Opera 都支持Web workers.
 </body>
 </html>
 ```
+
 `http://3.wenphp.sinaapp.com/test/demo_workers.js` 代码如下：
 
-``` demo_workers.js
+```
 /**
  * Created by Administrator on 2015/8/12.
  */

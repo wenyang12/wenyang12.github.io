@@ -88,7 +88,7 @@ rake deploy
     ```
     echo 'domain.com' >> source/CNAME
     ```
-    \# OR
+    OR
     ```
     echo 'www.domain.com' >> source/CNAME
     ```
