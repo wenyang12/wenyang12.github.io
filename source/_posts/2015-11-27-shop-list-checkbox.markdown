@@ -39,7 +39,7 @@ tags: [复选框组件]
 
 ## 代码实现（其中可以自定义复选框样式可以参考以下代码贴出的css样式代码）
 
-```html
+```
     <!DOCTYPE html>
     <html>
     <head lang="en">

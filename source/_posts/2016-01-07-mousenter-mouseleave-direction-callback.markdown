@@ -16,7 +16,7 @@ tags: [javascript, 鼠标事件]
 - id : 元素的id
 - enterObject：用于判断鼠标是从哪个方向进入元素后的对象，对象必须含有四个方向的回调方法，即如下
 
-```javascript
+```
 enterObjext = {
     left：function(self){//self是对id这个元素的引用
         //这里是鼠标从左边进入元素后的回调
@@ -36,7 +36,7 @@ enterObjext = {
 
 - leaveObject：用于判断鼠标是从哪个方向离开元素后的对象，对象必须含有四个方向的回调方法，即如下：
 
-```javascript
+```
 leaveObject = {
    left：function(self){//self是对id这个元素的引用
        //这里是鼠标从左边离开元素后的回调
@@ -61,7 +61,7 @@ leaveObject = {
 
 **html**
   
-```html
+```
 <h2>run接口测试：</h2>
 <div id="box"></div>
 <h2>jqRun接口测试：</h2>
@@ -72,7 +72,7 @@ leaveObject = {
 ```
 **css**
 
-```css
+```
 #box{
     width: 100px;
     height: 100px;
@@ -104,7 +104,7 @@ leaveObject = {
 ```
 **javascript**
 
-```javascript
+```
 //采用模块模式来封装代码，可以方便发布成为spm包，方便今后引用。
 var wen_direction = (function () {
     var jqDirection;

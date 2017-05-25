@@ -19,7 +19,7 @@ comments: true
 >当系统出现多对多交互复杂的对象群时，先不要急着使用中介者模式，而是要思考一下是不是系统设计有问题。
 
 ##代码实战
-```javascript
+```
     //创建一个飞机的构造函数
     var Plane = function(name) {
         this.name = name;

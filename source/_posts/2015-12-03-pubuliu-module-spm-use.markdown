@@ -29,7 +29,7 @@ tags: [spm, 瀑布流, 模块包]
 <!--more-->
 **js引入（源码中我已经在`index.js`中放入了下边的js代码了）**
 
-```javascript
+```
 var movingWater = require('moving-water');//引入瀑布流模块
 movingWater.init('.pubuliu-box','.img-box',callback);
 function callback(parent) {

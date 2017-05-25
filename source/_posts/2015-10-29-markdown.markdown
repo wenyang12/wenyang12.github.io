@@ -61,7 +61,7 @@ function hello(){
 
 \`\`\`
 
-```javascript this is javascript http://ywenblog.sinaapp.com/ ywen博客
+``` this is javascript http://ywenblog.sinaapp.com/ ywen博客
 function hello(){
     console.log("hello")
 }

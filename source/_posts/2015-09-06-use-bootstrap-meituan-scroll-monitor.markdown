@@ -8,7 +8,7 @@ comments: true
 ---
 
 ## 重新封装了bootstrap的滚动监听scrollspy.js
-```html
+```
 <!DOCTYPE html>
 <html lang="en">
 <head>

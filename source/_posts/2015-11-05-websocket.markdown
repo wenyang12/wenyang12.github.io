@@ -15,7 +15,7 @@ tags: [websoket, 聊天室, html5]
 
 ## 二、检查浏览器是否支持websocket
 代码如下：
-```javascript support.html
+``` support.html
 <!DOCTYPE html>
 <html>
 <head lang="en">
@@ -43,7 +43,7 @@ tags: [websoket, 聊天室, html5]
     - 下载后直接 `npm install` 安装即可
 - 新建服务端代码文件 `chat_server.js` 目录为：`websocket/chat_server.js`
 
-```javascript chat_server.js
+``` chat_server.js
 var ws = require("nodejs-websocket"); //获取nodejs-websocket模块
 var server = ws.createServer(function(conn){ //创建websocket服务器
         conn.sendText('您好! 欢迎您加入聊天室！'); //向接入的客户端发送消息
@@ -66,7 +66,7 @@ function broadcast(server, msg){
 ```
 - 新建客户端代码文件 `chat.html` 目录为 `websocket/chat.html`
 
-```javascript chat.html
+``` chat.html
 <!DOCTYPE html>
 <html>
 <head lang="en">

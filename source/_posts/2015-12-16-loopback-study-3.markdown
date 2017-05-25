@@ -35,7 +35,7 @@ Enter an empty property name when done.
 
 编辑`wen-users.js` 文件
 
-```javascript
+```
 module.exports = function(WenUsers) {
   WenUsers.sayHi = function(callback) {//定义一个http接口方法
     callback(null, 'hi');
@@ -70,7 +70,7 @@ module.exports = function(WenUsers) {
 
 编辑`wen-users.json` 文件
 
-```javascript
+```
 {
   "name": "WenUsers",
   "base": "User",
@@ -136,7 +136,7 @@ module.exports = function(WenUsers) {
 
 改一下`./server/config.json`这个文件中的host，发送邮件的时候会用到，本地测试一般都是127.0.0.1或localhost，修改如下图所示：
 
-```javascript
+```
 {
     "host": "localhost"
 }

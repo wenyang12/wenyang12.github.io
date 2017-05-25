@@ -23,7 +23,7 @@ tags: [设计模式, 观察者模式]
 
 ## 代码实战
 
-```javascript
+```
     //用jquery来实现观察者模式
     (function($) {
         var o = $({});//创建一个jquery空对象

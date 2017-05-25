@@ -34,7 +34,7 @@ tags: [Node.js框架, loopback, mongodb]
 
 配置providers.json(我们把providers.json.template这个文件复制一份出来，然后去掉后缀template，然后在这个基础上配置)
 
-```javascript
+```
 {
   "local": {
     "provider": "local",

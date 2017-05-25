@@ -23,12 +23,12 @@ AJAX 是与服务器交换数据并更新部分网页的艺术，在不重新加
 <!--more-->
 
 **创建对象XMLHttpRequest**
-```javascript
+```
 var xmlHttp = new XMLHttpRequest();
 ```
 >要是不用兼容旧浏览器IE5和IE6 就是以上一行代码即可创建这个对象。当然现在IE5和IE6，可以说淘汰了，所以就不兼容它了，没必要。想要兼容它就加个if判断即可，它的创建方式如下：
 
-```javascript
+```
 var xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
 //判断如：
 var xmlHttp;
@@ -100,7 +100,7 @@ value：规定头的值
 
 一般接收服务器返回的数据写法如下：
 
-```javascript
+```
 xmlhttp.onreadystatechange= function()
   {
   if (xmlhttp.readyState === 4 && xmlhttp.status === 200)
@@ -116,7 +116,7 @@ xmlhttp.onreadystatechange= function()
 
 ##代码实战
 
-```html
+```
 <!DOCTYPE html>
 <html lang="en">
 <head>

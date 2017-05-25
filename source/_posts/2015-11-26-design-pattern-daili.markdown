@@ -27,7 +27,7 @@ tags: [设计模式, 代理模式]
 
 ## 代码实战
 
-```javascript
+```
 //创建 买家构造函数
     var Maijia = function(name) {
         this.name = name;

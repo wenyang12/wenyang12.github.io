@@ -13,7 +13,7 @@ tags: [倒计时, jQuery插件]
 > html结构为`<div data-time="[后端传过来的剩余毫秒数]" data-id="time"><span class="t_d"></span><span class="t_h"></span><span class="t_m"></span><span class="t_s"></span></div>`
 
 ##实现代码
-```javascript
+```
 /*倒计时 start*/
     /**
      * 测试用例 在元素中加入data-time="ms" data-id ="time" ,并且在其子元素分别添加4个类class="t_d"、class="t_h"、class="t_m"、class="t_s" 注：（其中要是

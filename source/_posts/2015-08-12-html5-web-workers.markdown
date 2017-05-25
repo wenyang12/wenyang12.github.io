@@ -60,7 +60,7 @@ Internet Explorer 10, Firefox, Chrome, Safari 和 Opera 都支持Web workers.
 ```
 `http://3.wenphp.sinaapp.com/test/demo_workers.js` 代码如下：
 
-```javascript demo_workers.js
+``` demo_workers.js
 /**
  * Created by Administrator on 2015/8/12.
  */

@@ -33,7 +33,7 @@ tags: [spm, 瀑布流, 模块包]
 
 ### 编辑index.js
 
-```javascript
+```
 var movingWater;
 movingWater =(function() {
     /*单例模式*/

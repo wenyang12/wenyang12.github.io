@@ -23,21 +23,21 @@ tags: [less, sass, css预处理器]
 `变量`
 >变量允许我们单独定义一系列通用的样式，然后在需要的时候去调用。所以在做全局样式调整的时候我们可能只需要修改几行代码就可以了。
 
-```css
+```
 //less
 @color: #ff0000;
 #header{
     color: @color;
 }
 ```
-```css
+```
 //sass
 $color: #ff0000;
 #header{
     color: @color;
 }
 ```
-```css
+```
 //生成的css
 #header{
     color:#ff0000;
@@ -50,7 +50,7 @@ $color: #ff0000;
 
 >sass中可用mixin定义一些代码片段，且可传参数，方便日后根据需求调用。从此处理css3的前缀兼容轻松便捷。
 
-```css
+```
 //less
 .rounded-corners(@radius: 5px){
     border-radius: @radius;
@@ -64,7 +64,7 @@ $color: #ff0000;
     .rounded-corners;
 }
 ```
-```css
+```
 //sass
 @mixin rounded-corners($radius: 5px){
            border-radius: $radius;
@@ -78,7 +78,7 @@ $color: #ff0000;
     @include rounded-corners;
 }
 ```
-```css
+```
 //生成的css
 #header{
     border-radius: 10px;
@@ -95,7 +95,7 @@ $color: #ff0000;
 
 `扩展和继承`
 >sass可通过@extend来实现代码组合声明，使代码更加优越简洁。（less直接引入类即可）这里说白了也属于混合中的，但是这里生成的css两者不一样所以得提取出来写写。
-```css
+```
 //less
 .btn{
     border: none;
@@ -117,7 +117,7 @@ $color: #ff0000;
     background-color: #ff0000;
 }
 ```
-```css
+```
 //less生成的css
 .btn{
     border: none;
@@ -147,7 +147,7 @@ $color: #ff0000;
 `嵌套规则`
 >我们可以在一个选择器中嵌套另一个选择器来实现继承，这样很大程度减少了代码量，并且代码看起来更加的清晰。
 
-```css
+```
 //less && sass
 #header{
     h1{
@@ -163,7 +163,7 @@ $color: #ff0000;
     }
 }
 ```
-```css
+```
 #header h1{
     font-weight: normal;
     font-size: 24px;
@@ -183,7 +183,7 @@ $color: #ff0000;
 
 >sass可进行简单的加减乘除运算等
 
-```css
+```
 //less & sass
 .container { width: 100%; }
 article[role="main"] {
@@ -195,7 +195,7 @@ aside[role="complimentary"] {
   width: 300px / 960px * 100%;
 }
 ```
-```css
+```
 //生成的css
 #header {
   color: #333;
@@ -212,13 +212,13 @@ aside[role="complimentary"] {
 `导入`
 >sass（less）中如导入其他sass（less）文件，最后编译为一个css文件，优于纯css的@import
 
-```css _reset.less && _reset.scss
+``` _reset.less && _reset.scss
 body,h1,h2,p{
     margin: 0;
     padding: 0;
 }
 ```
-```css
+```
 //less
 @import "_reset";
 #or
@@ -232,7 +232,7 @@ body,h1,h2,p{
 #or
 @import "_reset.scss";
 ```
-```css
+```
 // 生成的css
 body,h1,h2,p{
     margin: 0;

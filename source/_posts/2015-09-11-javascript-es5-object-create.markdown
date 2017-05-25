@@ -108,7 +108,7 @@ comments: true
 
 现在我需要我的account对象有另外一个属性：账户号码,我需要如果修改了给出特定格式，没有账户需要给出警告
 
-```javascript
+```
 var account = Object.create(Object.prototype,{
 	type: {
 	   value: "建设银行",

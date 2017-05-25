@@ -114,7 +114,7 @@ $ bower install jquery-validation
 ```
 ***注册校验register.js***
 
-```javascript
+```
 $(function() {
     var myValidate = (function($) {
         function ValidFun(id) {
@@ -372,7 +372,7 @@ html 代码
 
 javascript 代码
 
-```javascript
+```
 $(function() {
     var myValidate = (function($) {
         function ValidFun(id) {

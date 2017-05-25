@@ -29,7 +29,7 @@ comments: true
 >grunt watch //监听文件改变来自动执行任务
 
 ## Gruntfile.js文件源码为：
-```javascript
+```
 /**
  * Created by Administrator on 2015/9/11.
  */

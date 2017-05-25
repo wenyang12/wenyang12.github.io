@@ -92,12 +92,12 @@ tags: [Node.js框架, loopback, mongodb]
         - wen-users.js
         - wen-users.json
 
-```javascript wen-users.js
+``` wen-users.js
 module.exports = function(WenUsers) {
   //add code 可以在这里给模型WenUsers添加方法
 };
 ```
-```javascript wen-users.json
+``` wen-users.json
 {
   "name": "WenUsers",
   "plural": "users",
@@ -166,7 +166,7 @@ module.exports = function(WenUsers) {
 
 接着我们要把内建的Users配置屏蔽掉（不屏蔽掉的话，下面我们调试WenUsers接口的时候会有问题），即让浏览器页面只显示WenUsers调试接口
 
-```javascript ./server/model-config.json
+``` ./server/model-config.json
 {
   "_meta": {
     "sources": [
@@ -209,7 +209,7 @@ module.exports = function(WenUsers) {
 
 首先，编辑一下这个文件`./common/models/wen-users.js`
 
-```javascript wen-users.js
+``` wen-users.js
 module.exports = function(WenUsers) {
   WenUsers.sayHi = function(callback) {
     callback(null, 'hi');
@@ -231,7 +231,7 @@ module.exports = function(WenUsers) {
 ```
 接着在`./common/models/wen-users.json`配置访问权限
 
-```javascript wen-users.json
+``` wen-users.json
 {
   "name": "WenUsers",
   "plural": "users",
@@ -315,7 +315,7 @@ MongoDB提供了可用于32位和64位系统的预编译二进制包，你可以
 ```
 其实以上操作就是在`./server/datasources.json` 这个文件里添加了一个"mongodb"属性配置，代码如下：
 
-```javascript
+```
 {
   "db": {
     "name": "db",
@@ -339,7 +339,7 @@ MongoDB提供了可用于32位和64位系统的预编译二进制包，你可以
 
 让以下数据模型都采用mongodb数据源来存储数据，代码如下：
 
-```javascript
+```
 {
   "_meta": {
     "sources": [
@@ -414,7 +414,7 @@ MongoDB提供了可用于32位和64位系统的预编译二进制包，你可以
 
 在`./server/` 这个目录下，增加一个datasources.dev.js文件，然后编辑如下：
 
-```javascript datasources.dev.js
+``` datasources.dev.js
 exports.mongodb = {
   'url': 'mongodb://localhost:27017/loopback-test-dev',
   'name': 'mongodb',
@@ -423,7 +423,7 @@ exports.mongodb = {
 ```
 ## OR
 
-```javascript datasources.dev.json
+``` datasources.dev.json
 {
   "db": {
     "name": "db",

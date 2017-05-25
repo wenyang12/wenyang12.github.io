@@ -31,7 +31,7 @@ tags: [瀑布流]
 
 源码放在我的github上<https://github.com/wenyang12/bupuliu>
 
-```html
+```
 <!DOCTYPE html>
 <html>
 <head lang="en">

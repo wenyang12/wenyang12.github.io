@@ -12,7 +12,7 @@ comments: true
 
 ## 没做ie浏览器兼容,用于测试，index.html代码如下:
 
-```javascript
+```
     var dragUpload = {
         file: document.getElementById('file'),
         fileArea: document.getElementById('fileArea'),
@@ -76,7 +76,7 @@ comments: true
 ```
 ## upload.php代码为：
 
-```php
+```
 <?php
 $file = $_FILES['file'];//获取文件内容
 //存入上传的文件

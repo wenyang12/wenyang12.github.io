@@ -24,7 +24,7 @@ comments: true
 >现有的文献里查看原型模式的定义，没有针对JavaScript的，你可能发现讲解的都是关于类的，但是现实情况是基于原型继承的JavaScript完全避免了类（class）的概念。
 
 ##代码实战
-```html
+```
 <!DOCTYPE html>
 <html>
 <head lang="en">
