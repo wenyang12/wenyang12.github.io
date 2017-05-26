@@ -9,9 +9,9 @@ tags: [octopress, markdown]
 ## 一、环境配置
 - 安装以下软件
     - Git、Ruby、Devkit、MarkdownPad 的安装与配置
-        - Git 版本管理工具，将代码托管到GitHub
-        - Ruby+Devkit 生成静态网页
-        - MarkdownPad windows下Markdown语法编辑器
+        - [Git](https://git-scm.com/downloads) 版本管理工具，将代码托管到GitHub 
+        - Ruby+Devkit 生成静态网页 这两个文件我已放到百度网盘里，点击[下载](http://pan.baidu.com/s/1civpEI)
+        - MarkdownPad windows下Markdown语法编辑器（可不用安装，只是为了方便查看或编辑markdown）
 
 ## 二、开始安装Octopress
 - 克隆 Octopress 至本地  可以到[Octopress](http://octopress.org/)官网，也有介绍
@@ -65,6 +65,10 @@ rake new_page[pagename/page.html]
 ```
 rake setup_github_pages
 ```
+输入以上命令后会出现配置，让你输入github上的对应的仓库链接，输入链接回车即可把本地的资源与GitHub绑定并通过git初始化一个_deploy文件出来，然后可以用```rake deploy```命令把本地生成的_deploy文件夹下的资源都部署到刚配置仓库的master分支上。
+
+本地生成的_deploy下的文件其实是把```rake generate```命令生成到public的所有文件都复制过来而已。所有在使用 ```rake deploy``` 命令前应该先使用命令```rake generate``` 先生成public才行。
+
 >让github与octopress目录绑定
 
 ```
