@@ -1,1 +1,8 @@
 * text=auto
+source/wenxun/dist/static/video/V70507-015120.mp4 filter=lfs diff=lfs merge=lfs -text
+source/wenxun/dist/static/video/V70507-123005.mp4 filter=lfs diff=lfs merge=lfs -text
+source/wenxun/dist/static/video/V70510-092421.mp4 filter=lfs diff=lfs merge=lfs -text
+source/wenxun/dist/static/video/V70516-184713.mp4 filter=lfs diff=lfs merge=lfs -text
+source/wenxun/dist/static/video/V70520-214608.mp4 filter=lfs diff=lfs merge=lfs -text
+source/wenxun/dist/static/video/V70521-122734.mp4 filter=lfs diff=lfs merge=lfs -text
+source/wenxun/dist/static/video/V70408-141739.mp4 filter=lfs diff=lfs merge=lfs -text
