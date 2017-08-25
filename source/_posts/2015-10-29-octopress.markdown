@@ -12,6 +12,10 @@ tags: [octopress, markdown]
         - [Git](https://git-scm.com/downloads) 版本管理工具，将代码托管到GitHub 
         - Ruby+Devkit 生成静态网页 这两个文件我已放到百度网盘里，点击[下载](http://pan.baidu.com/s/1civpEI)
         - MarkdownPad windows下Markdown语法编辑器（可不用安装，只是为了方便查看或编辑markdown）
+- 配置
+    - 安装好ruby，检查是否安装成功可以运行 ```ruby -v```
+    - Devkit直接解压缩放到你任意文件夹下即可，我放在了D:/根目录下，不用安装，然后在devkit目录下运行```ruby dk.rb init``` 和 ```ruby dk.rb install ``` 来增强ruby
+
 
 ## 二、开始安装Octopress
 - 克隆 Octopress 至本地  可以到[Octopress](http://octopress.org/)官网，也有介绍
@@ -21,6 +25,16 @@ git clone git://github.com/imathis/octopress.git octopress
 - 安装依赖项
 ```
 gem install bundler
+```
+- 再次安装依赖，采用bundle命令
+
+```
+bundle install
+```
+
+安装好bundler后，要是还不行，可以再次更新一下依赖项
+```
+bundle update
 ```
 - 安装并使用默认主题
 ```
@@ -35,6 +49,10 @@ rake generate
 rake preview
 ```
 - 最后在浏览器中预览，输入地址为 localhost:4000 即可看到博客
+
+PS： 提示ruby SSL_connect returned=1 errno=0 state=SSLv3 read server certificate B: 这个说明ruby没有安装SSL证书，说要https的链接会被服务器拒绝。
+
+> 解决方法：首先在这里下载证书[https://curl.haxx.se/ca/cacert.pem](https://curl.haxx.se/ca/cacert.pem),下载好后，然后再环境变量里设置SSL_CERT_FILE这个环境变量，并把value指向这个文件即可
 
 
 ## 三、生成博客与单页面
