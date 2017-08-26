@@ -6,6 +6,5 @@ comments: true
 sharing: true
 footer: true
 ---
-![简历图]({{ root_url }}/images/consume-1.png)
-![简历图]({{ root_url }}/images/consume-2.png)
+![简历图]({{ root_url }}/images/wenyang-consume.jpg)
 [简历下载]({{ root_url }}/assets/wenyang-consume.doc)

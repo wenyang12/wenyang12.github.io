@@ -26,14 +26,14 @@ footer: true
 >学历：本科
 
 ## 个人简介
->目前在[店连店打折网](http://www.dld.com/)担任前端交互工程师
+>目前在[纷享逍客](https://www.fxiaoke.com/)担任前端交互工程师
 
 >擅长javascript脚本交互编写，pc前端页面编写，html5，css3 移动端页面编写
 
->喜欢专研javascript和Node.js以及目前很火的ReactJS
+>喜欢专研javascript和Node.js以及目前比较流行的ReactJS，vuejs
 
 ## 技能清单
->前端框架：jQuery/Zepto/Bootstrap/ReactJS/Angularjs/requirejs
+>前端框架：jQuery/Zepto/Bootstrap/ReactJS/Angularjs/Vuejs/Backbone/seajs
 
 >前端工具：LESS/SASS
 
@@ -41,7 +41,7 @@ footer: true
 
 >数据库相关：MySQL
 
->版本管理、文档和自动化部署工具：Svn/Git/Grunt/Gulp
+>版本管理、文档和自动化部署工具：Svn/Git/Grunt/Gulp/Webpack
 
 ## [简历预览]({{ root_url }}/resume)
 
