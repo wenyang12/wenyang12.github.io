@@ -218,7 +218,7 @@ emd邮件如图所示：
                 iframeWidthAndHeight= me.getIframeWidthAndHeight(),
                 scale = 1,
                 head = document.getElementsByName('viewport')[0],
-                pageWidth = document.body.offsetWidth;
+                pageWidth = window.innerWidth;
             // 当实际的iframe内容宽度，大于父window页面的宽度的时候，即装不下了，通过设置meta来按比例缩小页面，来达到显示全部的效果。
             if (iframeWidthAndHeight.width > pageWidth) {
                 scale = (pageWidth/iframeWidthAndHeight.width).toFixed(2); 
