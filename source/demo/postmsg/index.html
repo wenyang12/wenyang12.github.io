@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>XDM（跨文档消息传递）</title>
+</head>
+<body>
+    <h1>我是新窗口</h1>
+    <p>我接收到来自源窗口的数据为：<span id="msg" style="color: red;"></span></p>
+    <script>
+        window.opener.postMessage('true', 'http://www.qdfuns.com');//发送一个数据给源窗口，用于判断通过open打开的窗口是否装载完成。
+        /*监听看有没有数据发送过来*/
+        window.addEventListener('message',function(e) {
+            if(e.origin !== "http://www.qdfuns.com"){ // 判断数据发送方是否是可靠的地址
+                return;
+            }
+            console.log(e);//打印接收到的数据对象
+            document.getElementById('msg').innerHTML = e.data;
+        })
+    
+    </script>
+</body>
+</html>
