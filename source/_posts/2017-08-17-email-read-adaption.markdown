@@ -231,7 +231,10 @@ emd邮件如图所示：
 
 为什么要针对终端来设置meta来按比例缩放呢，主要是考虑到edm邮件的整体效果，要是采用跟pc端类似的自适应方案，那就不是高保真了，看到的是只适应的换行效果，终端屏幕又那么小，就做不到高保真，看到用户所发过来的真是页面效果。
 
+[预览效果](/demo/email-read-adaption/index.html)
+
 查看[整体源码](https://github.com/wenyang12/email-read-adaption.git)
+
 
 
 
