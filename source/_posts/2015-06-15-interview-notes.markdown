@@ -31,7 +31,7 @@ function extend(subClass, superClass) {
     F.prototype = superClass.prototype;
     subClass.prototype = new F();
     subClass.superClass = superClass.prototype;
-    subClass.constructor = subClass;
+    subClass.prototype.constructor = subClass;
     if(superClass.prototype.constructor === Object.prototype.constructor) {
         superClass.prototype.constructor = superClass;
     }
