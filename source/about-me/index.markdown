@@ -28,9 +28,9 @@ footer: true
 ## 个人简介
 >目前在[纷享逍客](https://www.fxiaoke.com/)担任前端交互工程师
 
->擅长javascript脚本交互编写，pc前端页面编写，html5，css3 移动端页面编写
+>擅长javascript（es6）脚本交互编写，pc前端页面编写，html5，css3 移动端页面编写
 
->喜欢专研javascript和Node.js以及目前比较流行的ReactJS，vuejs
+>喜欢专研javascript（es6）以及目前比较流行的ReactJS，vuejs
 
 ## 技能清单
 >前端框架：jQuery/Zepto/Bootstrap/ReactJS/Angularjs/Vuejs/Backbone/seajs
