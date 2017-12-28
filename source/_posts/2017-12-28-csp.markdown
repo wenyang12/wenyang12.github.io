@@ -1,13 +1,11 @@
 ---
 layout: post
-title: "csp"
+title: "CSP(内容安全策略)"
 date: 2017-12-28 11:07:52 +0800
 comments: true
 categories: [csp,内容安全策略]
 tags: [csp,内容安全策略]
 ---
-
-# CSP(内容安全策略)
 
 ## 前言
 
@@ -30,6 +28,8 @@ Content-Security-Policy: <policy-directive>; <policy-directive>
 * 通过`<img>`标签加载的图片（包括SVG图片）
 * 通过`<video>`,`<audio>`和`<source>`标签加载的视频或音频
 * 预读的（prefetched）资源
+
+<!--more-->
 
 属于Blockable的资源包括：
 
