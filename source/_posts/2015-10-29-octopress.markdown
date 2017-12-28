@@ -16,23 +16,24 @@ tags: [octopress, markdown]
     - 安装好ruby，检查是否安装成功可以运行 ```ruby -v```
     - Devkit直接解压缩放到你任意文件夹下即可，我放在了D:/根目录下，不用安装，然后在devkit目录下运行```ruby dk.rb init``` 和 ```ruby dk.rb install ``` 来增强ruby
 
+PS： 安装ruby后，devkit的作用是为了增强ruby的功能。而安装ruby会自动安装了它自身的包管理器gem，即可使用gem命令
 
 ## 二、开始安装Octopress
 - 克隆 Octopress 至本地  可以到[Octopress](http://octopress.org/)官网，也有介绍
 ```
 git clone git://github.com/imathis/octopress.git octopress
 ```
-- 安装依赖项
+- 安装依赖项bundler。 安装了bundler后即可采用bundle命令来安装项目里Gemfile里定义的所有依赖gem，为了不手动gem install [包名] 这样一个个手动安装
 ```
 gem install bundler
 ```
-- 再次安装依赖，采用bundle命令
+- 安装Gemfile里定义的所有gem包
 
 ```
 bundle install
 ```
 
-安装好bundler后，要是还不行，可以再次更新一下依赖项
+要是安装有问题，可以再次更新一下所有依赖项，还是不行，可以到ruby的安装目录下手动删除对应安装失败的包，例如我的目录为：`C:\Ruby22\lib\ruby\gems\2.2.0`下的`gems`和`cache`文件夹下删除
 ```
 bundle update
 ```
@@ -121,4 +122,37 @@ rake deploy
     - 使用顶级域名
     >对于顶级域名（domain.com），使用A记录指向 192.30.252.153（154）
 
+## 七、Gemfile文件的说明
 
+### 设置Gem的版本
+对于一个gem，你最常做的事情就是设置它的版本，如果你不设置版本的话，你也可以说任意的版本都可以。
+
+`gem "my_gem", ">= 0.0"`
+这里有7个操作符供你用来设置你的gem
+
+   * = Equal To "=1.0"
+   * != Not Equal To "!=1.0"
+   * \> Greater Than ">1.0"
+   * < Less Than "<1.0"
+   * \>= Greater Than or Equal To ">=1.0"
+   * <= Less Than or Equal To "<=1.0"
+   * ~> Pessimistically Greater Than or Equal To "~>1.0"
+
+**Pessimistically Greater Than or Equal To**
+
+~> 操作能够让你使用这个gem的未来的某个安全的版本。如果你觉得使用一个大的版本更安全，你能够像下面这样声明.
+
+`gem "my_gem", "~> 2.0"`
+
+这能够允许你安装任意的2.x版本的gem，但是3.x版本是不被允许的。或许你对这么宽泛的版本感到不爽，你也可以声明一个更具体的版本，如下
+
+`gem "my_gem", "~> 2.5.0"`
+
+这能够让你使用2.5.0到2.6.0之间的版本。下面的例子能够让你更加理解~> 操作符
+
+   * gem "my_gem", "~> 1.0" –> gem "my_gem", ">= 1.0", "< 2.0"
+   * gem "my_gem", "~> 1.5.0" –> gem "my_gem", ">= 1.5.0", "< 1.6.0"
+   * gem "my_gem", "~> 1.5.5" –> gem "my_gem", ">= 1.5.5", "< 1.6.0"
+
+## 八、参考
+[Gemfile 详解](http://blog.csdn.net/efvn2008/article/details/48392047)
