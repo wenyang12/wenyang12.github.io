@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: 滚动监听 | 三重水的博客]]></title>
+  <link href="http://wenyang12.github.io/blog/categories/gun-dong-jian-ting/atom.xml" rel="self"/>
+  <link href="http://wenyang12.github.io/"/>
+  <updated>2018-04-13T14:54:38+08:00</updated>
+  <id>http://wenyang12.github.io/</id>
+  <author>
+    <name><![CDATA[三重水]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[用bootstrap仿美团滚动监听]]></title>
+    <link href="http://wenyang12.github.io/blog/2015/09/06/use-bootstrap-meituan-scroll-monitor/"/>
+    <updated>2015-09-06T15:41:23+08:00</updated>
+    <id>http://wenyang12.github.io/blog/2015/09/06/use-bootstrap-meituan-scroll-monitor</id>
+    <content type="html"><![CDATA[<h2>重新封装了bootstrap的滚动监听scrollspy.js</h2>
+
+<p>```
+&lt;!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用bootstrap仿美团滚动监听</title>
+    <style>
+        body,div,ul,li{
+            padding: 0;
+            margin: 0;
+        }
+        ul,li{
+            list-style: none;
+        }
+        body{
+            padding: 500px 0;
+            position: relative;
+        }
+        .box-spy{
+            width: 980px;
+            margin: 0 auto;
+        }
+        .wrap{
+            width: 700px;
+        }
+        .box-spy-header{
+            width: 700px;
+            -webkit-transition: width 0.3s;
+            -moz-transition: width 0.3s;
+            -ms-transition: width 0.3s;
+            -o-transition: width 0.3s;
+            transition: width 0.3s;
+            padding-top: 2px;
+        }
+        #mySpy > ul{
+            height: 30px;
+        }
+        #mySpy > ul > li{
+            float: left;
+            width: 80px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            background: #dddddd;
+            color: #ffffff;
+            margin-right: 15px;
+        }
+        #mySpy > ul > li.active,#mySpy > ul > li.on{
+            background: #ff3300;
+        }
+        #mySpy > ul > li.active > a,#mySpy > ul > li.on > a{
+            text-decoration: none;
+            color: #ffffff;
+        }
+        .box-spy-body-1,.box-spy-body-2,.box-spy-body-3{
+            height: 600px;
+            padding: 15px;
+            color: #ffffff;
+        }
+        .box-spy-body-1{
+            background: #0099cc;
+        }
+        .box-spy-body-2{
+            background: #0172be;
+        }
+        .box-spy-body-3{
+            background: #108040;
+        }
+        .js-fix-nav{
+            position: fixed;
+            top: 0;
+            border-top: 2px solid  #ff3300;
+            width: 980px;
+            padding-top: 0;
+        }
+    </style>
+</head>
+<body></p>
+
+<div class="box-spy">
+    <div class="wrap">
+        <div class="box-spy-header" id="mySpy">
+            <ul class="nav-detail">
+                <li class="on"><a href="#body-1">抽奖需知</a></li>
+                <li><a href="#body-2">大奖详情</a></li>
+                <li><a href="#body-3">参与流程</a></li>
+            </ul>
+        </div>
+        <div class="box-spy-body">
+            <div class="box-spy-body-1" id="body-1">
+                我是抽奖需知内容 我是抽奖需知内容 我是抽奖需知内容 我是抽奖需知内容 我是抽奖需知内容
+            </div>
+            <div class="box-spy-body-2" id="body-2">
+                大奖详情内容 大奖详情内容大奖详情内容大奖详情内容大奖详情内容大奖详情内容大奖详情内容
+            </div>
+            <div class="box-spy-body-3" id="body-3">
+                参与流程内容 参与流程内容参与流程内容参与流程内容参与流程内容参与流程内容参与流程内容
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+
+
+<script src="http://3.wenphp.sinaapp.com/jsku/scrollspy.js"></script>
+
+
+<script>
+    /**
+     * 重新封装了bootstrap的滚动监听scrollspy.js
+     * $(selector).spy({
+     *      target:string,//滚动监听包裹导航的元素选择器
+     *      offset:number,//计算滚动位置时相对于顶部的偏移量（像素数）
+     *      resultTop:number,//滚动结束时导航栏距离目标标题的距离
+     *      speed:number//滚动速度，默认，数值也大，速度越慢，数值越小，速度越快
+     * })
+     * */
+    $.fn.spy=function() {
+        var self =this;
+        var opt ={
+            target:'',
+            offset:10,
+            resultTop:0,
+            speed:8
+        };
+        $.extend(opt, arguments[0]);
+        /*调用滚动监听*/
+        $('body').scrollspy({
+            target:opt.target,
+            offset:opt.offset//默认是10
+        });
+        var selfTop = self.offset().top;
+        var selfHeight = self.outerHeight(true) + opt.resultTop;//导航条的高度
+        var scrollTop,Timer;
+        /*监听滚动，当滚动到导航条时，浮动起导航条，固定在顶部*/
+        $(window).scroll(function() {
+            scrollTop = $(this).scrollTop();
+            if(scrollTop >= selfTop){
+                self.addClass('js-fix-nav').find('li').eq(0).removeClass('on');
+                self.next().css("margin-top",selfHeight-opt.resultTop);//添加一个上边距，补充因为导航栏浮动起来整体会向上移动的距离
+            }else{
+                self.removeClass('js-fix-nav').find('li').eq(0).addClass('on');
+                self.next().css("margin-top",0);
+            }
+        });
+        /*单击每个导航条处理函数*/
+        self.on('click','a',function(e) {
+            var e = e || window.event;
+            var target = e.target || e.srcElement;
+            var id =target.getAttribute('href');
+            var targetTop = Math.floor($(id).offset().top) - selfHeight;//减掉导航栏的距离，不然导航栏会遮住目标
+            var i = Math.floor($(window).scrollTop());// 获取滚动条距离顶端的距离
+            var documentHeight = $(document).height();//整个文档高度
+            var windowHeight = $(window).height();//页面可视高度
+            var diffHeight =Math.floor(documentHeight - windowHeight);// 页面总共可以滚动的高度
+            var speed;//定义一个速度
+            (e.preventDefault()) || (e.returnValue=false);// 阻止浏览器默认单击事件
+            if(Timer){
+                clearInterval(Timer);
+            }
+            Timer = setInterval(main, 30);
+            function main() {//定义主函数
+                if(targetTop>i){//当目标距离顶部的距离大于滚动条距离顶端的距离，则滚动条往下滚动，一直运动到目标距离
+                    i = Math.floor($(window).scrollTop());//用于每次都要获取滚动条距离顶部的距离
+                    speed = (Math.abs(i-targetTop))/opt.speed;
+                    speed = speed>0 ? Math.ceil(speed):Math.floor(speed);
+                    if(i >= targetTop || diffHeight === i){ //当滚动条滚动距离大于或等于目标距离时，或滚动条已经到达底部时
+                        clearInterval(Timer);
+                    }else{
+                        $(window).scrollTop(i+speed);
+                    }
+                }else{//向上滚动
+                    i = Math.floor($(window).scrollTop());
+                    speed = (Math.abs(i-targetTop))/opt.speed;
+                    speed = speed>0?Math.ceil(speed):Math.floor(speed);
+                    if(i <= targetTop){//当滚动条距离顶端位置小于目标距离时
+                        clearInterval(Timer);
+                    }else{
+                        $(window).scrollTop(i-speed);
+                    }
+                }
+            }
+        })
+    };
+    /*测试用例*/
+   $(function() {
+        $('#mySpy').spy({
+            targer:'#mySpy',
+            offset:50,
+            resultTop:10,
+            speed:5
+        });
+    })
+</script>
+
+
+<p></body>
+</html>
+```</p>
+]]></content>
+  </entry>
+  
+</feed>

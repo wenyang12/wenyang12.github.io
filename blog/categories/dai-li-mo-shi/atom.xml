@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: 代理模式 | 三重水的博客]]></title>
+  <link href="http://wenyang12.github.io/blog/categories/dai-li-mo-shi/atom.xml" rel="self"/>
+  <link href="http://wenyang12.github.io/"/>
+  <updated>2018-04-13T14:54:38+08:00</updated>
+  <id>http://wenyang12.github.io/</id>
+  <author>
+    <name><![CDATA[三重水]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[设计模式--代理模式]]></title>
+    <link href="http://wenyang12.github.io/blog/2015/11/26/design-pattern-daili/"/>
+    <updated>2015-11-26T10:15:07+08:00</updated>
+    <id>http://wenyang12.github.io/blog/2015/11/26/design-pattern-daili</id>
+    <content type="html"><![CDATA[<h2>概念解读</h2>
+
+<p>文字解读</p>
+
+<p>代理，顾名思义就是帮助别人做事，GoF（《Design Patterns: Elements of Reusable Object-Oriented Software》（即后述《设计模式》一书），由 Erich Gamma、Richard Helm、Ralph Johnson 和 John Vlissides 合著（Addison-Wesley，1995）。这几位作者常被称为&ldquo;四人组（Gang of Four）&rdquo;）对代理模式的定义如下：</p>
+
+<blockquote><p>代理模式（Proxy），为其他对象提供一种代理以控制对这个对象的访问。
+代理模式使得代理对象控制具体对象的引用。代理几乎可以是任何对象：文件，资源，内存中的对象，或者是一些难以复制的东西。</p></blockquote>
+
+<h2>作用和主意事项</h2>
+
+<p>作用</p>
+
+<ul>
+<li>远程代理（一个对象将不同空间的对象进行局部代理）。</li>
+<li>虚拟代理（根据需要创建开销很大的对象如渲染网页暂时用占位代替真图）。</li>
+<li>安全代理（控制真实对象的访问权限）。</li>
+<li>智能指引（调用对象代理处理另外一些事情如垃圾回收机制）。</li>
+</ul>
+
+
+<p>注意事项</p>
+
+<p>不能滥用代理，有时候仅仅是给代码增加复杂度。</p>
+
+<h2>代码实战</h2>
+
+<pre><code>//创建 买家构造函数
+    var Maijia = function(name) {
+        this.name = name;
+    };
+    //创建 卖家对象 即房东
+    var fangdong = {//单一一个对象
+        //创建一个卖房的方法
+        sell : function(money,from) {
+            console.log("收到买家" + "【" + from.name + "】付的" + money + "人民币");
+        }
+    };
+    // 创建一个代理对象，即代理者,这个代理者是代理房东做事的
+    var daili = {//代表房东，一对一的关系
+        all:{},//用于储存买家的对象
+        zhuce:function(obj) {//买家到中介里登记个人
+            this.all[obj.name] = obj;
+        },
+        sell : function(money,from) {//创建一个卖房的方法
+            fangdong.sell(money,this.all[from.name]);
+        }
+    };
+    //运用
+    var maijiaA = new Maijia("maijiaA");//创建一个买家A
+    daili.zhuce(maijiaA);//买家A到中介注册
+    daili.sell("100万", maijiaA);//然后中介给买家A卖了一套100万的房，房东那边就可以收到钱了，中介给房东办了事
+</code></pre>
+
+<h2>题外话：代理模式跟中介者模式的区别</h2>
+
+<ul>
+<li>代理模式有以下特点：
+
+<ul>
+<li>一对一，这个代理只能代表一个对象。</li>
+<li>只能代表一方，PB是B的代理，A可以通过PB访问B，但是B不能通过PB访问A。</li>
+</ul>
+</li>
+<li>中介者模式有以下特点：
+
+<ul>
+<li>多对多，这些被管理的对象都可以通信，它们的业务关系应该是交织在一起的。</li>
+<li>A能够通过中介访问B，B也能够通过中介访问A</li>
+</ul>
+</li>
+</ul>
+
+
+<blockquote><p>以上信息来自<a href="http://www.jikexueyuan.com/">极客学院</a>的视频观看，属于个人记录，以及添加了一些个人理解。</p></blockquote>
+]]></content>
+  </entry>
+  
+</feed>

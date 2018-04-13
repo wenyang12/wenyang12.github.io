@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>三重水的博客</title>
+  <title>Webview的调试方法 - 三重水的博客</title>
   <meta name="author" content="三重水">
 
   
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="baidu-site-verification" content="ipSlYf2c3P" />
   
-  <link rel="canonical" href="http://wenyang12.github.io/">
+  <link rel="canonical" href="http://wenyang12.github.io/blog/2018/01/17/adb-chrome-develop/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="三重水的博客" type="application/atom+xml">
@@ -93,19 +93,12 @@
 </div></nav>
   <div id="main">
     <div id="content">
-      <div class="blog-index">
+      <div>
+<article class="hentry" role="article">
   
-  
-  
-    <article>
-      
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2018/01/17/adb-chrome-develop/">Webview的调试方法</a></h1>
-      <div class="time-node">
-        <div class="golf_stick"></div>
-        <div class="golf_ball"></div>
-      </div>
+      <h1 class="entry-title">Webview的调试方法</h1>
     
     
       <p class="meta">
@@ -121,7 +114,7 @@
   </header>
 
 
-  <div class="entry-content"><h2>采用fiddler代理调试</h2>
+<div class="entry-content"><h2>采用fiddler代理调试</h2>
 
 <p>下载fiddler，可以移步<a href="https://www.telerik.com/download/fiddler">这里</a></p>
 
@@ -157,297 +150,85 @@
 
 <p>此外还可以通过adb连接手机，通过chrome开发者工具调试，即通过 chrome://inspect 访问已启用调试的 WebView 列表，详情可以移步<a href="https://developers.google.com/web/tools/chrome-devtools/remote-debugging/webviews?hl=zh-cn">远程调试 WebView</a></p>
 </div>
-  
-  
 
 
-    </article>
-  
-  
-    <article>
+  <footer>
+    <p class="meta">
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2017/12/28/csp/">CSP(内容安全策略)</a></h1>
-      <div class="time-node">
-        <div class="golf_stick"></div>
-        <div class="golf_ball"></div>
-      </div>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2017-12-28T11:07:52+08:00'><span class='date'>2017年12月28日</span> <span class='time'>11:07 am</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>前言</h2>
-
-<blockquote><p>HTTP 响应头 Content-Security-Policy 允许站点管理者在指定的页面控制用户代理的资源。除了少数例外，这条政策将极大地指定服务源 以及脚本端点。这将帮助防止跨站脚本攻击（Cross-Site Script） (XSS).</p></blockquote>
-
-<h2>语法</h2>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Content-Security-Policy: &lt;policy-directive&gt;; &lt;policy-directive&gt;</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>CSP的<code>upgrade-insecure-requests</code>指令</h2>
-
-<h3>作用是？</h3>
-
-<p>假如访问的页面是通过https加载进来的html，那么当html中含有http的请求资源，浏览器就会有提示或报错，或浏览器的地址栏会出现黄色角标，提示用户页面中包含有不安全的请求。HTTPS 网页中加载的 HTTP 资源被称之为 Mixed Content（混合内容），不同浏览器对 Mixed Content 有不一样的处理规则。</p>
-
-<p><strong>什么时候浏览器会出现提示呢？</strong></p>
-
-<p>现代浏览器（Chrome、Firefox、Safari、Microsoft Edge），基本上都遵守了W3C的Mixed Content规范，将Mixed Content分为Optionally-blockable 和 Blockable 两类
-属于Optionally-blockable的会在在控制台中打印警告信息。这类资源包括：
-* 通过<code>&lt;img&gt;</code>标签加载的图片（包括SVG图片）
-* 通过<code>&lt;video&gt;</code>,<code>&lt;audio&gt;</code>和<code>&lt;source&gt;</code>标签加载的视频或音频
-* 预读的（prefetched）资源</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2017/12/28/csp/">阅读更多 &rarr;</a>
-    </footer>
   
 
+<span class="byline author vcard">Posted by <span class="fn">三重水</span></span>
 
-    </article>
-  
-  
-    <article>
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2017/08/31/native-drag/">原生拖放</a></h1>
-      <div class="time-node">
-        <div class="golf_stick"></div>
-        <div class="golf_ball"></div>
-      </div>
-    
-    
-      <p class="meta">
-        
 
 
 
 
-<time class='entry-date' datetime='2017-08-31T14:05:02+08:00'><span class='date'>2017年08月31日</span> <span class='time'>2:05 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>前言</h2>
-
-<ul>
-<li>最早引入拖放的是IE4， IE4当时只有两种对象可以拖放： 图像和某些文本； 唯一的放置目标：文本框；</li>
-<li>IE5 扩展了新的事件，几乎网页中任何元素都可以作为放置目标；</li>
-<li>IE5.5 任何元素都可以拖放</li>
-</ul>
-
-
-<blockquote><p>ps： HTML5就是以IE的拖放实例为基础制定了拖放规范的。</p></blockquote>
-
-<h2>事件</h2>
-
-<p>拖动元素时发生的事件依次触发有3个：（事件目标为拖动的元素）</p>
-
-<ul>
-<li>dragstart  按下鼠标键并开始移动鼠标时触发</li>
-<li>drag       元素被拖动期间会持续触发</li>
-<li>dragend    拖动停止时触发（无论元素是否放置在了有效目标上都触发）</li>
-</ul>
-
-
-<p>当某个元素被拖动到一个有效的放置目标上时，依次会触发以下事件：（事件目标为放置目标的元素）</p>
-
-<ul>
-<li>dragenter  只要有元素拖动到放置目标上，就会触发</li>
-<li>dragover   被拖动的元素在放置目标范围中移动触发</li>
-<li>dragleave/drop 被拖动的元素拖出放置目标范围触发dragleave/元素要是被放置到目标中触发drop</li>
-</ul>
-
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2017/08/31/native-drag/">阅读更多 &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
+<time class='entry-date' datetime='2018-01-17T11:23:19+08:00'><span class='date'>2018年01月17日</span> <span class='time'>11:23 am</span></time>
       
-  <header>
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/adb/'>adb</a>, <a class='category' href='/blog/categories/diao-shi-webview/'>调试webview</a>
+  
+</span>
+
+
+    </p>
     
-      <h1 class="entry-title"><a href="/blog/2017/08/17/email-read-adaption/">邮件读信页的自适应方案</a></h1>
-      <div class="time-node">
-        <div class="golf_stick"></div>
-        <div class="golf_ball"></div>
-      </div>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2017-08-17T14:25:10+08:00'><span class='date'>2017年08月17日</span> <span class='time'>2:25 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>背景介绍</h2>
-
-<p>邮件的读信页，要分享到别的地方，别的地方可以通过一个连接即可打开查看。</p>
-
-<p>那么问题了来了，在终端或者pc端，查看内容的时候，因为设备不一样，屏幕尺寸也都不同，那就会碰到，有些邮件内容看起来就很难看，因为邮件内容都是第三方发送过来的，都没有做自适应适配，只能是读信这边来做自适应，让它展示起来效果都高保真发件者发过来的邮件即可。此外我们会经常收到一些推广的邮件，里边的邮件就像一个小页面一样展示，这种邮件一般有个名字叫emd邮件，即“电子邮件营销”，很多都不符合标准，会带上自己的一些样式规则，而css样式不是用符合edm规范的的内联样式，这就导致了，读信页里的内容样式，影响到展示它的网页样式，通常处理这种影响，有些会把style标签过滤掉，不过，一般成熟的邮件方案是使用iframe方案插入邮件，让他自己有自己的一个空间，就可以解决影响到外部样式问题，而也高保真了发送过来的邮件展示问题。</p>
-
-<h2>edm是什么？</h2>
-
-<p>上边提到的edm邮件营销，即可以理解为，通过邮件方式，插入自己的网页源代码，然后发送给对方，对方查看邮件的时候，就会看到邮件内容跟一张网页一样，可以浏览，也可以点击调转，从而起到营销引流的作用，把流量导入自己的真实网站中，最常见的就是购物网站的edm邮件了。你去某网站购物，注册了，然后留了自己的邮箱地址，购物网站会根据你平时浏览过的，或购买过的，进行精准的邮件edm营销，定期发送一封邮件给你。
-emd邮件如图所示：</p>
-
-<p><img src="/images/email-read-pic.png" alt="edm图例" /></p>
-
-<p>这么样才算符合edm的源码写法呢，这里有个源码<a href="https://github.com/wenyang12/email-edm-template.git">事例</a>可以看看</p>
-
+      <div class="sharing">
+  
+  
+  
+  
+  <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style_32x32">
+    <a class="jiathis_button_qzone"></a>
+    <a class="jiathis_button_tsina"></a>
+    <a class="jiathis_button_tqq"></a>
+    <a class="jiathis_button_weixin"></a>
+    <a class="jiathis_button_renren"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+    <a class="jiathis_counter_style"></a>
 </div>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
   
-  
-    <footer>
-      <a rel="full-article" href="/blog/2017/08/17/email-read-adaption/">阅读更多 &rarr;</a>
-    </footer>
-  
+</div>
 
-
-    </article>
-  
-  
-    <article>
+    
+    <p class="meta">
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2017/07/07/file-upload-formdata/">Formdata异步上传文件的实现</a></h1>
-      <div class="time-node">
-        <div class="golf_stick"></div>
-        <div class="golf_ball"></div>
-      </div>
-    
-    
-      <p class="meta">
-        
+        <a class="basic-alignment left" href="/blog/2017/12/28/csp/" title="Previous Post: CSP(内容安全策略)">&laquo; CSP(内容安全策略)</a>
+      
+      
+    </p>
+  </footer>
+</article>
 
-
-
-
-<time class='entry-date' datetime='2017-07-07T16:09:14+08:00'><span class='date'>2017年07月07日</span> <span class='time'>4:09 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>使用FormData来实现文件上传</h2>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>var xhr = new XMLHttpRequest(),
-</span><span class='line'>fd = new FormData();
-</span><span class='line'>//file为上传的file对象，将文件放入FormData对象中,第三个参数是指定文件名,或者可以不指定。
-</span><span class='line'>fd.append('file', file, file.name); 
-</span><span class='line'>fd.append('type',1); // 继续追加数据   
-</span><span class='line'>xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-</span><span class='line'>xhr.addEventListener('load',function(evt){ // 监听上传完成
-</span><span class='line'>    var response = evt.target.response;     // 返回的数据
-</span><span class='line'>    //do something...
-</span><span class='line'>})
-</span><span class='line'>xhr.upload.addEventListener('progress', function(evt){ // 监听上传进度
-</span><span class='line'>    //lengthComputabel: 文件长度是否可计算
-</span><span class='line'>    if(evt.lengthComputable){
-</span><span class='line'>        //evt.loaded: 已下载的字节数
-</span><span class='line'>        //evt.total: 文件总字节数
-</span><span class='line'>        var percent = Math.round(evt.loaded*100/evt.total);
-</span><span class='line'>        console.log(percent);
-</span><span class='line'>    }
-</span><span class='line'>})
-</span><span class='line'>xhr.abort() // 终止文件上传方法
-</span><span class='line'>xhr.addEventListener('abort', function(evt){ // 监听文件被终止上传
-</span><span class='line'>    // do something...
-</span><span class='line'>})
-</span><span class='line'>xhr.addEventListener('error', function(evt){ // 监听上传错误
-</span><span class='line'>    // do something...
-</span><span class='line'>})
-</span><span class='line'>xhr.addEventListener('loaded', function(evt){ // 监听传输结束事件: 不管成功或者失败都会触发
-</span><span class='line'>    // do something...
-</span><span class='line'>})
-</span><span class='line'>
-</span><span class='line'>xhr.open('post', url, true);
-</span><span class='line'>xhr.send(fd);</span></code></pre></td></tr></table></div></figure>
+  <section>
+    <h1>评论</h1>
+    <div id="disqus_thread" aria-live="polite"><!-- 多说评论框 start -->
+<div class="ds-thread" data-thread-key="/blog/2018/01/17/adb-chrome-develop" data-title="webview的调试方法" data-url="http://wenyang12.github.io/blog/2018/01/17/adb-chrome-develop/"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    var duoshuoQuery = {short_name:"ywenblog"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+        || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+</div>
+  </section>
 
 </div>
-  
-  
 
-
-    </article>
-  
-  <div class="pagination">
-    
-      <a class="prev" href="/posts/2">&larr; Older</a>
-    
-    <a href="/blog/archives">博客文档</a>
-    
-  </div>
-</div>
 <aside class="sidebar">
   
     <section>
@@ -551,6 +332,7 @@ emd邮件如图所示：</p>
 </section>
   
 </aside>
+
 
     </div>
   </div>

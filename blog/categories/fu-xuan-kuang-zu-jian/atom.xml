@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: 复选框组件 | 三重水的博客]]></title>
+  <link href="http://wenyang12.github.io/blog/categories/fu-xuan-kuang-zu-jian/atom.xml" rel="self"/>
+  <link href="http://wenyang12.github.io/"/>
+  <updated>2018-04-13T14:54:38+08:00</updated>
+  <id>http://wenyang12.github.io/</id>
+  <author>
+    <name><![CDATA[三重水]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[购物车订单列表的复选框组件]]></title>
+    <link href="http://wenyang12.github.io/blog/2015/11/27/shop-list-checkbox/"/>
+    <updated>2015-11-27T13:40:24+08:00</updated>
+    <id>http://wenyang12.github.io/blog/2015/11/27/shop-list-checkbox</id>
+    <content type="html"><![CDATA[<h2>起源</h2>
+
+<p>我们要是写电商网页的时候，会经常碰到购物车列表的复选框点选操作，点击全选，然后上边的复选框都能选中，然后结算，或者单个选中上边的复选框时，假如都选中了，下边的全选复选框也会打上勾，
+所以为了将来开发到电商网站时，可以复用自己写过的脚本，特地抽象写成了一个组件。</p>
+
+<h2>实现思路</h2>
+
+<p><strong>需求</strong></p>
+
+<ul>
+<li>点击全选复选框按钮时，列表中的所有复选框都被选中；</li>
+<li>选中列表中的复选框时，假如全选中了，全选复选框状态也变为选中，否则不选中。</li>
+</ul>
+
+
+<!--more-->
+
+
+<p><strong>代码架构</strong></p>
+
+<p>声明一个类CheckList</p>
+
+<p>属性：</p>
+
+<ul>
+<li>checkItem （用于储存所有复选框对象，不包含全选复选框）；</li>
+<li>checkAll (用于储存全选复选框对象)；</li>
+<li>allCheckItem (用于储存所有复选框，包含全选复选框在内)；</li>
+<li>state （储存状态，假如为true时，当页面加载完后所有复选框都为选中状态；反之false，为不选中状态）。</li>
+</ul>
+
+
+<p>方法：</p>
+
+<ul>
+<li>init 用于初始化加载</li>
+<li>_check 用于选中或不选中复选框（包含全选复选框在内）的操作</li>
+<li>_allCheck 全选</li>
+<li>_notAllcheck 全不选</li>
+</ul>
+
+
+<blockquote><p>每次复用这个组件的时候，实例化这个类时，同时传入全选复选框对象，和所有复选框（包含全选复选框），和自己想要的初始化页面时的复选框状态即可复用。</p></blockquote>
+
+<h2>代码实现（其中可以自定义复选框样式可以参考以下代码贴出的css样式代码）</h2>
+
+<pre><code>    &lt;!DOCTYPE html&gt;
+    &lt;html&gt;
+    &lt;head lang="en"&gt;
+        &lt;meta charset="UTF-8"&gt;
+        &lt;title&gt;购物车订单列表复选框组件&lt;/title&gt;
+        &lt;style&gt;
+            .form-group{
+                margin-bottom: 30px;
+                height: 30px;
+            }
+            /*改变复选框样式*/
+            .form-group &gt; label &gt; span{
+                display: inline-block;
+                margin-right: 5px;
+                border: 1px solid #d9d9d9;
+                width: 1.375em;
+                height: 1.375em;
+                -webkit-border-radius: 50%;
+                -moz-border-radius: 50%;
+                border-radius: 50%;
+                -webkit-box-sizing:border-box;
+                -moz-box-sizing:border-box;
+                -o-box-sizing:border-box;
+                -ms-box-sizing:border-box;
+                box-sizing:border-box;
+            }
+            .form-group &gt; label input{
+                visibility: hidden;
+            }
+            /*选中复选框样式*/
+            .form-group &gt; label &gt; span.active{
+                background: #ff5252;
+                position: relative;
+                border-color: #ff5252;
+            }
+            .form-group &gt; label &gt; span.active:after{
+                position: absolute;
+                content: '';
+                width: 0.75em;
+                height: 0.41em;
+                border: 2px solid #ffffff;
+                border-top: none;
+                border-right: none;
+                left: 0.3em;
+                top: 0.35em;
+                -webkit-box-sizing:border-box;
+                -moz-box-sizing:border-box;
+                -o-box-sizing:border-box;
+                -ms-box-sizing:border-box;
+                box-sizing:border-box;
+                -webkit-transform: rotate(-45deg);
+                -moz-transform: rotate(-45deg);
+                -ms-transform: rotate(-45deg);
+                -o-transform: rotate(-45deg);
+                transform: rotate(-45deg);
+            }
+        &lt;/style&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+    &lt;script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"&gt;&lt;/script&gt;
+    &lt;div class="box"&gt;
+        &lt;div class="form-group"&gt;
+            &lt;label&gt;&lt;span&gt;&lt;input type="checkbox"/&gt;&lt;/span&gt;2000金币&lt;/label&gt;
+        &lt;/div&gt;
+        &lt;div class="form-group"&gt;
+            &lt;label&gt;&lt;span&gt;&lt;input type="checkbox"/&gt;&lt;/span&gt;2000金币&lt;/label&gt;
+        &lt;/div&gt;
+        &lt;div class="form-group"&gt;
+            &lt;label&gt;&lt;span&gt;&lt;input type="checkbox"/&gt;&lt;/span&gt;2000金币&lt;/label&gt;
+        &lt;/div&gt;
+        &lt;div class="form-group"&gt;
+            &lt;label&gt;&lt;span&gt;&lt;input id="checkAll" type="checkbox"/&gt;&lt;/span&gt;全选&lt;/label&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;script&gt;
+        //复选框选择
+        function CheckList(obj) {
+            this.checkItem = obj.checkItem.not(obj.checkAll) || $("input[type='checkbox']").not(obj.checkAll);//所有复选框（不包含全选复选框）
+            this.allCheckItem = obj.checkItem || $("input[type='checkbox']");//所有复选框
+            this.checkAll = obj.checkAll;//全选复选框
+            this.state = obj.state || false;//状态为true时，页面刚加载复选框默认都为选中
+        }
+        CheckList.prototype ={
+            init:function() {
+                this._check();
+                if(this.state){
+                    this._allCheck();
+                }else{
+                    this._notAllcheck();
+                }
+            },
+            _check:function() {
+                //单击全选
+                var that = this;
+                this.checkAll.on('click',function() {
+                    if($(this).prop('checked')){
+                        that.checkItem.prop('checked', true).parent().addClass('active');
+                        $(this).prop('checked', true).parent().addClass('active');
+                    }else{
+                        that.checkItem.prop('checked', false).parent().removeClass('active');
+                        $(this).prop('checked', false).parent().removeClass('active');
+                    }
+                });
+                //单击每个复选框（不包含全选复选框）
+                this.checkItem.on('click',function() {
+                    var checkItem =Array.prototype.slice.call(that.checkItem);
+                    var flag =checkItem.every(function(elem,index,array) {
+                        return $(elem).prop('checked');
+                    });
+                    if($(this).prop('checked')){
+                        $(this).prop('checked',true).parent().addClass('active');
+                    }else{
+                        $(this).prop('checked',false).parent().removeClass('active');
+                    }
+                    if(flag){//如果都为选中
+                        that.checkAll.prop('checked', true).parent().addClass('active');
+                    }else{
+                        that.checkAll.prop('checked', false).parent().removeClass('active');
+                    }
+                })
+            },
+            _allCheck:function() {// 全选
+                this.allCheckItem.prop('checked', true).parent().addClass('active');
+            },
+            _notAllcheck:function() {//全不选
+                this.allCheckItem.prop('checked', false).parent().removeClass('active');
+            }
+        };
+        //兼容旧环境，es5新增的数组方法every
+        if (!Array.prototype.every)
+        {
+            Array.prototype.every = function(fun /*, thisArg */)
+            {
+                'use strict';
+                if (this === void 0 || this === null)
+                    throw new TypeError();
+                var t = Object(this);
+                var len = t.length &gt;&gt;&gt; 0;
+                if (typeof fun !== 'function')
+                    throw new TypeError();
+                var thisArg = arguments.length &gt;= 2 ? arguments[1] : void 0;
+                for (var i = 0; i &lt; len; i++)
+                {
+                    if (i in t &amp;&amp; !fun.call(thisArg, t[i], i, t))
+                        return false;
+                }
+                return true;
+            };
+        }
+        //实例化运用
+        var checklistA = new CheckList({
+            checkItem: $("input[type='checkbox']"),//所有复选框对象
+            checkAll:$("#checkAll"),//全选复选框对象
+            state:true//状态，为true全选中，为false为不选中（默认为false）
+        });
+        checklistA.init();
+    &lt;/script&gt;
+    &lt;/body&gt;
+    &lt;/html&gt;
+</code></pre>
+]]></content>
+  </entry>
+  
+</feed>

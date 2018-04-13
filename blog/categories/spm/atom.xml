@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Spm | 三重水的博客]]></title>
+  <link href="http://wenyang12.github.io/blog/categories/spm/atom.xml" rel="self"/>
+  <link href="http://wenyang12.github.io/"/>
+  <updated>2018-04-13T14:54:38+08:00</updated>
+  <id>http://wenyang12.github.io/</id>
+  <author>
+    <name><![CDATA[三重水]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Spm瀑布流模块包的使用]]></title>
+    <link href="http://wenyang12.github.io/blog/2015/12/03/pubuliu-module-spm-use/"/>
+    <updated>2015-12-03T15:21:14+08:00</updated>
+    <id>http://wenyang12.github.io/blog/2015/12/03/pubuliu-module-spm-use</id>
+    <content type="html"><![CDATA[<p>这里是如何使用模块包，想要了解如何构建模块包可以看<a href="/blog/2015/12/03/pubuliu-module-spm/">构建spm瀑布流模块包</a></p>
+
+<h2>源码结构(前端写的静态页面一般都是如下结构，即可在自己的这个结构上进行spm引用包辅助开发,然后下边会用到<code>$ spm build</code>命令来构建这些代码，从而生成我们要的最终代码，放在dist文件夹里)</h2>
+
+<ul>
+<li>pubuliu
+
+<ul>
+<li>css</li>
+<li>images</li>
+<li>index.html</li>
+<li>index.js</li>
+</ul>
+</li>
+</ul>
+
+
+<p>源码可以在我的github上下载<a href="https://github.com/wenyang12/bupuliu/tree/v1">https://github.com/wenyang12/bupuliu/tree/v1</a></p>
+
+<h2>引入瀑布流模块测试（在下载以上源码后，进入这个源码文件夹pubuliu，在这里边开发测试）</h2>
+
+<p><strong>安装spm包管理</strong></p>
+
+<blockquote><p>npm install -g spm</p></blockquote>
+
+<p><strong>安装瀑布流模块</strong></p>
+
+<blockquote><p>spm install moving-water</p></blockquote>
+
+<!--more-->
+
+
+<p><strong>js引入（源码中我已经在<code>index.js</code>中放入了下边的js代码了）</strong></p>
+
+<pre><code>var movingWater = require('moving-water');//引入瀑布流模块
+movingWater.init('.pubuliu-box','.img-box',callback);
+function callback(parent) {
+    //模拟数据
+    var ajaxData =[{src:'images/1.jpg'},{src:'images/2.jpg'},{src:'images/3.jpg'},{src:'images/4.jpg'},{src:'images/5.jpg'},{src:'images/6.jpg'},{src:'images/7.jpg'},{src:'images/8.jpg'},{src:'images/9.jpg'},{src:'images/10.jpg'}];
+    ajaxData.forEach(function(el) {
+        var imgBox = document.createElement('div');
+        var imgInner = document.createElement('div');
+        var img = document.createElement('img');
+        imgBox.className='img-box';
+        imgInner.className = 'img-inner';
+        img.src = el.src;
+        imgInner.appendChild(img);
+        imgBox.appendChild(imgInner);
+        parent.appendChild(imgBox);
+    });
+}
+</code></pre>
+
+<p><strong>本地运行</strong></p>
+
+<blockquote><p>spm server</p></blockquote>
+
+<p>在浏览器输入<code>http://127.0.0.1:8000/index.html</code> 即可预览</p>
+
+<p><strong>构建最终代码（不用先建一个dist文件夹，构建时会自动创建这个文件夹）</strong></p>
+
+<blockquote><p>spm build index.html css/*.*    //这里构建的时候默认自动构建index.js</p>
+
+<p>mkdir dist/images          //这里因为构建代码images的时候，会提示没有images文件夹，所以先创建这个文件夹</p>
+
+<p>spm build images/*.*</p></blockquote>
+
+<p><strong>用make构建</strong>
+需要创建一个Makefile文件，我这里的源码已经有了，这个文件的代码如下</p>
+
+<pre><code>build:
+    @spm build index.html css/*.*
+    @mkdir dist/images
+    @spm build images/*.*
+</code></pre>
+
+<p>其实就是用make编译，帮我们自动执行Makefile里边写入的一个个命令，不用手动每次自己敲。但是，要保证自己电脑安装了make编译，可以安装<a href="http://www.cygwin.com/">cygwin</a>;</p>
+
+<p>然后安装时，添加一个镜像<a href="http://mirrors.163.com/cygwin/">http://mirrors.163.com/cygwin/</a>
+<img src="http://wenyang-public.stor.sinaapp.com/Uploads/20151203/1449121181_1160471122.png" alt="添加镜像图" /></p>
+
+<p>然后接着下一步选取make点击下一步安装即可</p>
+
+<p><img src="http://wenyang-public.stor.sinaapp.com/Uploads/20151203/1449121196_2038698492.png" alt="添加镜像图" /></p>
+
+<blockquote><p>make build  //即可执行Makefile文件里写入的命令，已达到同样效果</p></blockquote>
+
+<p>最终的代码会被放入dist这个文件夹下。
+最终的效果可以看我的<a href="https://github.com/wenyang12/bupuliu/tree/v2">v2版本</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[构建spm瀑布流模块包]]></title>
+    <link href="http://wenyang12.github.io/blog/2015/12/03/pubuliu-module-spm/"/>
+    <updated>2015-12-03T14:17:50+08:00</updated>
+    <id>http://wenyang12.github.io/blog/2015/12/03/pubuliu-module-spm</id>
+    <content type="html"><![CDATA[<h2>前言</h2>
+
+<p>构建自己的一个spm瀑布流模块包以方便自己在图片运用到瀑布流效果的时候，自己可以在spm环境下引入代码，方便js编写，方便模块管理。
+构建好之后可以发布到<a href="http://spmjs.io/">http://spmjs.io/</a>,下次想要用直接输入</p>
+
+<blockquote><p>$ spm install &lt;包文件名> &ndash;save</p>
+
+<p>即 spm install moving-water &ndash;save</p></blockquote>
+
+<p>即可给自己项目添加了一个包，然后接着，在自己js里边引用</p>
+
+<blockquote><p>var movingWater = require(&lsquo;&lt;包文件名>&rsquo;)</p>
+
+<p>即 var movingWater = require(&lsquo;moving-water&rsquo;);
+ // use movingWater</p></blockquote>
+
+<h2>构建包开始</h2>
+
+<!--more-->
+
+
+<h3>安装spm</h3>
+
+<blockquote><p>$ npm install -g spm</p></blockquote>
+
+<h3>建一个文件夹(即包名)</h3>
+
+<blockquote><p>$ mkdir  moving-water</p></blockquote>
+
+<h3>初始化spm环境</h3>
+
+<blockquote><p>$ npm init</p></blockquote>
+
+<h3>编辑index.js</h3>
+
+<pre><code>var movingWater;
+movingWater =(function() {
+    /*单例模式*/
+    var addEvent=(function() {//返回兼容旧浏览器的事件监听
+        var instance;
+        function init() {
+            function temp(target,event,fn) {
+                if(window.addEventListener){
+                    return target.addEventListener(event, fn);
+                }else if(window.attachEvent) {
+                    return target.attachEvent('on'+event, fn);
+                }
+            }
+            return temp
+        }
+        return{
+            getInstance: function() {
+                if(!instance){
+                    instance = init();
+                }
+                return instance;
+            }
+        }
+    }());
+    function init(parent,child,callback){
+        var event = addEvent.getInstance();
+        event(window,'load',function() {
+            var parentEle = document.querySelector(parent);
+            var childEle = document.querySelectorAll(child);
+            //设置布局宽度
+            var docWidth = document.documentElement.offsetWidth || document.body.offsetWidth; //获取可视文档的宽度
+            var imgBoxWidth = childEle[0].offsetWidth;//获取图片盒子的宽度
+            var cols = Math.floor(docWidth / imgBoxWidth);//一行能放几张图片的个数
+            parentEle.style.width = cols * imgBoxWidth + 'px';//设置布局宽度
+            main(cols, child);
+            scrollAjax(cols, child, parentEle, callback);
+        });
+    }
+    //核心函数
+    function main(cols,child) {
+        //设置除了第一行图片，往后的图片的布局，计算出第一行图片当中的最小高度，然后把往后的图片用绝对定位摆放在其下边，依次类推。
+        var imgHeightArr =[],imgMinHeight, imgMinHeightIndex;
+        childEle = document.querySelectorAll(child);
+        for(var i = 0,len = childEle.length; i &lt; len; i++) {
+            if(i &lt; cols) {
+                imgHeightArr[i]  = childEle[i].offsetHeight;
+            }else{
+                imgMinHeight = Math.min.apply(null, imgHeightArr); //获取第一行图片的最小高度
+                imgMinHeightIndex = getImgMinIndex(imgHeightArr, imgMinHeight);//获取第一行图片最小高度对应的位置，即索引值
+                //设置接下来除了第一行图片的所有图片布局
+                childEle[i].style.position = 'absolute';
+                childEle[i].style.top = imgMinHeight + 'px';
+                childEle[i].style.left = childEle[imgMinHeightIndex].offsetLeft+'px';
+                imgHeightArr[imgMinHeightIndex] = imgMinHeight + childEle[i].offsetHeight;//重新设置最小高度
+            }
+        }
+    }
+    //获取第一行图片最小高度对应的位置，即索引值
+    function getImgMinIndex(imgHeightArr, imgMinHeight) {
+        for(var i in imgHeightArr) {
+            if(imgHeightArr[i] === imgMinHeight) {
+                return i;
+            }
+        }
+    }
+    function scrollAjax(cols,child,parent,callback) {
+        var event = addEvent.getInstance();
+        event(window,'scroll',function() {
+            if(scrollFlag(child)){
+                callback(parent);
+                main(cols,child);
+            }
+        })
+    }
+    //设置滚动条滚动到什么位置，加载图片
+    function scrollFlag(child) {
+        childEle = document.querySelectorAll(child);
+        var lastImgOffsetTop = childEle[childEle.length - 1].offsetTop;
+        var lastImgHeight = childEle[childEle.length - 1].offsetHeight;
+        var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;//获取滚动条向下滚滚去的高度
+        var docHeight = document.documentElement.clientHeight || document.body.clientHeight;//获取文档可视区域的高度
+        console.log(lastImgOffsetTop, scrollTop, docHeight,lastImgHeight);
+        if(lastImgOffsetTop &lt; scrollTop+docHeight-lastImgHeight) {//滚动条拉动显示最后一张图片底部时加载
+            return true;
+        }else{
+            return false;
+        }
+    }
+    return {
+        init:init
+    }
+}());
+module.exports = movingWater;
+</code></pre>
+
+<h3>编辑<code>./examples/index.md</code>(即在这里编辑写入这个包的demo，这里有一个值得注意的就是它会自动解析里边用md编辑的代码，可以看到测试用例demo的效果)</h3>
+
+<h3>编辑根目录下边的<code>./README.md</code> 来教大家如何使用你的包。</h3>
+
+<h3>最后本地调试</h3>
+
+<p>执行 spm doc 开启一个文档服务 127.0.0.1:8000 ：</p>
+
+<blockquote><p>$ spm doc</p></blockquote>
+
+<p>然后在浏览器里打开 <a href="http://127.0.0.1:8000/examples/">http://127.0.0.1:8000/examples/</a> 即可看到结果。<a href="http://docs.spmjs.io/moving-water/latest/">这里</a>是我的</p>
+
+<h3>发布</h3>
+
+<blockquote><p>$ spm login //username 是你的 github 账号，而 authkey 可以在你登陆后在 <a href="http://spmjs.io/account">http://spmjs.io/account</a> 找到。</p>
+
+<p>spm publish</p></blockquote>
+
+<p><strong>发布文档</strong></p>
+
+<blockquote><p>$ spm doc publish</p></blockquote>
+
+<h2>发布好后即可使用了</h2>
+
+<p>在我的<a href="https://github.com/wenyang12/bupuliu/tree/v1">github</a>上有瀑布流的测试用例</p>
+
+<h2>参考质料</h2>
+
+<p><a href="https://github.com/spmjs/docs/blob/master/zh-cn/package/get-started.md">spm组件入门</a></p>
+]]></content>
+  </entry>
+  
+</feed>

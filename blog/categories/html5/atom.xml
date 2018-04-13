@@ -1,0 +1,567 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Html5 | 三重水的博客]]></title>
+  <link href="http://wenyang12.github.io/blog/categories/html5/atom.xml" rel="self"/>
+  <link href="http://wenyang12.github.io/"/>
+  <updated>2018-04-13T14:54:38+08:00</updated>
+  <id>http://wenyang12.github.io/</id>
+  <author>
+    <name><![CDATA[三重水]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[原生拖放]]></title>
+    <link href="http://wenyang12.github.io/blog/2017/08/31/native-drag/"/>
+    <updated>2017-08-31T14:05:02+08:00</updated>
+    <id>http://wenyang12.github.io/blog/2017/08/31/native-drag</id>
+    <content type="html"><![CDATA[<h2>前言</h2>
+
+<ul>
+<li>最早引入拖放的是IE4， IE4当时只有两种对象可以拖放： 图像和某些文本； 唯一的放置目标：文本框；</li>
+<li>IE5 扩展了新的事件，几乎网页中任何元素都可以作为放置目标；</li>
+<li>IE5.5 任何元素都可以拖放</li>
+</ul>
+
+
+<blockquote><p>ps： HTML5就是以IE的拖放实例为基础制定了拖放规范的。</p></blockquote>
+
+<h2>事件</h2>
+
+<p>拖动元素时发生的事件依次触发有3个：（事件目标为拖动的元素）</p>
+
+<ul>
+<li>dragstart  按下鼠标键并开始移动鼠标时触发</li>
+<li>drag       元素被拖动期间会持续触发</li>
+<li>dragend    拖动停止时触发（无论元素是否放置在了有效目标上都触发）</li>
+</ul>
+
+
+<p>当某个元素被拖动到一个有效的放置目标上时，依次会触发以下事件：（事件目标为放置目标的元素）</p>
+
+<ul>
+<li>dragenter  只要有元素拖动到放置目标上，就会触发</li>
+<li>dragover   被拖动的元素在放置目标范围中移动触发</li>
+<li>dragleave/drop 被拖动的元素拖出放置目标范围触发dragleave/元素要是被放置到目标中触发drop</li>
+</ul>
+
+
+<!--more-->
+
+
+<h2>如何把任何元素变成有效的放置目标呢？</h2>
+
+<p>直接阻止dragenter 和dragover这两个事件的默认行为即可实现，代码如下</p>
+
+<pre><code>// 假如droptargetNode为放置目标的元素
+droptargetNode.addEventListener('dragenter', function(evt) {
+    evt.preventDefault();
+})
+droptargetNode.addEventListener('dragover', function(evt) {
+    evt.preventDefault();
+})
+</code></pre>
+
+<p>存在的兼容性：</p>
+
+<ul>
+<li>firefox3.5中 放置事件drop的默认行为是打开被放到放置目标上的URL，如把图像拖放到放置目标上，页面就会转向图像文件，但是如果把文本拖放到放置目标上时，会导致无效的URL错误。所以要兼容还得取消drop事件的默认行为，阻止它打开URL，代码如下：</li>
+</ul>
+
+
+<pre><code>droptargetNode.addEventListener('drop', function(evt) {
+    evt.preventDefault();
+})
+</code></pre>
+
+<h2>如何把元素设置为可以拖动呢？</h2>
+
+<p>默认情况下，图像，链接和文本是可以拖动的。而其他元素怎么实现让它也能拖动呢，html5规范为所有HTML元素添加了一个draggable属性，表示元素是否可以被拖动。当设置为true时，即可被拖动，false为不可被拖动。</p>
+
+<p>这里有个兼容问题：firefox浏览器要是不在dragstart事件中给dataTransfer对象设置保存一些信息的话，元素还是无法被拖动。</p>
+
+<h2>如何在拖放操作时实现数据交换？dataTransfer对象。</h2>
+
+<p>针对这个问题，IE5引入了<strong>dataTransfer</strong>对象，它是事件对象的一个属性</p>
+
+<p>dataTransfer对象的作用： 用于被拖动元素向放置目标传递字符串格式的数据</p>
+
+<p>dataTransfer对象有两个主要方法：</p>
+
+<ul>
+<li>getData()  只能在drop事件处理程序获取保存的数据</li>
+<li>setDate()  第一个参数表示保存的数据类型，取值为“text” 或 “URL”( IE只定义了这两种有效的数据类型，HTML5扩展了，允许指定各种MIME类型)</li>
+</ul>
+
+
+<p>代码事例：</p>
+
+<pre><code>// 设置和接收文本数据
+evt.dataTransfer.setData('text','some text');
+var text = evt.dataTransfer.getData('text); // some text
+
+// 设置和接收URL
+evt.dataTransfer.setData('URL','https://wenyang12.github.io/');
+var text = evt.dataTransfer.getData('URL); // https://wenyang12.github.io/
+</code></pre>
+
+<blockquote><p>ps： HTML5规范扩展了各种MIME类型的同时，考虑到向后兼容，也同时保留了对“text” 和“URL” 这两种数据类型的支持，要是你指定了这两种类型，会映射为“text/plain” 和 “text/uri-list”</p></blockquote>
+
+<p><strong>浏览器在你拖动文本或图像时，默认行为做了些什么呢？</strong></p>
+
+<p>当你拖动文本或图像时，浏览器会默认调用setData()方法，将拖动的文本以“text”或“URL”格式保存在dataTransfer对象中，
+然后当放置到目标元素时，就可以通过getDage() 方法读取到这些数据，所以我们要是想保存自己的数据，可以在dragstart事件发生时，调用setData设置自己要保存的数据，然后在放置事件drop触发时，就可以通过dataTransfer对象获取到保存的数据了。</p>
+
+<p><strong>兼容问题</strong></p>
+
+<p>firfox在第五版本之前不能正确映射“URL”和“text”为 “text/uri-list” 和 “text/plain” ，但是能把“Text”(T大写) 正确映射，
+所以为了兼容，应该处理如下：</p>
+
+<pre><code>// 读取URL
+dataTransfer.getData('URL') || dataTransfer.getdata('text/uri-list')
+
+// 读取文本
+dataTransfer.getData('Text');
+</code></pre>
+
+<blockquote><p>ps: IE10之前都不支持扩展的MIME类型名称，所以，读取URL时必须把dataTransfer.getData(&lsquo;URL&rsquo;)放前面，不然ie在遇到无法识别的数据类型时，会抛出错误。</p></blockquote>
+
+<p><strong>dropEffect 与 effectAllowed</strong></p>
+
+<ul>
+<li><p>dropEffect在dragenter事件中设置，即在放置目标上设置,它包含的值有：</p>
+
+<ul>
+<li>&lsquo;none&rsquo;: 不能把拖动的元素放在这里。这是除文本框之外说有元素的默认值。</li>
+<li>&lsquo;move&rsquo;: 应该把拖动的元素移动到放置目标。</li>
+<li>&lsquo;copy&rsquo;: 应该把拖动的元素复制到放置目标。</li>
+<li>&lsquo;link&rsquo;: 表示放置目标会打开拖动的元素（但拖动的元素必须是一个连接，有URL）</li>
+</ul>
+</li>
+<li><p>effectAllowed在dragstart事件中设置，即在拖动目标上设置， 这个属性表示允许拖动元素的那种dropEffect。它包含的值有：</p>
+
+<ul>
+<li>&lsquo;uninitialized&rsquo;: 没有给被拖动的元素设置任何行为。</li>
+<li>&lsquo;none&rsquo;: 被拖动的元素不能有任何行为。</li>
+<li>&lsquo;copy&rsquo;: 只允许值为&ldquo;copy&rdquo;的dropEffect</li>
+<li>&lsquo;link&rsquo;: 只允许值为&ldquo;link&rdquo;的dropEffect</li>
+<li>&lsquo;move&rsquo;: 只允许值为&ldquo;move&rdquo;的dropEffect</li>
+<li>&lsquo;copyLink&rsquo;: 只允许值为&ldquo;copy&rdquo;和&ldquo;link&rdquo;的dropEffect</li>
+<li>&lsquo;copyMove&rsquo;: 只允许值为&ldquo;copy&rdquo;和&ldquo;move&rdquo;的dropEffect</li>
+<li>&lsquo;linkMove&rsquo;: 只允许值为&ldquo;link&rdquo;和&ldquo;move&rdquo;的dropEffect</li>
+<li>&lsquo;all&rsquo;: 允许任意dropEffect</li>
+</ul>
+</li>
+</ul>
+
+
+<blockquote><p>ps: dropEffect 属性只有搭配effectAllowed属性才有用。</p></blockquote>
+
+<p><strong>其他</strong></p>
+
+<p>dataTransfer还包括以下属性和方法：</p>
+
+<ul>
+<li>addElement(elemet)            为拖动元素添加一个元素，只有Firefox3.5+实现</li>
+<li>clearData(format)             清除以特定元素保存的数据。实现浏览器有： IE， Fireforx 3.5+, Chrome, Safari 4+</li>
+<li>setDragImage(element, x, y)    指定一副图像，当拖动发生时显示在光标下方，x,y为光标在图像中的x,y坐标。实现的浏览器有：Firefox 3.5+，Safari 4+， chrome</li>
+<li>types： 当前保存的数据类型。     实现的浏览器有： IE10+，Firefox3.5+， Chrome</li>
+</ul>
+
+
+<h2>参考</h2>
+
+<p>JavaScript 高级程序设计（第三版） 作者：Nicholas C.Zakas</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Formdata异步上传文件的实现]]></title>
+    <link href="http://wenyang12.github.io/blog/2017/07/07/file-upload-formdata/"/>
+    <updated>2017-07-07T16:09:14+08:00</updated>
+    <id>http://wenyang12.github.io/blog/2017/07/07/file-upload-formdata</id>
+    <content type="html"><![CDATA[<h2>使用FormData来实现文件上传</h2>
+
+<pre><code>    var xhr = new XMLHttpRequest(),
+    fd = new FormData();
+    //file为上传的file对象，将文件放入FormData对象中,第三个参数是指定文件名,或者可以不指定。
+    fd.append('file', file, file.name); 
+    fd.append('type',1); // 继续追加数据   
+    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    xhr.addEventListener('load',function(evt){ // 监听上传完成
+        var response = evt.target.response;     // 返回的数据
+        //do something...
+    })
+    xhr.upload.addEventListener('progress', function(evt){ // 监听上传进度
+        //lengthComputabel: 文件长度是否可计算
+        if(evt.lengthComputable){
+            //evt.loaded: 已下载的字节数
+            //evt.total: 文件总字节数
+            var percent = Math.round(evt.loaded*100/evt.total);
+            console.log(percent);
+        }
+    })
+    xhr.abort() // 终止文件上传方法
+    xhr.addEventListener('abort', function(evt){ // 监听文件被终止上传
+        // do something...
+    })
+    xhr.addEventListener('error', function(evt){ // 监听上传错误
+        // do something...
+    })
+    xhr.addEventListener('loaded', function(evt){ // 监听传输结束事件: 不管成功或者失败都会触发
+        // do something...
+    })
+
+    xhr.open('post', url, true);
+    xhr.send(fd);
+</code></pre>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Websocket 聊天室]]></title>
+    <link href="http://wenyang12.github.io/blog/2015/11/05/websocket/"/>
+    <updated>2015-11-05T13:51:10+08:00</updated>
+    <id>http://wenyang12.github.io/blog/2015/11/05/websocket</id>
+    <content type="html"><![CDATA[<h2>一、目录结构如下</h2>
+
+<ul>
+<li>websocket
+
+<ul>
+<li>chat.html <code>聊天客户端代码</code></li>
+<li>chat_server.js <code>服务端代码</code></li>
+<li>package.json <code>包管理文件</code></li>
+<li>support.html <code>检查浏览器是否支持websocket</code></li>
+</ul>
+</li>
+</ul>
+
+
+<h2>二、检查浏览器是否支持websocket</h2>
+
+<p>代码如下：
+support.html</p>
+
+<p>```
+&lt;!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body></p>
+
+<div id=support></div>
+
+
+<script type="text/javascript">
+    if(window.WebSocket){
+        document.getElementById("support").innerHTML = "您的浏览器支持HTML5的WebSocket协议";
+    }
+    else{
+        document.getElementById("support").innerHTML = "您的浏览器不支持HTML5的WebSocket协议";
+    }
+</script>
+
+
+<p></body>
+</html>
+```</p>
+
+<h2>三、创建 websocket node.js端服务器</h2>
+
+<ul>
+<li>安装依赖包 nodejs-websoket 依赖包官方地址可以移步<a href="https://www.npmjs.com/package/nodejs-websocket">这里</a>
+
+<blockquote><p>npm install nodejs-websoket &ndash;save-dev</p></blockquote>
+
+<ul>
+<li>或者可以到我的github上下载源代码欢迎大家fork <a href="https://github.com/wenyang12/websocket">https://github.com/wenyang12/websocket</a></li>
+<li>下载后直接 <code>npm install</code> 安装即可</li>
+</ul>
+</li>
+<li>新建服务端代码文件 <code>chat_server.js</code> 目录为：<code>websocket/chat_server.js</code>
+chat_server.js</li>
+</ul>
+
+
+<pre><code>var ws = require("nodejs-websocket"); //获取nodejs-websocket模块
+var server = ws.createServer(function(conn){ //创建websocket服务器
+        conn.sendText('您好! 欢迎您加入聊天室！'); //向接入的客户端发送消息
+        console.log("有新聊天者加入");
+        conn.on("text", function(msg){//监听是否有客户端发送消息过来
+                broadcast(conn.server, msg);//向所有客户端广播消息
+                console.log(msg);
+            });
+        conn.on("close", function(code, reason){//监听客户端关闭连接
+                console.log(code+" 连接关闭了");//关闭掉浏览器窗口断开连接code为1001，通过代码断开连接code：1005
+            })
+    }).listen(8000, function(){//监听8000端口
+            console.log("Hello,Server is Running:8000");
+        });
+function broadcast(server, msg){
+        server.connections.forEach(function(conn){
+                conn.sendText(msg);
+            })
+    }
+</code></pre>
+
+<ul>
+<li>新建客户端代码文件 <code>chat.html</code> 目录为 <code>websocket/chat.html</code></li>
+</ul>
+
+
+<p>chat.html</p>
+
+<p>```
+&lt;!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>聊天室</title>
+</head>
+<body>
+<input type="button" value="断开链接" onclick="disconect();">
+姓名：<input type="text" name="msgname" id="msgname">
+聊天内容：
+<input type="text" name="msgtxt" id="msgtxt" maxlength="100">
+<input type="button" id=enter value="发言" onclick="send_msg();">
+<br></p>
+
+<div id="valueLabel"></div>
+
+
+<script>
+    var s = new WebSocket("ws://localhost:8000/");//链接websocket服务器
+    var valueLabel = document.getElementById('valueLabel');
+    s.onopen = function(event) {//当链接成功时
+        valueLabel.innerHTML="<p>已经链接到WebSocket服务器</p>";
+        console.log("链接成功了！！！");
+    };
+    s.onmessage = function(event) {//收到服务器传来信息的事件处理
+        valueLabel.innerHTML +="<p>"+event.data+" "+CurentTime()+"</p>";
+    };
+    s.onclose = function(event) { //链接关闭时的事件处理
+        console.log("连接关闭了！！！");
+        console.log("readyState " + s.readyState);
+    };
+    function send_msg() {//向服务器发出信息
+        var msgName = document.getElementById('msgname').value;
+        var msg = document.getElementById('msgtxt').value;
+        s.send(msgName + " say: " + msg + " ========= " + CurentTime());
+    }
+    function disconect() {//断开链接的函数
+        s.close();// 关闭连接
+        valueLabel.innerHTML = "<p>已经断开了跟WebSocket服务器的链接</p>";
+        alert("断开了！");
+    }
+    function CurentTime() {// 获取当前时间的函数
+        return (new Date().toLocaleString());
+    }
+</script>
+
+
+<p></body>
+</html>
+```</p>
+
+<h2>启动服务器</h2>
+
+<blockquote><p>node chat_server.js</p></blockquote>
+
+<p>看到返回以下信息即成功</p>
+
+<blockquote><p>Hello,Server is Running:8000</p></blockquote>
+
+<p>然后在浏览器中打开客户端页面，即可加入聊天，打开多少个都没问题，赶紧试试吧。。。
+<img src="http://wenyang-public.stor.sinaapp.com/Uploads/20151105/1446709473_618194907.JPG" alt="image" /></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[HTML5 Web Workers]]></title>
+    <link href="http://wenyang12.github.io/blog/2015/08/12/html5-web-workers/"/>
+    <updated>2015-08-12T18:01:50+08:00</updated>
+    <id>http://wenyang12.github.io/blog/2015/08/12/html5-web-workers</id>
+    <content type="html"><![CDATA[<h2>什么是 Web Worker？</h2>
+
+<p>当在 HTML 页面中执行脚本时，页面的状态是不可响应的，直到脚本已完成。
+web worker 是运行在后台的 JavaScript，独立于其他脚本，不会影响页面的性能。您可以继续做任何愿意做的事情：点击、选取内容等等，而此时 web worker 在后台运行。</p>
+
+<h2>浏览器支持情况</h2>
+
+<p>Internet Explorer 10, Firefox, Chrome, Safari 和 Opera 都支持Web workers.</p>
+
+<h2>局限性</h2>
+
+<ul>
+<li>不能跨域加载js；</li>
+<li>worker内代码不能访问DOM；</li>
+<li>各个浏览器对Worker的实现不大一致，例如FF里允许worker中创建新的worker,而Chrome中就不行；</li>
+<li>不是每个浏览器都支持这个新特性。</li>
+</ul>
+
+
+<h2>测试用例 代码如下：</h2>
+
+<p>```
+&lt;!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>web worker</title>
+</head>
+<body></p>
+
+<div>计数：<output id="result"></output> </div>
+
+
+<p><button id="btn1">开始计数</button>
+<button id="btn2">停止计数</button></p>
+
+<script>
+    /*web worker 是运行在后台的 JavaScript，不会影响页面的性能。*/
+    (function(){
+        var w;
+        function workerHand() {
+            if(typeof(Worker) !== 'undefined'){
+                if(typeof(w) === 'undefined'){
+                    w = new Worker('http://1.ywenblog.sinaapp.com/wp-content/themes/twentyeleven/js/demo_workers.js');
+                }
+                w.onmessage = function(e) {//监听脚本发送过来的信息
+                    document.getElementById('result').innerHTML = e.data;
+                };
+            }else{
+                document.getElementById('result').innerHTML = "抱歉！，您的浏览器不支持web workers...";
+            }
+        }
+        document.getElementById('btn1').onclick = function() {
+            workerHand();
+        };
+        document.getElementById('btn2').onclick = function() {
+            w.terminate();
+            w = undefined;
+        };
+    })()
+</script>
+
+
+<p></body>
+</html>
+```</p>
+
+<p><code>http://3.wenphp.sinaapp.com/test/demo_workers.js</code> 代码如下：</p>
+
+<pre><code>/**
+ * Created by Administrator on 2015/8/12.
+ */
+(function(){
+    var i = 0;
+    function calc() {
+        postMessage(i);//给worker对象放松信息i
+        i++;
+        setTimeout(calc, 1000);
+    }
+    calc();
+})();
+</code></pre>
+
+<blockquote><p>节选自菜鸟教程</p></blockquote>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[拖拽文件异步上传]]></title>
+    <link href="http://wenyang12.github.io/blog/2015/08/11/asynchronous-upload-file/"/>
+    <updated>2015-08-11T09:40:58+08:00</updated>
+    <id>http://wenyang12.github.io/blog/2015/08/11/asynchronous-upload-file</id>
+    <content type="html"><![CDATA[<h2>文件目录为</h2>
+
+<blockquote><p><a href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMcAAABWCAIAAAD0XRV3AAAFLklEQVR4nO2dPWvbQBjH/bW0BOPvUOhc6HVvpvZDaOzQdO6S2Elx6oBJMyTZDAkhQ6gb6slkDS4ePAR1kC3fy3N683PSSfn/EEGW7kWQH3eH9DxSJwKAm07dFwBaCKwC/MAqwA+sAvwwW/Xryztt+zv5wdsF8B/nVjkQayQ6YrR7G0E4ZbkcYFCFVeS2QyewyncIq05PT/sUw+EwszlYBSLSqvl8Tlo1n88zm8tjDKxqPfQMOB6PNaXG43Ge5kpaNQ2DRJTtfrw3Ep01mxKyVduzHVm1aRgQR+XCHVjlDtqqxWIxGAwSpQaDwWKxyNMcu1WKS+v9xKqRkN3YFpiGYnNUqaXKCKucYV2tX19fJ1ZdXV3lbM7BWGUW2lilz2JKeX200gpjBnSJ1arVanV8fBwPVKvVKmdzdVsVhNO1UOszciVYVRVpdxZub2/7/f7d3V3+5nawStJAngFl2TJnwPiHZIxaS20MVjkj437V+fl5oeZK31lIJqxACGWsEsZiPXu1vp39pNbkskEYYqxyiM93QbUZEDQGn58uw6qmAqsAPz5bBZoKrAL8wCrAD6wC/MAqwA+sAvzAKsCPR1Yhk6I1eG1VbrHWD/7eHyRPqTniRUFZ+K06Ozt7fn4uUXGnJ9Pb59Gwqn74rYoD/S4vL/NHZcWUtoqKlYJVdeLKqjjc7/7+Pn/F0pkUsMo3HFqV5HvlSc6JylolBViJn9u5kI7BQkhVNTi3Kubh4SGzIsNYRVglD2QIgqgI51adnJw8Pj7mqejEKjVZC8NVNbi1ajKZvLy85Kzoyip4VDmurLq4uFgul4UqOpsB5RUWJsAq4LdqOBw+PT2VqMhwZ4FcrdN5zMAhvt9bL5tJAerEI6tAa4BVgB9YBfiBVYAfWAX4gVWAH1gF+PHLqm8Wbm5u6r40UIBmWHV4eAixGoSPVpkHl8vl0dERxGoKnlr18c+HeIvUAYyoI72nL5vyIQy7Bz+8ovBUf616G76JrdJO6cAq//DXqr1uzxyxdu2A2apCwaWwqiZgVTvw2qq9bi+ZB1NnQClEPRRGJLHtkxB6loT8zmQl2M9ovCNGSrNB+DsuMFrHcsnnNx3Cqpowx6r4b5TXqg6Vbkp+EoLOklgfJQYmsnF5rBqJxKDYJ/2l8bCqJna2ShYlCKf2l/dbsyTiE+ZkRzWuW5UUIPdhVU1UahW9wIJVDPhrlbxFpa2yfhKCzpKIm1CnOFNDWJWBp1YVOJVhlf2TEEaWhLTq2izcM6zatJGs1mFVFEV+WpVC3RcIcgGrAD9+WQXaAawC/MAqwA+sAvzAKsAPrAL8+GWV7YYCYoubRTOsQjZEs/DRKvMgsiGaRTOs4ru3zvEwrkBA6St9gaRfVs1ms9lsVvRUEWBVFfhl1c/v/+Rtr9vTjsTbDj3AqiqAVaXagFWpeGdVnATxef8gZV+pI0fOqd9JEqNtaJUUW0d8M0LJfKDfTmtLqZA7JrvTcihSCrcHH63K/KvUsVul/HOpN2ar6TabikKKt6Nfr01bZemOzqGgCrcHH63a6/Y+7X81fUqOK3XSxiqzkO3t/kp5fbSyBb9bqqvdpcclmz/bgI9WkWsp+bhSh82qIJyqoe2kG0Td9O5gVd2UtUqLNld3lR/2GdAIT1drUSkV2qRGd0dbRRVuD35ZVe5+VTJhBUIoY5UwF8SZq/Xt7Ce1Zkmp0NJN6e4sYxVRuD34ZRVf3HrF00qh7lo45WnAKhZglYJfVvEBq+qkrVaBOoFVgB9YBfiBVYCf/01ox8u3OIbxAAAAAElFTkSuQmCC">文件目录图</a></p></blockquote>
+
+<h2>没做ie浏览器兼容,用于测试，index.html代码如下</h2>
+
+<pre><code>    var dragUpload = {
+        file: document.getElementById('file'),
+        fileArea: document.getElementById('fileArea'),
+        init:function() {
+            var self = this;
+            this.fileArea.onclick = function() {
+                var event = document.createEvent('MouseEvents');//调用document对象的 createEvent 方法得到一个event的对象实例。
+                 /*initEvent接受3个参数：
+                 事件类型，是否冒泡，是否阻止浏览器的默认行为*/
+                event.initEvent('click', true, false);
+                self.file.dispatchEvent(event);//触发控件的单击事件
+            };
+            this.file.onchange = function() {
+                self.upload(this.files);
+            };
+            this.fileArea.ondragenter = function(ev) {
+                self.dragEnter(ev,this);
+            };
+            this.fileArea.ondragover = function(ev) {
+                self.dragOver(ev,this);
+            };
+            this.fileArea.ondrop = function(ev) {
+                self.drop(ev,this);
+            };
+        },
+        upload:function(fs) {//上传文件
+            for(var i = 0,len = fs.length; i &lt; len; i++) {
+                this.sendFile(fs[i]);
+            }
+        },
+        dragEnter:function(ev,my) {//文件进入回调函数
+            ev.preventDefault();
+            console.log('dragEnter');
+            my.className = 'up-area hover';
+        },
+        dragOver:function(ev,my) { //文件经过回调函数
+            ev.preventDefault();
+            console.log('dragOver');
+        },
+        drop:function(ev,my) {//放入文件回调函数
+            ev.preventDefault();
+            console.log('drop');
+            var dt = ev.dataTransfer;//获取文件对象
+            my.className = 'up-area';
+            dragUpload.upload(dt.files);
+        },
+        sendFile:function(file) {//上传文件主函数
+            var xhr = new XMLHttpRequest();
+            var fd = new FormData();
+            fd.append('file', file);
+            xhr.onreadystatechange = function() {
+                if(xhr.readyState ===4 &amp;&amp; xhr.status === 200) {
+                    document.getElementById('console').innerHTML += '&lt;br/&gt;'+xhr.responseText;
+                }
+            };
+            xhr.open('POST', 'upload.php ',true);
+            xhr.send(fd);
+        }
+    };
+    dragUpload.init();
+</code></pre>
+
+<h2>upload.php代码为</h2>
+
+<pre><code>&lt;?php
+$file = $_FILES['file'];//获取文件内容
+//存入上传的文件
+$path = 'file';
+if($file['size'] &gt; 10*1024*1024){
+    echo '{"error":"1000","message":"上传的文件超过限制，最大10M"}';
+}else{
+    $path .= '/file_'.time().'.png';
+    move_uploaded_file($file['tmp_name'],$path);
+    echo '上传成功：'. json_encode($file);
+}
+</code></pre>
+]]></content>
+  </entry>
+  
+</feed>

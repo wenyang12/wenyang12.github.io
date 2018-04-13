@@ -1,0 +1,622 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>React学习笔记 - 三重水的博客</title>
+  <meta name="author" content="三重水">
+
+  
+  <meta name="description" content="我的理解 React是基于状态驱使的。在整个React开发中，你会体会到，组件的状态贯穿着一切，一切都是基于状态驱使开发的。 为什么使用React React 是一个 Facebook 和 Instagram 用来创建用户界面的 JavaScript 库。很人多认为 React 是 MVC 中的 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="baidu-site-verification" content="ipSlYf2c3P" />
+  
+  <link rel="canonical" href="http://wenyang12.github.io/blog/2015/12/04/react-study-notes/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="三重水的博客" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<script type="text/javascript">
+
+    function addBlankTargetForLinks () {
+
+        $('a[href^="http"]').each(function(){
+
+            $(this).attr('target', '_blank');
+
+        });
+
+    }
+
+    $(document).bind('DOMNodeInserted', function(event) {
+        addBlankTargetForLinks();
+
+    });
+
+</script>
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?ddb3466dedfe096084bfb3626c5d2311";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">三重水的博客</a></h1>
+  
+    <h2>在变化当中不断记录自己，充实自己，浏览自己</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><div class="wrapper">
+<ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form>
+  <fieldset role="search">
+    <input class="search" id="bdcsMain" type="text" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">首页</a></li>
+  <li><a href="/blog/archives">归档</a></li>
+  <!-- <li><a href="/about-me">关于我</a></li>
+  <li><a href="/wenxun/dist/">相册</a></li> -->
+</ul>
+
+</div></nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">React学习笔记</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-12-04T15:18:02+08:00'><span class='date'>2015年12月04日</span> <span class='time'>3:18 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h2>我的理解</h2>
+
+<p>React是基于状态驱使的。在整个React开发中，你会体会到，组件的状态贯穿着一切，一切都是基于状态驱使开发的。</p>
+
+<h2>为什么使用React</h2>
+
+<p><a href="https://facebook.github.io/react/">React</a> 是一个 Facebook 和 Instagram 用来创建用户界面的 JavaScript 库。很人多认为 React 是 MVC 中的 V（视图）。</p>
+
+<p>我们创造 React 是为了解决一个问题：构建随着时间数据不断变化的大规模应用程序。为了达到这个目标，React 采用下面两个主要的思想。</p>
+
+<p><strong>简单</strong></p>
+
+<p>仅仅只要表达出你的应用程序在任一个时间点应该长的样子，然后当底层的数据变了，React 会自动处理所有用户界面的更新。</p>
+
+<p><strong>表达能力</strong></p>
+
+<p>当数据变化了，React 概念上是类似点击了更新的按钮，但仅会更新变化的部分。</p>
+
+<h2>语法</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//穿件一个组件
+</span><span class='line'>var MyComponent = React.createClass({
+</span><span class='line'>    render: function(){
+</span><span class='line'>        return &lt;h1&gt;hello world!&lt;/h1&gt;;
+</span><span class='line'>    }
+</span><span class='line'>})
+</span><span class='line'>//把组件渲染到页面body中
+</span><span class='line'>React.render(&lt;MyComponent&gt;&lt;/MyComponent&gt;,document.body)</span></code></pre></td></tr></table></div></figure>
+
+
+<!--more-->
+
+
+<h2>可配置的函数</h2>
+
+<p><strong>初始化中的函数</strong></p>
+
+<ul>
+<li>getDefaultProps //初始化属性，只调用一次，实例之间共享引用</li>
+<li>getInitialState //初始化每个实例特有的状态</li>
+<li>componentWillMount //render之前最后一次修改状态的机会</li>
+<li>render //只能访问this.props和this.state，只有一个顶层组件，不允许修改状态和DOM输出</li>
+<li>componentDidMount //成功render并渲染完成真实DOM之后触发，可以修改DOM</li>
+</ul>
+
+
+<p><strong>改变状态时，触发的运行中的函数</strong></p>
+
+<ul>
+<li>componentWillReceiveProps //父组件修改属性时触发，可以修改属性、状态</li>
+<li>shouldComponentUpdate //是否让组件更新渲染到页面当中，返回fasle会阻止render的执行，返回true，则会执行render</li>
+<li>componentWillUpdate //组件更新之前最后一次要执行的，不能修改属性和状态</li>
+<li>render //执行渲染</li>
+<li>componentDidUpdate //组件更新后的操作，可以修改DOM</li>
+<li>componentWillUnmount //在删除组件之前进行清理操作，比如计数器和事件监听器等</li>
+</ul>
+
+
+<blockquote><p>以上函数，会从上到下依次执行。运行中的函数需要执行的条件是：状态改变才会依次执行，状态不断更新时，运行中的函数会不断循环执行。运行中的函数是由状态驱使的。</p></blockquote>
+
+<h2>代码实战</h2>
+
+<p>执行React所需要的代码结构如下：</p>
+
+<p>首先引入两个js</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;script src="react.js"&gt;&lt;/script&gt;
+</span><span class='line'>&lt;script src="JSXTransformer.js"&gt;&lt;/script&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然后在下边即可写入React的组件代码了</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;script src="react.js"&gt;&lt;/script&gt;
+</span><span class='line'>&lt;script src="JSXTransformer.js"&gt;&lt;/script&gt;
+</span><span class='line'>&lt;script type="text/jsx"&gt;// 注意这里的type='text/jsx'
+</span><span class='line'>    //这里可以写入你的代码
+</span><span class='line'>&lt;/script&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>实战</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;!DOCTYPE html&gt;
+</span><span class='line'>&lt;html&gt;
+</span><span class='line'>&lt;head lang="en"&gt;
+</span><span class='line'>    &lt;meta charset="UTF-8"&gt;
+</span><span class='line'>    &lt;title&gt;&lt;/title&gt;
+</span><span class='line'>&lt;/head&gt;
+</span><span class='line'>&lt;body&gt;
+</span><span class='line'>&lt;div id="box"&gt;&lt;/div&gt;
+</span><span class='line'>&lt;script src="build/react.js"&gt;&lt;/script&gt;
+</span><span class='line'>&lt;script src="build/JSXTransformer.js"&gt;&lt;/script&gt;
+</span><span class='line'>&lt;script type="text/jsx"&gt;
+</span><span class='line'>    var style={
+</span><span class='line'>        color:"blue",
+</span><span class='line'>        border:"1px solid #ddd"
+</span><span class='line'>    };
+</span><span class='line'>    var rawHTML = {
+</span><span class='line'>        __html:"&lt;span&gt;I'm inner HTML&lt;/span&gt;"
+</span><span class='line'>    };
+</span><span class='line'>    //初始化，创建一个组件
+</span><span class='line'>    var HelloWorld = React.createClass(
+</span><span class='line'>            {
+</span><span class='line'>                //初始化中的函数
+</span><span class='line'>                getDefaultProps:function() {//只调用一次，实例之间共享引用
+</span><span class='line'>                    console.log('getDefaultProps,1');
+</span><span class='line'>                },
+</span><span class='line'>                getInitialState:function() {// 初始化每个实例特有的状态
+</span><span class='line'>                    console.log('getInitialState,2');
+</span><span class='line'>                    return null;
+</span><span class='line'>                },
+</span><span class='line'>                componentWillMount:function() {//render之前最后一次修改状态的机会
+</span><span class='line'>                    console.log('componentWillMount,3');
+</span><span class='line'>                },
+</span><span class='line'>                render: function() {//只能访问this.props和this.state,只有一个顶层组件，不允许修改状态和DOM输出
+</span><span class='line'>                    console.log('4');
+</span><span class='line'>                    return &lt;p&gt;Hello ,{this.props.name1 + " " + this.props.name2}&lt;/p&gt;;
+</span><span class='line'>                },
+</span><span class='line'>                componentDidMount:function() {//成功render并渲染完成真实DOM之后触发，可以修改DOM
+</span><span class='line'>                    console.log('componentDidMount,5');
+</span><span class='line'>                },
+</span><span class='line'>                //运行中的函数
+</span><span class='line'>                componentWillReceiveProps:function(obj) {//父组件修改属性触发，可以修改新属性、修改状态
+</span><span class='line'>                    console.log("运行中：1");
+</span><span class='line'>                    console.log(obj);//obj为接收到修改了属性的对象，对象包含了修改后的属性在里边
+</span><span class='line'>                },
+</span><span class='line'>                shouldComponentUpdate: function() {//返回false会阻止render调用
+</span><span class='line'>                    console.log("运行中：2");
+</span><span class='line'>                    return true;
+</span><span class='line'>                },
+</span><span class='line'>                componentWillUpdate: function() {//不能修改属性和状态
+</span><span class='line'>                    console.log("运行中：3");
+</span><span class='line'>                },
+</span><span class='line'>                componentDidUpdate:function() {//可以修改DOM
+</span><span class='line'>                    console.log("运行中：5");
+</span><span class='line'>                    var newNode = document.createElement('span');
+</span><span class='line'>                    newNode.innerHTML = 'sups';
+</span><span class='line'>                    React.findDOMNode(this).appendChild(newNode);
+</span><span class='line'>                },
+</span><span class='line'>                //销毁阶段，即把我的这个组件移出后执行的回调函数
+</span><span class='line'>                componentWillUnmount: function() {//在删除组件之前进行清理操作，比如计时器和事件监听器
+</span><span class='line'>                    alert('销毁，我是子组件');
+</span><span class='line'>                }
+</span><span class='line'>            }
+</span><span class='line'>    );
+</span><span class='line'>    var HelloUniverse = React.createClass({
+</span><span class='line'>        getInitialState: function() {
+</span><span class='line'>            return {
+</span><span class='line'>                name1:"wen",
+</span><span class='line'>                name2:"yang"
+</span><span class='line'>            }
+</span><span class='line'>        },
+</span><span class='line'>        handleChange: function(event) {
+</span><span class='line'>            if(event.target.value === "123"){
+</span><span class='line'>                React.unmountComponentAtNode(document.body);//移除body里的所有组件
+</span><span class='line'>                return;
+</span><span class='line'>            }
+</span><span class='line'>            this.setState({
+</span><span class='line'>                name:event.target.value
+</span><span class='line'>            });
+</span><span class='line'>        },
+</span><span class='line'>        render: function () {
+</span><span class='line'>            return &lt;div&gt;&lt;HelloWorld  {...this.state}&gt;&lt;/HelloWorld&gt;
+</span><span class='line'>             &lt;br/&gt;
+</span><span class='line'>             &lt;input type="text" onChange={this.handleChange} /&gt;
+</span><span class='line'>            &lt;/div&gt;
+</span><span class='line'>        },
+</span><span class='line'>        //销毁阶段，即把我的这个组件移出后执行的回调函数
+</span><span class='line'>        componentWillUnmount: function() {//在删除组件之前进行清理操作，比如计时器和事件监听器
+</span><span class='line'>            alert('销毁，我是父组件');
+</span><span class='line'>        }
+</span><span class='line'>    });
+</span><span class='line'>    //把组件渲染到页面中
+</span><span class='line'>    React.render(&lt;div style={style}&gt;&lt;HelloUniverse&gt;&lt;/HelloUniverse&gt;&lt;/div&gt;, document.body);//把标签渲染到body标签中
+</span><span class='line'>&lt;/script&gt;
+</span><span class='line'>&lt;/body&gt;
+</span><span class='line'>&lt;/html&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>更多例子可以到我的github上下载<a href="https://github.com/wenyang12/react-test">react-test</a></p>
+
+<h2>参考质料</h2>
+
+<p><a href="http://www.reactjs-china.com/">React中文站</a></p>
+
+<p><a href="http://www.jikexueyuan.com/course/reactjs/">极客学院ReactJS视频</a></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">三重水</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2015-12-04T15:18:02+08:00'><span class='date'>2015年12月04日</span> <span class='time'>3:18 pm</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/react/'>react</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+  
+  <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style_32x32">
+    <a class="jiathis_button_qzone"></a>
+    <a class="jiathis_button_tsina"></a>
+    <a class="jiathis_button_tqq"></a>
+    <a class="jiathis_button_weixin"></a>
+    <a class="jiathis_button_renren"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+    <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/12/03/pubuliu-module-spm-use/" title="Previous Post: spm瀑布流模块包的使用">&laquo; spm瀑布流模块包的使用</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2015/12/10/lookback-study-1/" title="Next Post: Node.js框架lookback学习一">Node.js框架lookback学习一 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>评论</h1>
+    <div id="disqus_thread" aria-live="polite"><!-- 多说评论框 start -->
+<div class="ds-thread" data-thread-key="/blog/2015/12/04/react-study-notes" data-title="React学习笔记" data-url="http://wenyang12.github.io/blog/2015/12/04/react-study-notes/"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    var duoshuoQuery = {short_name:"ywenblog"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+        || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>近期文章</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2018/01/17/adb-chrome-develop/">Webview的调试方法</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/12/28/csp/">CSP(内容安全策略)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/08/31/native-drag/">原生拖放</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/08/17/email-read-adaption/">邮件读信页的自适应方案</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/07/07/file-upload-formdata/">Formdata异步上传文件的实现</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+<section class="about-me">
+  <h1>关于我</h1>
+  <div class="thumb">
+      <span></span>
+      <p>三重水</p>
+      <p>学习，积累，反思，阅读，分享</p>
+  </div>  
+  <p><a href="https://github.com/wenyang12" target="_blank">github</a><a href="http://wenyang12.github.io/" target="_blank">博客</a><a
+          href="https://www.qdfuns.com/u/13989/works/articles" target="_blank">前端网</a>
+          <!-- <a href="http://wenyang.sinaapp.com/" target="_blank">笔记</a>
+          <a href="http://ywenblog.sinaapp.com/" target="_blank">WordPress</a> -->
+        </p>
+</section>
+<section>
+    <h1>标签</h1>
+    <div class="cloud">
+        <a style="font-size: 159%" href="/blog/categories/node-dot-jskuang-jia/">Node.js框架</a>
+<a style="font-size: 90%" href="/blog/categories/adb/">adb</a>
+<a style="font-size: 145%" href="/blog/categories/ajax/">ajax</a>
+<a style="font-size: 90%" href="/blog/categories/bootstrap/">bootstrap</a>
+<a style="font-size: 90%" href="/blog/categories/csp/">csp</a>
+<a style="font-size: 90%" href="/blog/categories/cssyu-chu-li-qi/">css预处理器</a>
+<a style="font-size: 90%" href="/blog/categories/email/">email</a>
+<a style="font-size: 90%" href="/blog/categories/es5/">es5</a>
+<a style="font-size: 90%" href="/blog/categories/express/">express</a>
+<a style="font-size: 124%" href="/blog/categories/git/">git</a>
+<a style="font-size: 90%" href="/blog/categories/grunt/">grunt</a>
+<a style="font-size: 170%" href="/blog/categories/html5/">html5</a>
+<a style="font-size: 90%" href="/blog/categories/jquerycha-jian/">jQuery插件</a>
+<a style="font-size: 145%" href="/blog/categories/javascript/">javascript</a>
+<a style="font-size: 90%" href="/blog/categories/jquery/">jquery</a>
+<a style="font-size: 90%" href="/blog/categories/jquery-dot-validation/">jquery.validation</a>
+<a style="font-size: 90%" href="/blog/categories/less/">less</a>
+<a style="font-size: 145%" href="/blog/categories/loopback/">loopback</a>
+<a style="font-size: 90%" href="/blog/categories/markdown/">markdown</a>
+<a style="font-size: 145%" href="/blog/categories/mongodb/">mongodb</a>
+<a style="font-size: 124%" href="/blog/categories/octopress/">octopress</a>
+<a style="font-size: 90%" href="/blog/categories/react/">react</a>
+<a style="font-size: 90%" href="/blog/categories/sass/">sass</a>
+<a style="font-size: 124%" href="/blog/categories/spm/">spm</a>
+<a style="font-size: 90%" href="/blog/categories/webworker/">webWorker</a>
+<a style="font-size: 90%" href="/blog/categories/websoket/">websoket</a>
+<a style="font-size: 90%" href="/blog/categories/wordpress/">wordpress</a>
+<a style="font-size: 90%" href="/blog/categories/zhong-jie-zhe-mo-shi/">中介者模式</a>
+<a style="font-size: 90%" href="/blog/categories/dai-li-mo-shi/">代理模式</a>
+<a style="font-size: 90%" href="/blog/categories/dao-ji-shi/">倒计时</a>
+<a style="font-size: 90%" href="/blog/categories/nei-rong-an-quan-ce-lue/">内容安全策略</a>
+<a style="font-size: 90%" href="/blog/categories/qian-duan-gou-jian-gong-ju/">前端构建工具</a>
+<a style="font-size: 90%" href="/blog/categories/yuan-xing-mo-shi/">原型模式</a>
+<a style="font-size: 90%" href="/blog/categories/fu-xuan-kuang-zu-jian/">复选框组件</a>
+<a style="font-size: 90%" href="/blog/categories/dan-chu-kuang/">弹出框</a>
+<a style="font-size: 90%" href="/blog/categories/tuo-fang/">拖放</a>
+<a style="font-size: 124%" href="/blog/categories/wen-jian-shang-chuan/">文件上传</a>
+<a style="font-size: 90%" href="/blog/categories/jian-ce-shu-ju-lei-xing/">检测数据类型</a>
+<a style="font-size: 124%" href="/blog/categories/mo-kuai-bao/">模块包</a>
+<a style="font-size: 90%" href="/blog/categories/gun-dong-jian-ting/">滚动监听</a>
+<a style="font-size: 145%" href="/blog/categories/pu-bu-liu/">瀑布流</a>
+<a style="font-size: 90%" href="/blog/categories/deng-lu-zhu-ce-mo-ban/">登陆注册模板</a>
+<a style="font-size: 90%" href="/blog/categories/liao-tian-shi/">聊天室</a>
+<a style="font-size: 90%" href="/blog/categories/zi-gua-ying/">自适应</a>
+<a style="font-size: 90%" href="/blog/categories/guan-cha-zhe-mo-shi/">观察者模式</a>
+<a style="font-size: 159%" href="/blog/categories/she-ji-mo-shi/">设计模式</a>
+<a style="font-size: 90%" href="/blog/categories/diao-shi-webview/">调试webview</a>
+<a style="font-size: 90%" href="/blog/categories/xuan-xiang-qia/">选项卡</a>
+<a style="font-size: 90%" href="/blog/categories/mian-shi/">面试</a>
+<a style="font-size: 90%" href="/blog/categories/shu-biao-shi-jian/">鼠标事件</a>
+
+    </div>
+</section>
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><div class="wrapper">
+<p>
+  Copyright &copy; 2018 - 三重水 -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a>&nbsp;<a href="http://tongji.baidu.com/web/welcome/ico?s=ddb3466dedfe096084bfb3626c5d2311">百度统计</a></span>
+</p>
+</div>
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">(function(){document.write(unescape('%3Cdiv id="bdcs"%3E%3C/div%3E'));var bdcs = document.createElement('script');bdcs.type = 'text/javascript';bdcs.async = true;bdcs.src = 'http://znsv.baidu.com/customer_search/api/js?sid=5545127454396687048' + '&plate_url=' + encodeURIComponent(window.location.href) + '&t=' + Math.ceil(new Date()/3600000);var s = document.getElementsByTagName('script')[0];s.parentNode.insertBefore(bdcs, s);})();</script>
+</body>
+</html>

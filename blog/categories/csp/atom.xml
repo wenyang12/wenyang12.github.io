@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Csp | 三重水的博客]]></title>
+  <link href="http://wenyang12.github.io/blog/categories/csp/atom.xml" rel="self"/>
+  <link href="http://wenyang12.github.io/"/>
+  <updated>2018-04-13T14:54:38+08:00</updated>
+  <id>http://wenyang12.github.io/</id>
+  <author>
+    <name><![CDATA[三重水]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[CSP(内容安全策略)]]></title>
+    <link href="http://wenyang12.github.io/blog/2017/12/28/csp/"/>
+    <updated>2017-12-28T11:07:52+08:00</updated>
+    <id>http://wenyang12.github.io/blog/2017/12/28/csp</id>
+    <content type="html"><![CDATA[<h2>前言</h2>
+
+<blockquote><p>HTTP 响应头 Content-Security-Policy 允许站点管理者在指定的页面控制用户代理的资源。除了少数例外，这条政策将极大地指定服务源 以及脚本端点。这将帮助防止跨站脚本攻击（Cross-Site Script） (XSS).</p></blockquote>
+
+<h2>语法</h2>
+
+<pre><code>Content-Security-Policy: &lt;policy-directive&gt;; &lt;policy-directive&gt;
+</code></pre>
+
+<h2>CSP的<code>upgrade-insecure-requests</code>指令</h2>
+
+<h3>作用是？</h3>
+
+<p>假如访问的页面是通过https加载进来的html，那么当html中含有http的请求资源，浏览器就会有提示或报错，或浏览器的地址栏会出现黄色角标，提示用户页面中包含有不安全的请求。HTTPS 网页中加载的 HTTP 资源被称之为 Mixed Content（混合内容），不同浏览器对 Mixed Content 有不一样的处理规则。</p>
+
+<p><strong>什么时候浏览器会出现提示呢？</strong></p>
+
+<p>现代浏览器（Chrome、Firefox、Safari、Microsoft Edge），基本上都遵守了W3C的Mixed Content规范，将Mixed Content分为Optionally-blockable 和 Blockable 两类
+属于Optionally-blockable的会在在控制台中打印警告信息。这类资源包括：
+* 通过<code>&lt;img&gt;</code>标签加载的图片（包括SVG图片）
+* 通过<code>&lt;video&gt;</code>,<code>&lt;audio&gt;</code>和<code>&lt;source&gt;</code>标签加载的视频或音频
+* 预读的（prefetched）资源</p>
+
+<!--more-->
+
+
+<p>属于Blockable的资源包括：</p>
+
+<p>除了以上三点以外的所有Mixed Content资源都属于</p>
+
+<p>当我们对页面进行https改造时难免有很多运营对 https 没有技术概念，在填入的数据中不免出现 http 的资源，体系庞大，出现疏忽和漏洞也是不可避免的。</p>
+
+<p>所以为了解决以上的问题，可以在返回头中设置CSP的指令upgrade-insecure-requests解决，设置后，页面中用到的http资源请求会被浏览器切换为https请求。</p>
+
+<h3>如何设置？</h3>
+
+<ul>
+<li>可以设置响应头
+  <code>
+    Content-Security-Policy: upgrade-insecure-requests
+ </code></li>
+<li>或在html里添加meta tag
+  <code>
+    &lt;meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"&gt;
+ </code></li>
+</ul>
+
+
+<h2>CPS 的<code>block-all-mixed-content</code>指令</h2>
+
+<h3>作用是？</h3>
+
+<p>通过 CSP 的 <code>block-all-mixed-content</code> 指令，可以让页面进入对混合内容的严格检测模式, 禁止mixed-content。在这种模式下，所有非 HTTPS 资源都不允许加载。</p>
+
+<h2>DEMO github地址为：<a href="https://github.com/wenyang12/csp-test.git">https://github.com/wenyang12/csp-test.git</a></h2>
+
+<p>安装依赖
+<code>
+$ npm install
+</code>
+启动服务
+```</p>
+
+<h1>npm run start</h1>
+
+<p>```</p>
+
+<p>浏览器打开 <a href="http://localhost:3000/">http://localhost:3000/</a></p>
+
+<h2>参考</h2>
+
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy">Content-Security-Policy</a></p>
+
+<p><a href="http://mp.weixin.qq.com/s/Pz7gS9_7J16wZGrR8zgR8g">腾讯前端开发女神与你谈：web安全与CSP</a></p>
+
+<p><a href="https://github.com/googlechrome/samples/tree/gh-pages/csp-upgrade-insecure-requests">Upgrade Insecure Requests Sample</a></p>
+
+<p><a href="https://www.cnblogs.com/hustskyking/archive/2015/08/21/upgrade-insecure-requests.html">让浏览器不再显示 https 页面中的 http 请求警报</a></p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,767 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>鼠标进入和离开元素4个方向对应的相关操作 - 三重水的博客</title>
+  <meta name="author" content="三重水">
+
+  
+  <meta name="description" content="介绍 这个模块wen_direction用于判断鼠标是从哪个方向进入和离开元素后的相关回调操作 1、这个对象暴露的run方法，有三个参数：wen_direction.run(id, enterObject, leaveObject) id : 元素的id
+enterObject： &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="baidu-site-verification" content="ipSlYf2c3P" />
+  
+  <link rel="canonical" href="http://wenyang12.github.io/blog/2016/01/07/mousenter-mouseleave-direction-callback/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="三重水的博客" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<script type="text/javascript">
+
+    function addBlankTargetForLinks () {
+
+        $('a[href^="http"]').each(function(){
+
+            $(this).attr('target', '_blank');
+
+        });
+
+    }
+
+    $(document).bind('DOMNodeInserted', function(event) {
+        addBlankTargetForLinks();
+
+    });
+
+</script>
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?ddb3466dedfe096084bfb3626c5d2311";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">三重水的博客</a></h1>
+  
+    <h2>在变化当中不断记录自己，充实自己，浏览自己</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><div class="wrapper">
+<ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form>
+  <fieldset role="search">
+    <input class="search" id="bdcsMain" type="text" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">首页</a></li>
+  <li><a href="/blog/archives">归档</a></li>
+  <!-- <li><a href="/about-me">关于我</a></li>
+  <li><a href="/wenxun/dist/">相册</a></li> -->
+</ul>
+
+</div></nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">鼠标进入和离开元素4个方向对应的相关操作</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-01-07T10:21:01+08:00'><span class='date'>2016年01月07日</span> <span class='time'>10:21 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h2>介绍</h2>
+
+<p>这个模块<a href="http://spmjs.io/package/wen_direction">wen_direction</a>用于判断鼠标是从哪个方向进入和离开元素后的相关回调操作</p>
+
+<p>1、这个对象暴露的run方法，有三个参数：wen_direction.run(id, enterObject, leaveObject)</p>
+
+<ul>
+<li>id : 元素的id</li>
+<li>enterObject：用于判断鼠标是从哪个方向进入元素后的对象，对象必须含有四个方向的回调方法，即如下</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>enterObjext = {
+</span><span class='line'>    left：function(self){//self是对id这个元素的引用
+</span><span class='line'>        //这里是鼠标从左边进入元素后的回调
+</span><span class='line'>    }，
+</span><span class='line'>    right: function(self){
+</span><span class='line'>        //这里是鼠标从右边进入元素后的回调
+</span><span class='line'>    }，
+</span><span class='line'>    top: function(self){
+</span><span class='line'>        //这里是鼠标从上边进入元素后的回调
+</span><span class='line'>    }，
+</span><span class='line'>    bottoom: function(self){
+</span><span class='line'>        //这里是鼠标从下边进入元素后的回调
+</span><span class='line'>    }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<!--more-->
+
+
+<ul>
+<li>leaveObject：用于判断鼠标是从哪个方向离开元素后的对象，对象必须含有四个方向的回调方法，即如下：</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>leaveObject = {
+</span><span class='line'>   left：function(self){//self是对id这个元素的引用
+</span><span class='line'>       //这里是鼠标从左边离开元素后的回调
+</span><span class='line'>   }，
+</span><span class='line'>   right: function(self){
+</span><span class='line'>       //这里是鼠标从右边离开元素后的回调
+</span><span class='line'>   }，
+</span><span class='line'>   top: function(self){
+</span><span class='line'>       //这里是鼠标从上边离开元素后的回调
+</span><span class='line'>   }，
+</span><span class='line'>   bottoom: function(self){
+</span><span class='line'>       //这里是鼠标从下边离开元素后的回调
+</span><span class='line'>   }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>2、这个对象暴露了的jqRun方法，有2个参数：wen_direction.jqRun(id, e);这个方法是基于jQuery的</p>
+
+<ul>
+<li>id : 元素的jquery对象的引用</li>
+<li>e ：传入的query的事件对象</li>
+</ul>
+
+
+<h2>代码实战</h2>
+
+<p><strong>html</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;h2&gt;run接口测试：&lt;/h2&gt;
+</span><span class='line'>&lt;div id="box"&gt;&lt;/div&gt;
+</span><span class='line'>&lt;h2&gt;jqRun接口测试：&lt;/h2&gt;
+</span><span class='line'>&lt;div id="jqbox"&gt;
+</span><span class='line'>    &lt;div id="client"&gt;&lt;/div&gt;
+</span><span class='line'>    &lt;div id="hidden"&gt;&lt;/div&gt;
+</span><span class='line'>&lt;/div&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>css</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#box{
+</span><span class='line'>    width: 100px;
+</span><span class='line'>    height: 100px;
+</span><span class='line'>    background: #dddddd;
+</span><span class='line'>    margin: 100px;
+</span><span class='line'>}
+</span><span class='line'>#jqbox{
+</span><span class='line'>    position: relative;
+</span><span class='line'>    width: 100px;
+</span><span class='line'>    height: 100px;
+</span><span class='line'>    margin: 100px;
+</span><span class='line'>    overflow: hidden;
+</span><span class='line'>}
+</span><span class='line'>#client , #hidden{
+</span><span class='line'>    width:100%;
+</span><span class='line'>    height:100%;
+</span><span class='line'>    background: #dddddd;
+</span><span class='line'>    position: absolute;
+</span><span class='line'>}
+</span><span class='line'>#client{
+</span><span class='line'>    left:0;
+</span><span class='line'>    top:0;
+</span><span class='line'>}
+</span><span class='line'>#hidden{
+</span><span class='line'>    background: #6bc30d;
+</span><span class='line'>    left:-100%;
+</span><span class='line'>    top:-100%;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>javascript</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+<span class='line-number'>113</span>
+<span class='line-number'>114</span>
+<span class='line-number'>115</span>
+<span class='line-number'>116</span>
+<span class='line-number'>117</span>
+<span class='line-number'>118</span>
+<span class='line-number'>119</span>
+<span class='line-number'>120</span>
+<span class='line-number'>121</span>
+<span class='line-number'>122</span>
+<span class='line-number'>123</span>
+<span class='line-number'>124</span>
+<span class='line-number'>125</span>
+<span class='line-number'>126</span>
+<span class='line-number'>127</span>
+<span class='line-number'>128</span>
+<span class='line-number'>129</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//采用模块模式来封装代码，可以方便发布成为spm包，方便今后引用。
+</span><span class='line'>var wen_direction = (function () {
+</span><span class='line'>    var jqDirection;
+</span><span class='line'>    function Direction(id) {
+</span><span class='line'>        this.id = document.getElementById(id) || id ;
+</span><span class='line'>    }
+</span><span class='line'>    Direction.prototype.init = function (enterObj, leaveObj) {
+</span><span class='line'>        //鼠标滑入元素
+</span><span class='line'>        var self = this;
+</span><span class='line'>        this.id.addEventListener('mouseenter', function (e) {
+</span><span class='line'>            var directionNumber = self.main(e); //返回数字  返回0:上方进入， 返回1:右方进入，返回2：下方进入，返回3：左方进入
+</span><span class='line'>            var funArray = [enterObj.top, enterObj.right, enterObj.bottom, enterObj.left];
+</span><span class='line'>            funArray[directionNumber](self.id);
+</span><span class='line'>        },false);
+</span><span class='line'>        this.id.addEventListener('mouseleave', function (e) {
+</span><span class='line'>            var directionNumber = self.main(e); //返回数字  返回0:上方离开， 返回1:右方离开，返回2：下方离开，返回3：左方离开
+</span><span class='line'>            var funArray = [leaveObj.top, leaveObj.right, leaveObj.bottom, leaveObj.left];
+</span><span class='line'>            funArray[directionNumber](self.id);
+</span><span class='line'>        },false);
+</span><span class='line'>    };
+</span><span class='line'>    /*主函数 返回数字来判断从哪个方向进入*/
+</span><span class='line'>    Direction.prototype.main = function (e) {
+</span><span class='line'>        var w = this.id.scrollWidth;
+</span><span class='line'>        var h = this.id.scrollHeight;
+</span><span class='line'>        var x = (e.offsetX - (w / 2)) * (w &gt; h ? (h / w) : 1);
+</span><span class='line'>        var y = (e.offsetY - (h / 2)) * (h &gt; w ? (w / h) : 1);
+</span><span class='line'>        var number = Math.round((((Math.atan2(y, x) * (180 / Math.PI)) + 180) / 90) + 3) % 4;
+</span><span class='line'>        return number;
+</span><span class='line'>    };
+</span><span class='line'>    /*基于jquery的事件对象*/
+</span><span class='line'>    Direction.prototype.jqRun=function(e) {
+</span><span class='line'>        var directionNumber = this.jqMain(e);
+</span><span class='line'>        var obj = {};
+</span><span class='line'>        switch(directionNumber)
+</span><span class='line'>        {
+</span><span class='line'>            case 0://from top
+</span><span class='line'>                obj.left = 0;
+</span><span class='line'>                obj.top = "-100%";
+</span><span class='line'>                break;
+</span><span class='line'>            case 1://from right
+</span><span class='line'>                obj.left = "100%";
+</span><span class='line'>                obj.top = 0;
+</span><span class='line'>                break;
+</span><span class='line'>            case 2://from bottom
+</span><span class='line'>                obj.left = 0;
+</span><span class='line'>                obj.top = "100%";
+</span><span class='line'>                break;
+</span><span class='line'>            case 3://from left
+</span><span class='line'>                obj.left = "-100%";
+</span><span class='line'>                obj.top = 0;
+</span><span class='line'>                break;
+</span><span class='line'>        }
+</span><span class='line'>        return obj;
+</span><span class='line'>    };
+</span><span class='line'>    Direction.prototype.jqMain = function (e) {
+</span><span class='line'>        var w = this.id.width();
+</span><span class='line'>        var h = this.id.height();
+</span><span class='line'>        /*计算x和y得到一个角到elem的中心，得到相对于x和y值到div的中心*/
+</span><span class='line'>        var x = (e.pageX - this.id.offset().left - (w / 2)) * (w &gt; h ? (h / w) : 1);
+</span><span class='line'>        var y = (e.pageY - this.id.offset().top - (h / 2)) * (h &gt; w ? (w / h) : 1);
+</span><span class='line'>        /** 鼠标从哪里来 / 角度 和 方向出去顺时针（得出的结果是TRBL 0 1 2 3
+</span><span class='line'>         * 首先计算点的角度，
+</span><span class='line'>         * 再加上180度摆脱负值
+</span><span class='line'>         * 除于90得到的象限（象限，又称象限角，意思就是一个圆之四分之一等份）
+</span><span class='line'>         * 加上3，做一个模（求模 求余数）4的象限转移到一个适当的顺时针 得出 TRBL 0 1 2 3（上/右/下/左）
+</span><span class='line'>         **/
+</span><span class='line'>        var number = Math.round((((Math.atan2(y, x) * (180 / Math.PI)) + 180) / 90) + 3) % 4;
+</span><span class='line'>        return number;
+</span><span class='line'>    };
+</span><span class='line'>    return {
+</span><span class='line'>        run: function (id, enterObj, leaveObj) {//这个接口用于原生js
+</span><span class='line'>            var directionChild = new Direction(id);
+</span><span class='line'>            directionChild.init(enterObj, leaveObj);
+</span><span class='line'>        },
+</span><span class='line'>        jqRun: function(id, e){//暴露的这个接口是基于jquery的
+</span><span class='line'>            if(!jqDirection){
+</span><span class='line'>                jqDirection = new Direction(id);
+</span><span class='line'>            }
+</span><span class='line'>            return jqDirection.jqRun(e);//返回一个样式对象{left：string，top：string}
+</span><span class='line'>        }
+</span><span class='line'>    }
+</span><span class='line'>})();
+</span><span class='line'>//测试用例
+</span><span class='line'>var enterObject = {
+</span><span class='line'>    left: function(self) {
+</span><span class='line'>        self.innerHTML = "从左边进入";
+</span><span class='line'>        console.log("从左边进入");
+</span><span class='line'>    },
+</span><span class='line'>    right: function(self) {
+</span><span class='line'>        self.innerHTML = "从右边进入";
+</span><span class='line'>        console.log("从右边进入");
+</span><span class='line'>    },
+</span><span class='line'>    top: function(self) {
+</span><span class='line'>        self.innerHTML = "从上边进入";
+</span><span class='line'>        console.log("从上边进入");
+</span><span class='line'>    },
+</span><span class='line'>    bottom: function(self) {
+</span><span class='line'>        self.innerHTML = "从下边进入";
+</span><span class='line'>        console.log("从下边进入");
+</span><span class='line'>    }
+</span><span class='line'>};
+</span><span class='line'>var leaveObject = {
+</span><span class='line'>    left: function(self) {
+</span><span class='line'>        self.innerHTML = "从左边离开";
+</span><span class='line'>        console.log("从左边离开");
+</span><span class='line'>    },
+</span><span class='line'>    right: function(self) {
+</span><span class='line'>        self.innerHTML = "从右边离开";
+</span><span class='line'>        console.log("从右边离开");
+</span><span class='line'>    },
+</span><span class='line'>    top: function(self) {
+</span><span class='line'>        self.innerHTML = "从上边离开";
+</span><span class='line'>        console.log("从上边离开");
+</span><span class='line'>    },
+</span><span class='line'>    bottom: function(self) {
+</span><span class='line'>        self.innerHTML = "从下边离开";
+</span><span class='line'>        console.log("从下边离开");
+</span><span class='line'>    }
+</span><span class='line'>};
+</span><span class='line'>//run接口
+</span><span class='line'>wen_direction.run('box',enterObject, leaveObject);
+</span><span class='line'>//jqRun接口
+</span><span class='line'>var jqbox = $("#jqbox");
+</span><span class='line'>var hidden = jqbox.children("#hidden");
+</span><span class='line'>jqbox.hover(function(e) {
+</span><span class='line'>    hidden.css(wen_direction.jqRun(jqbox,e)).stop(true,true).animate({left: '0', top: '0'},200);
+</span><span class='line'>},function(e) {
+</span><span class='line'>    hidden.stop(true, true).animate(wen_direction.jqRun(jqbox,e), 200);
+</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
+
+
+<p>代码的效果可以移步这里<a href="http://docs.spmjs.io/wen_direction/latest/examples/index.html">http://docs.spmjs.io/wen_direction/latest/examples/index.html</a></p>
+
+<p>以上采用模块模式封装的wen_direction 我已经发布到我的spm上了 地址为：<a href="http://spmjs.io/package/wen_direction">http://spmjs.io/package/wen_direction</a>。</p>
+
+<p>怎么发布spm包可以移步这里<a href="http://wenyang12.github.io/blog/2015/12/03/pubuliu-module-spm/">构建spm瀑布流模块包</a> 有兴趣的可以模仿这个发布一下wen_direction这个我用模块模式封装好的代码</p>
+
+<p>既然发布了，肯定就要涉及到使用这个包，如何使用呢？感兴趣的可以移步这里<a href="http://wenyang12.github.io/blog/2015/12/03/pubuliu-module-spm-use/">Spm瀑布流模块包的使用</a></p>
+
+<p>我自己发布wen_direction模块包的源码已经放到我的github上了，地址为：<a href="https://github.com/wenyang12/wen_direction">https://github.com/wenyang12/wen_direction</a></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">三重水</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2016-01-07T10:21:01+08:00'><span class='date'>2016年01月07日</span> <span class='time'>10:21 am</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/javascript/'>javascript</a>, <a class='category' href='/blog/categories/shu-biao-shi-jian/'>鼠标事件</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+  
+  <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style_32x32">
+    <a class="jiathis_button_qzone"></a>
+    <a class="jiathis_button_tsina"></a>
+    <a class="jiathis_button_tqq"></a>
+    <a class="jiathis_button_weixin"></a>
+    <a class="jiathis_button_renren"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+    <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2016/01/04/yuan-sheng-ajax/" title="Previous Post: 原生AJAX">&laquo; 原生AJAX</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2016/01/31/login-register-model/" title="Next Post: 登录和注册模板，采用jquery.validation.js效验">登录和注册模板，采用jquery.validation.js效验 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>评论</h1>
+    <div id="disqus_thread" aria-live="polite"><!-- 多说评论框 start -->
+<div class="ds-thread" data-thread-key="/blog/2016/01/07/mousenter-mouseleave-direction-callback" data-title="鼠标进入和离开元素4个方向对应的相关操作" data-url="http://wenyang12.github.io/blog/2016/01/07/mousenter-mouseleave-direction-callback/"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    var duoshuoQuery = {short_name:"ywenblog"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+        || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>近期文章</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2018/01/17/adb-chrome-develop/">Webview的调试方法</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/12/28/csp/">CSP(内容安全策略)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/08/31/native-drag/">原生拖放</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/08/17/email-read-adaption/">邮件读信页的自适应方案</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/07/07/file-upload-formdata/">Formdata异步上传文件的实现</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+<section class="about-me">
+  <h1>关于我</h1>
+  <div class="thumb">
+      <span></span>
+      <p>三重水</p>
+      <p>学习，积累，反思，阅读，分享</p>
+  </div>  
+  <p><a href="https://github.com/wenyang12" target="_blank">github</a><a href="http://wenyang12.github.io/" target="_blank">博客</a><a
+          href="https://www.qdfuns.com/u/13989/works/articles" target="_blank">前端网</a>
+          <!-- <a href="http://wenyang.sinaapp.com/" target="_blank">笔记</a>
+          <a href="http://ywenblog.sinaapp.com/" target="_blank">WordPress</a> -->
+        </p>
+</section>
+<section>
+    <h1>标签</h1>
+    <div class="cloud">
+        <a style="font-size: 159%" href="/blog/categories/node-dot-jskuang-jia/">Node.js框架</a>
+<a style="font-size: 90%" href="/blog/categories/adb/">adb</a>
+<a style="font-size: 145%" href="/blog/categories/ajax/">ajax</a>
+<a style="font-size: 90%" href="/blog/categories/bootstrap/">bootstrap</a>
+<a style="font-size: 90%" href="/blog/categories/csp/">csp</a>
+<a style="font-size: 90%" href="/blog/categories/cssyu-chu-li-qi/">css预处理器</a>
+<a style="font-size: 90%" href="/blog/categories/email/">email</a>
+<a style="font-size: 90%" href="/blog/categories/es5/">es5</a>
+<a style="font-size: 90%" href="/blog/categories/express/">express</a>
+<a style="font-size: 124%" href="/blog/categories/git/">git</a>
+<a style="font-size: 90%" href="/blog/categories/grunt/">grunt</a>
+<a style="font-size: 170%" href="/blog/categories/html5/">html5</a>
+<a style="font-size: 90%" href="/blog/categories/jquerycha-jian/">jQuery插件</a>
+<a style="font-size: 145%" href="/blog/categories/javascript/">javascript</a>
+<a style="font-size: 90%" href="/blog/categories/jquery/">jquery</a>
+<a style="font-size: 90%" href="/blog/categories/jquery-dot-validation/">jquery.validation</a>
+<a style="font-size: 90%" href="/blog/categories/less/">less</a>
+<a style="font-size: 145%" href="/blog/categories/loopback/">loopback</a>
+<a style="font-size: 90%" href="/blog/categories/markdown/">markdown</a>
+<a style="font-size: 145%" href="/blog/categories/mongodb/">mongodb</a>
+<a style="font-size: 124%" href="/blog/categories/octopress/">octopress</a>
+<a style="font-size: 90%" href="/blog/categories/react/">react</a>
+<a style="font-size: 90%" href="/blog/categories/sass/">sass</a>
+<a style="font-size: 124%" href="/blog/categories/spm/">spm</a>
+<a style="font-size: 90%" href="/blog/categories/webworker/">webWorker</a>
+<a style="font-size: 90%" href="/blog/categories/websoket/">websoket</a>
+<a style="font-size: 90%" href="/blog/categories/wordpress/">wordpress</a>
+<a style="font-size: 90%" href="/blog/categories/zhong-jie-zhe-mo-shi/">中介者模式</a>
+<a style="font-size: 90%" href="/blog/categories/dai-li-mo-shi/">代理模式</a>
+<a style="font-size: 90%" href="/blog/categories/dao-ji-shi/">倒计时</a>
+<a style="font-size: 90%" href="/blog/categories/nei-rong-an-quan-ce-lue/">内容安全策略</a>
+<a style="font-size: 90%" href="/blog/categories/qian-duan-gou-jian-gong-ju/">前端构建工具</a>
+<a style="font-size: 90%" href="/blog/categories/yuan-xing-mo-shi/">原型模式</a>
+<a style="font-size: 90%" href="/blog/categories/fu-xuan-kuang-zu-jian/">复选框组件</a>
+<a style="font-size: 90%" href="/blog/categories/dan-chu-kuang/">弹出框</a>
+<a style="font-size: 90%" href="/blog/categories/tuo-fang/">拖放</a>
+<a style="font-size: 124%" href="/blog/categories/wen-jian-shang-chuan/">文件上传</a>
+<a style="font-size: 90%" href="/blog/categories/jian-ce-shu-ju-lei-xing/">检测数据类型</a>
+<a style="font-size: 124%" href="/blog/categories/mo-kuai-bao/">模块包</a>
+<a style="font-size: 90%" href="/blog/categories/gun-dong-jian-ting/">滚动监听</a>
+<a style="font-size: 145%" href="/blog/categories/pu-bu-liu/">瀑布流</a>
+<a style="font-size: 90%" href="/blog/categories/deng-lu-zhu-ce-mo-ban/">登陆注册模板</a>
+<a style="font-size: 90%" href="/blog/categories/liao-tian-shi/">聊天室</a>
+<a style="font-size: 90%" href="/blog/categories/zi-gua-ying/">自适应</a>
+<a style="font-size: 90%" href="/blog/categories/guan-cha-zhe-mo-shi/">观察者模式</a>
+<a style="font-size: 159%" href="/blog/categories/she-ji-mo-shi/">设计模式</a>
+<a style="font-size: 90%" href="/blog/categories/diao-shi-webview/">调试webview</a>
+<a style="font-size: 90%" href="/blog/categories/xuan-xiang-qia/">选项卡</a>
+<a style="font-size: 90%" href="/blog/categories/mian-shi/">面试</a>
+<a style="font-size: 90%" href="/blog/categories/shu-biao-shi-jian/">鼠标事件</a>
+
+    </div>
+</section>
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><div class="wrapper">
+<p>
+  Copyright &copy; 2018 - 三重水 -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a>&nbsp;<a href="http://tongji.baidu.com/web/welcome/ico?s=ddb3466dedfe096084bfb3626c5d2311">百度统计</a></span>
+</p>
+</div>
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">(function(){document.write(unescape('%3Cdiv id="bdcs"%3E%3C/div%3E'));var bdcs = document.createElement('script');bdcs.type = 'text/javascript';bdcs.async = true;bdcs.src = 'http://znsv.baidu.com/customer_search/api/js?sid=5545127454396687048' + '&plate_url=' + encodeURIComponent(window.location.href) + '&t=' + Math.ceil(new Date()/3600000);var s = document.getElementsByTagName('script')[0];s.parentNode.insertBefore(bdcs, s);})();</script>
+</body>
+</html>

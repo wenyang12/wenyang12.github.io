@@ -1,0 +1,916 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>瀑布流 - 三重水的博客</title>
+  <meta name="author" content="三重水">
+
+  
+  <meta name="description" content="实现思路 布局 以第一行图片为基准设置其余图片（除第一行图片）的布局排版，让这些图片都采用绝对定位，一张一张依次类推的定位在每一列最小高度的下边。 举个栗子： 假如界面的宽度一行只能放8张图（相当于8列），即第一行的图片个数为8张，每列也只有1张图，那么第九张图如何来摆放呢？ &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="baidu-site-verification" content="ipSlYf2c3P" />
+  
+  <link rel="canonical" href="http://wenyang12.github.io/blog/2015/12/01/pubuliu/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="三重水的博客" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<script type="text/javascript">
+
+    function addBlankTargetForLinks () {
+
+        $('a[href^="http"]').each(function(){
+
+            $(this).attr('target', '_blank');
+
+        });
+
+    }
+
+    $(document).bind('DOMNodeInserted', function(event) {
+        addBlankTargetForLinks();
+
+    });
+
+</script>
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?ddb3466dedfe096084bfb3626c5d2311";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">三重水的博客</a></h1>
+  
+    <h2>在变化当中不断记录自己，充实自己，浏览自己</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><div class="wrapper">
+<ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form>
+  <fieldset role="search">
+    <input class="search" id="bdcsMain" type="text" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">首页</a></li>
+  <li><a href="/blog/archives">归档</a></li>
+  <!-- <li><a href="/about-me">关于我</a></li>
+  <li><a href="/wenxun/dist/">相册</a></li> -->
+</ul>
+
+</div></nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">瀑布流</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-12-01T11:41:35+08:00'><span class='date'>2015年12月01日</span> <span class='time'>11:41 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h2>实现思路</h2>
+
+<p><strong>布局</strong></p>
+
+<p>以第一行图片为基准设置其余图片（除第一行图片）的布局排版，让这些图片都采用绝对定位，一张一张依次类推的定位在每一列最小高度的下边。</p>
+
+<p><strong>举个栗子</strong>：</p>
+
+<p>假如界面的宽度一行只能放8张图（相当于8列），即第一行的图片个数为8张，每列也只有1张图，那么第九张图如何来摆放呢？那么第九张图应该让它采用绝对定位。</p>
+
+<ol>
+<li>定位在这8列当中高度最小的下边即可；</li>
+<li>接着又重新计算每一列的高度，找出最小的，然后放入接下来的图片，以此类推。</li>
+</ol>
+
+
+<blockquote><p>1跟2不断循环，即可实现瀑布流的布局效果</p></blockquote>
+
+<p>最后，你会发现瀑布流，拉到最下边的时候总是不断加载图片进来，这个效果可以这么实现：</p>
+
+<ol>
+<li>首先监听滚动条滚动事件;</li>
+<li>然后当滚动条滚动到全部显示出最后一张图片时（这个判断很重要，你也可以采用其他类似判断，看你怎么判断），异步加载图片数据；</li>
+<li>用这些数据追加到页面即可。</li>
+</ol>
+
+
+<!--more-->
+
+
+<h2>代码实现</h2>
+
+<p>源码放在我的github上<a href="https://github.com/wenyang12/bupuliu">https://github.com/wenyang12/bupuliu</a></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+<span class='line-number'>113</span>
+<span class='line-number'>114</span>
+<span class='line-number'>115</span>
+<span class='line-number'>116</span>
+<span class='line-number'>117</span>
+<span class='line-number'>118</span>
+<span class='line-number'>119</span>
+<span class='line-number'>120</span>
+<span class='line-number'>121</span>
+<span class='line-number'>122</span>
+<span class='line-number'>123</span>
+<span class='line-number'>124</span>
+<span class='line-number'>125</span>
+<span class='line-number'>126</span>
+<span class='line-number'>127</span>
+<span class='line-number'>128</span>
+<span class='line-number'>129</span>
+<span class='line-number'>130</span>
+<span class='line-number'>131</span>
+<span class='line-number'>132</span>
+<span class='line-number'>133</span>
+<span class='line-number'>134</span>
+<span class='line-number'>135</span>
+<span class='line-number'>136</span>
+<span class='line-number'>137</span>
+<span class='line-number'>138</span>
+<span class='line-number'>139</span>
+<span class='line-number'>140</span>
+<span class='line-number'>141</span>
+<span class='line-number'>142</span>
+<span class='line-number'>143</span>
+<span class='line-number'>144</span>
+<span class='line-number'>145</span>
+<span class='line-number'>146</span>
+<span class='line-number'>147</span>
+<span class='line-number'>148</span>
+<span class='line-number'>149</span>
+<span class='line-number'>150</span>
+<span class='line-number'>151</span>
+<span class='line-number'>152</span>
+<span class='line-number'>153</span>
+<span class='line-number'>154</span>
+<span class='line-number'>155</span>
+<span class='line-number'>156</span>
+<span class='line-number'>157</span>
+<span class='line-number'>158</span>
+<span class='line-number'>159</span>
+<span class='line-number'>160</span>
+<span class='line-number'>161</span>
+<span class='line-number'>162</span>
+<span class='line-number'>163</span>
+<span class='line-number'>164</span>
+<span class='line-number'>165</span>
+<span class='line-number'>166</span>
+<span class='line-number'>167</span>
+<span class='line-number'>168</span>
+<span class='line-number'>169</span>
+<span class='line-number'>170</span>
+<span class='line-number'>171</span>
+<span class='line-number'>172</span>
+<span class='line-number'>173</span>
+<span class='line-number'>174</span>
+<span class='line-number'>175</span>
+<span class='line-number'>176</span>
+<span class='line-number'>177</span>
+<span class='line-number'>178</span>
+<span class='line-number'>179</span>
+<span class='line-number'>180</span>
+<span class='line-number'>181</span>
+<span class='line-number'>182</span>
+<span class='line-number'>183</span>
+<span class='line-number'>184</span>
+<span class='line-number'>185</span>
+<span class='line-number'>186</span>
+<span class='line-number'>187</span>
+<span class='line-number'>188</span>
+<span class='line-number'>189</span>
+<span class='line-number'>190</span>
+<span class='line-number'>191</span>
+<span class='line-number'>192</span>
+<span class='line-number'>193</span>
+<span class='line-number'>194</span>
+<span class='line-number'>195</span>
+<span class='line-number'>196</span>
+<span class='line-number'>197</span>
+<span class='line-number'>198</span>
+<span class='line-number'>199</span>
+<span class='line-number'>200</span>
+<span class='line-number'>201</span>
+<span class='line-number'>202</span>
+<span class='line-number'>203</span>
+<span class='line-number'>204</span>
+<span class='line-number'>205</span>
+<span class='line-number'>206</span>
+<span class='line-number'>207</span>
+<span class='line-number'>208</span>
+<span class='line-number'>209</span>
+<span class='line-number'>210</span>
+<span class='line-number'>211</span>
+<span class='line-number'>212</span>
+<span class='line-number'>213</span>
+<span class='line-number'>214</span>
+<span class='line-number'>215</span>
+<span class='line-number'>216</span>
+<span class='line-number'>217</span>
+<span class='line-number'>218</span>
+<span class='line-number'>219</span>
+<span class='line-number'>220</span>
+<span class='line-number'>221</span>
+<span class='line-number'>222</span>
+<span class='line-number'>223</span>
+<span class='line-number'>224</span>
+<span class='line-number'>225</span>
+<span class='line-number'>226</span>
+<span class='line-number'>227</span>
+<span class='line-number'>228</span>
+<span class='line-number'>229</span>
+<span class='line-number'>230</span>
+<span class='line-number'>231</span>
+<span class='line-number'>232</span>
+<span class='line-number'>233</span>
+<span class='line-number'>234</span>
+<span class='line-number'>235</span>
+<span class='line-number'>236</span>
+<span class='line-number'>237</span>
+<span class='line-number'>238</span>
+<span class='line-number'>239</span>
+<span class='line-number'>240</span>
+<span class='line-number'>241</span>
+<span class='line-number'>242</span>
+<span class='line-number'>243</span>
+<span class='line-number'>244</span>
+<span class='line-number'>245</span>
+<span class='line-number'>246</span>
+<span class='line-number'>247</span>
+<span class='line-number'>248</span>
+<span class='line-number'>249</span>
+<span class='line-number'>250</span>
+<span class='line-number'>251</span>
+<span class='line-number'>252</span>
+<span class='line-number'>253</span>
+<span class='line-number'>254</span>
+<span class='line-number'>255</span>
+<span class='line-number'>256</span>
+<span class='line-number'>257</span>
+<span class='line-number'>258</span>
+<span class='line-number'>259</span>
+<span class='line-number'>260</span>
+<span class='line-number'>261</span>
+<span class='line-number'>262</span>
+<span class='line-number'>263</span>
+<span class='line-number'>264</span>
+<span class='line-number'>265</span>
+<span class='line-number'>266</span>
+<span class='line-number'>267</span>
+<span class='line-number'>268</span>
+<span class='line-number'>269</span>
+<span class='line-number'>270</span>
+<span class='line-number'>271</span>
+<span class='line-number'>272</span>
+<span class='line-number'>273</span>
+<span class='line-number'>274</span>
+<span class='line-number'>275</span>
+<span class='line-number'>276</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;!DOCTYPE html&gt;
+</span><span class='line'>&lt;html&gt;
+</span><span class='line'>&lt;head lang="en"&gt;
+</span><span class='line'>    &lt;meta charset="UTF-8"&gt;
+</span><span class='line'>    &lt;title&gt;瀑布流&lt;/title&gt;
+</span><span class='line'>    &lt;style&gt;
+</span><span class='line'>        .pubuliu-box{
+</span><span class='line'>            position: relative;
+</span><span class='line'>            margin: 0 auto;
+</span><span class='line'>        }
+</span><span class='line'>        .pubuliu-box &gt; .img-box{
+</span><span class='line'>            float: left;
+</span><span class='line'>            padding: 5px;
+</span><span class='line'>        }
+</span><span class='line'>        .pubuliu-box &gt; .img-box &gt; .img-inner{
+</span><span class='line'>            border: 1px solid #cccccc;
+</span><span class='line'>            padding: 5px;
+</span><span class='line'>            border-radius: 5px;
+</span><span class='line'>            -webkit-box-shadow: 0 0 5px #ccc;
+</span><span class='line'>            -moz-box-shadow: 0 0 5px #ccc;
+</span><span class='line'>            box-shadow: 0 0 5px #ccc;
+</span><span class='line'>        }
+</span><span class='line'>        .pubuliu-box &gt; .img-box &gt; .img-inner &gt;img{
+</span><span class='line'>            display: block;
+</span><span class='line'>            width: 150px;
+</span><span class='line'>            height: auto;
+</span><span class='line'>        }
+</span><span class='line'>    &lt;/style&gt;
+</span><span class='line'>&lt;/head&gt;
+</span><span class='line'>&lt;body&gt;
+</span><span class='line'>&lt;div class="pubuliu-box"&gt;
+</span><span class='line'>    &lt;div class="img-box"&gt;
+</span><span class='line'>        &lt;div class="img-inner"&gt;
+</span><span class='line'>            &lt;img src="images/1.jpg" alt="picture"/&gt;
+</span><span class='line'>        &lt;/div&gt;
+</span><span class='line'>    &lt;/div&gt;
+</span><span class='line'>    &lt;div class="img-box"&gt;
+</span><span class='line'>        &lt;div class="img-inner"&gt;
+</span><span class='line'>            &lt;img src="images/2.jpg" alt="picture"/&gt;
+</span><span class='line'>        &lt;/div&gt;
+</span><span class='line'>    &lt;/div&gt;
+</span><span class='line'>    &lt;div class="img-box"&gt;
+</span><span class='line'>        &lt;div class="img-inner"&gt;
+</span><span class='line'>            &lt;img src="images/3.jpg" alt="picture"/&gt;
+</span><span class='line'>        &lt;/div&gt;
+</span><span class='line'>    &lt;/div&gt;
+</span><span class='line'>    &lt;div class="img-box"&gt;
+</span><span class='line'>        &lt;div class="img-inner"&gt;
+</span><span class='line'>            &lt;img src="images/4.jpg" alt="picture"/&gt;
+</span><span class='line'>        &lt;/div&gt;
+</span><span class='line'>    &lt;/div&gt;
+</span><span class='line'>    &lt;div class="img-box"&gt;
+</span><span class='line'>        &lt;div class="img-inner"&gt;
+</span><span class='line'>            &lt;img src="images/5.jpg" alt="picture"/&gt;
+</span><span class='line'>        &lt;/div&gt;
+</span><span class='line'>    &lt;/div&gt;
+</span><span class='line'>    &lt;div class="img-box"&gt;
+</span><span class='line'>        &lt;div class="img-inner"&gt;
+</span><span class='line'>            &lt;img src="images/6.jpg" alt="picture"/&gt;
+</span><span class='line'>        &lt;/div&gt;
+</span><span class='line'>    &lt;/div&gt;
+</span><span class='line'>    &lt;div class="img-box"&gt;
+</span><span class='line'>        &lt;div class="img-inner"&gt;
+</span><span class='line'>            &lt;img src="images/7.jpg" alt="picture"/&gt;
+</span><span class='line'>        &lt;/div&gt;
+</span><span class='line'>    &lt;/div&gt;
+</span><span class='line'>    &lt;div class="img-box"&gt;
+</span><span class='line'>        &lt;div class="img-inner"&gt;
+</span><span class='line'>            &lt;img src="images/8.jpg" alt="picture"/&gt;
+</span><span class='line'>        &lt;/div&gt;
+</span><span class='line'>    &lt;/div&gt;
+</span><span class='line'>    &lt;div class="img-box"&gt;
+</span><span class='line'>        &lt;div class="img-inner"&gt;
+</span><span class='line'>            &lt;img src="images/9.jpg" alt="picture"/&gt;
+</span><span class='line'>        &lt;/div&gt;
+</span><span class='line'>    &lt;/div&gt;
+</span><span class='line'>    &lt;div class="img-box"&gt;
+</span><span class='line'>        &lt;div class="img-inner"&gt;
+</span><span class='line'>            &lt;img src="images/10.jpg" alt="picture"/&gt;
+</span><span class='line'>        &lt;/div&gt;
+</span><span class='line'>    &lt;/div&gt;
+</span><span class='line'>    &lt;div class="img-box"&gt;
+</span><span class='line'>        &lt;div class="img-inner"&gt;
+</span><span class='line'>            &lt;img src="images/1.jpg" alt="picture"/&gt;
+</span><span class='line'>        &lt;/div&gt;
+</span><span class='line'>    &lt;/div&gt;
+</span><span class='line'>    &lt;div class="img-box"&gt;
+</span><span class='line'>        &lt;div class="img-inner"&gt;
+</span><span class='line'>            &lt;img src="images/2.jpg" alt="picture"/&gt;
+</span><span class='line'>        &lt;/div&gt;
+</span><span class='line'>    &lt;/div&gt;
+</span><span class='line'>    &lt;div class="img-box"&gt;
+</span><span class='line'>        &lt;div class="img-inner"&gt;
+</span><span class='line'>            &lt;img src="images/3.jpg" alt="picture"/&gt;
+</span><span class='line'>        &lt;/div&gt;
+</span><span class='line'>    &lt;/div&gt;
+</span><span class='line'>    &lt;div class="img-box"&gt;
+</span><span class='line'>        &lt;div class="img-inner"&gt;
+</span><span class='line'>            &lt;img src="images/1.jpg" alt="picture"/&gt;
+</span><span class='line'>        &lt;/div&gt;
+</span><span class='line'>    &lt;/div&gt;
+</span><span class='line'>    &lt;div class="img-box"&gt;
+</span><span class='line'>        &lt;div class="img-inner"&gt;
+</span><span class='line'>            &lt;img src="images/2.jpg" alt="picture"/&gt;
+</span><span class='line'>        &lt;/div&gt;
+</span><span class='line'>    &lt;/div&gt;
+</span><span class='line'>    &lt;div class="img-box"&gt;
+</span><span class='line'>        &lt;div class="img-inner"&gt;
+</span><span class='line'>            &lt;img src="images/3.jpg" alt="picture"/&gt;
+</span><span class='line'>        &lt;/div&gt;
+</span><span class='line'>    &lt;/div&gt;
+</span><span class='line'>    &lt;div class="img-box"&gt;
+</span><span class='line'>        &lt;div class="img-inner"&gt;
+</span><span class='line'>            &lt;img src="images/4.jpg" alt="picture"/&gt;
+</span><span class='line'>        &lt;/div&gt;
+</span><span class='line'>    &lt;/div&gt;
+</span><span class='line'>    &lt;div class="img-box"&gt;
+</span><span class='line'>        &lt;div class="img-inner"&gt;
+</span><span class='line'>            &lt;img src="images/5.jpg" alt="picture"/&gt;
+</span><span class='line'>        &lt;/div&gt;
+</span><span class='line'>    &lt;/div&gt;
+</span><span class='line'>    &lt;div class="img-box"&gt;
+</span><span class='line'>        &lt;div class="img-inner"&gt;
+</span><span class='line'>            &lt;img src="images/6.jpg" alt="picture"/&gt;
+</span><span class='line'>        &lt;/div&gt;
+</span><span class='line'>    &lt;/div&gt;
+</span><span class='line'>    &lt;div class="img-box"&gt;
+</span><span class='line'>        &lt;div class="img-inner"&gt;
+</span><span class='line'>            &lt;img src="images/7.jpg" alt="picture"/&gt;
+</span><span class='line'>        &lt;/div&gt;
+</span><span class='line'>    &lt;/div&gt;
+</span><span class='line'>    &lt;div class="img-box"&gt;
+</span><span class='line'>        &lt;div class="img-inner"&gt;
+</span><span class='line'>            &lt;img src="images/8.jpg" alt="picture"/&gt;
+</span><span class='line'>        &lt;/div&gt;
+</span><span class='line'>    &lt;/div&gt;
+</span><span class='line'>    &lt;div class="img-box"&gt;
+</span><span class='line'>        &lt;div class="img-inner"&gt;
+</span><span class='line'>            &lt;img src="images/9.jpg" alt="picture"/&gt;
+</span><span class='line'>        &lt;/div&gt;
+</span><span class='line'>    &lt;/div&gt;
+</span><span class='line'>    &lt;div class="img-box"&gt;
+</span><span class='line'>        &lt;div class="img-inner"&gt;
+</span><span class='line'>            &lt;img src="images/10.jpg" alt="picture"/&gt;
+</span><span class='line'>        &lt;/div&gt;
+</span><span class='line'>    &lt;/div&gt;
+</span><span class='line'>    &lt;div class="img-box"&gt;
+</span><span class='line'>        &lt;div class="img-inner"&gt;
+</span><span class='line'>            &lt;img src="images/1.jpg" alt="picture"/&gt;
+</span><span class='line'>        &lt;/div&gt;
+</span><span class='line'>    &lt;/div&gt;
+</span><span class='line'>    &lt;div class="img-box"&gt;
+</span><span class='line'>        &lt;div class="img-inner"&gt;
+</span><span class='line'>            &lt;img src="images/2.jpg" alt="picture"/&gt;
+</span><span class='line'>        &lt;/div&gt;
+</span><span class='line'>    &lt;/div&gt;
+</span><span class='line'>    &lt;div class="img-box"&gt;
+</span><span class='line'>        &lt;div class="img-inner"&gt;
+</span><span class='line'>            &lt;img src="images/3.jpg" alt="picture"/&gt;
+</span><span class='line'>        &lt;/div&gt;
+</span><span class='line'>    &lt;/div&gt;
+</span><span class='line'>&lt;/div&gt;
+</span><span class='line'>&lt;script&gt;
+</span><span class='line'>    /*单例模式*/
+</span><span class='line'>    var addEvent=(function() {//返回兼容旧浏览器的事件监听
+</span><span class='line'>        var instance;
+</span><span class='line'>        function init() {
+</span><span class='line'>            function temp(target,event,fn) {
+</span><span class='line'>                if(window.addEventListener){
+</span><span class='line'>                    return target.addEventListener(event, fn);
+</span><span class='line'>                }else if(window.attachEvent) {
+</span><span class='line'>                    return target.attachEvent('on'+event, fn);
+</span><span class='line'>                }
+</span><span class='line'>            }
+</span><span class='line'>            return temp
+</span><span class='line'>        }
+</span><span class='line'>        return{
+</span><span class='line'>            getInstance: function() {
+</span><span class='line'>                if(!instance){
+</span><span class='line'>                    instance = init();
+</span><span class='line'>                }
+</span><span class='line'>                return instance;
+</span><span class='line'>            }
+</span><span class='line'>        }
+</span><span class='line'>    }());
+</span><span class='line'>    /*模块模式*/
+</span><span class='line'>    function loadModule(moduleArr) {//页面初始化完成时载入模块
+</span><span class='line'>        var event = addEvent.getInstance();
+</span><span class='line'>        event(window,'load',function() {
+</span><span class='line'>            moduleArr.forEach(function(el) {
+</span><span class='line'>                el.init();
+</span><span class='line'>            });
+</span><span class='line'>        });
+</span><span class='line'>        return moduleArr;
+</span><span class='line'>    }
+</span><span class='line'>    var pubuliuModule = (function() {
+</span><span class='line'>        var parentEle = document.querySelector('.pubuliu-box');
+</span><span class='line'>        var childEle = document.querySelectorAll('.img-box');
+</span><span class='line'>        function init(){
+</span><span class='line'>            //设置布局宽度
+</span><span class='line'>            var docWidth = document.documentElement.offsetWidth || document.body.offsetWidth; //获取可视文档的宽度
+</span><span class='line'>            var imgBoxWidth = childEle[0].offsetWidth;//获取图片盒子的宽度
+</span><span class='line'>            var cols = Math.floor(docWidth / imgBoxWidth);//一行能放几张图片的个数
+</span><span class='line'>            parentEle.style.width = cols * imgBoxWidth + 'px';//设置布局宽度
+</span><span class='line'>            main(cols);
+</span><span class='line'>            scrollAjax(cols);
+</span><span class='line'>        }
+</span><span class='line'>        //核心函数
+</span><span class='line'>        function main(cols) {
+</span><span class='line'>            //设置除了第一行图片，往后的图片的布局，计算出第一行图片当中的最小高度，然后把往后的图片用绝对定位摆放在其下边，依次类推。
+</span><span class='line'>            var imgHeightArr =[],imgMinHeight, imgMinHeightIndex;
+</span><span class='line'>            childEle = document.querySelectorAll('.img-box');
+</span><span class='line'>            for(var i = 0,len = childEle.length; i &lt; len; i++) {
+</span><span class='line'>                if(i &lt; cols) {
+</span><span class='line'>                    imgHeightArr[i]  = childEle[i].offsetHeight;
+</span><span class='line'>                }else{
+</span><span class='line'>                    imgMinHeight = Math.min.apply(null, imgHeightArr); //获取第一行图片的最小高度
+</span><span class='line'>                    imgMinHeightIndex = getImgMinIndex(imgHeightArr, imgMinHeight);//获取第一行图片最小高度对应的位置，即索引值
+</span><span class='line'>                    //设置接下来除了第一行图片的所有图片布局
+</span><span class='line'>                    childEle[i].style.position = 'absolute';
+</span><span class='line'>                    childEle[i].style.top = imgMinHeight + 'px';
+</span><span class='line'>                    childEle[i].style.left = childEle[imgMinHeightIndex].offsetLeft+'px';
+</span><span class='line'>                    imgHeightArr[imgMinHeightIndex] = imgMinHeight + childEle[i].offsetHeight;//重新设置最小高度
+</span><span class='line'>                }
+</span><span class='line'>            }
+</span><span class='line'>        }
+</span><span class='line'>        //获取第一行图片最小高度对应的位置，即索引值
+</span><span class='line'>        function getImgMinIndex(imgHeightArr, imgMinHeight) {
+</span><span class='line'>            for(var i in imgHeightArr) {
+</span><span class='line'>                if(imgHeightArr[i] === imgMinHeight) {
+</span><span class='line'>                    return i;
+</span><span class='line'>                }
+</span><span class='line'>            }
+</span><span class='line'>        }
+</span><span class='line'>        function scrollAjax(cols) {
+</span><span class='line'>            var ajaxData =[{src:'images/1.jpg'},{src:'images/2.jpg'},{src:'images/3.jpg'},{src:'images/4.jpg'},{src:'images/5.jpg'},{src:'images/6.jpg'},{src:'images/7.jpg'},{src:'images/8.jpg'},{src:'images/9.jpg'},{src:'images/10.jpg'}];
+</span><span class='line'>            var event = addEvent.getInstance();
+</span><span class='line'>            event(window,'scroll',function() {
+</span><span class='line'>                if(scrollFlag()){
+</span><span class='line'>                    ajaxData.forEach(function(el) {
+</span><span class='line'>                        var imgBox = document.createElement('div');
+</span><span class='line'>                        var imgInner = document.createElement('div');
+</span><span class='line'>                        var img = document.createElement('img');
+</span><span class='line'>                        imgBox.className='img-box';
+</span><span class='line'>                        imgInner.className = 'img-inner';
+</span><span class='line'>                        img.src = el.src;
+</span><span class='line'>                        imgInner.appendChild(img);
+</span><span class='line'>                        imgBox.appendChild(imgInner);
+</span><span class='line'>                        parentEle.appendChild(imgBox);
+</span><span class='line'>                    });
+</span><span class='line'>                    main(cols);
+</span><span class='line'>                }
+</span><span class='line'>            })
+</span><span class='line'>        }
+</span><span class='line'>        //设置滚动条滚动到什么位置，加载图片
+</span><span class='line'>        function scrollFlag() {
+</span><span class='line'>            childEle = document.querySelectorAll('.img-box');
+</span><span class='line'>            var lastImgOffsetTop = childEle[childEle.length - 1].offsetTop;
+</span><span class='line'>            var lastImgHeight = childEle[childEle.length - 1].offsetHeight;
+</span><span class='line'>            var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;//获取滚动条向下滚滚去的高度
+</span><span class='line'>            var docHeight = document.documentElement.clientHeight || document.body.clientHeight;//获取文档可视区域的高度
+</span><span class='line'>            console.log(lastImgOffsetTop, scrollTop, docHeight,lastImgHeight);
+</span><span class='line'>            if(lastImgOffsetTop &lt; scrollTop+docHeight-lastImgHeight) {//滚动条拉动显示最后一张图片底部时加载
+</span><span class='line'>                return true;
+</span><span class='line'>            }else{
+</span><span class='line'>                return false;
+</span><span class='line'>            }
+</span><span class='line'>        }
+</span><span class='line'>        return {
+</span><span class='line'>            init:init
+</span><span class='line'>        }
+</span><span class='line'>    }());
+</span><span class='line'>    loadModule([pubuliuModule]);
+</span><span class='line'>&lt;/script&gt;
+</span><span class='line'>&lt;/body&gt;
+</span><span class='line'>&lt;/html&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">三重水</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2015-12-01T11:41:35+08:00'><span class='date'>2015年12月01日</span> <span class='time'>11:41 am</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/pu-bu-liu/'>瀑布流</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+  
+  <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style_32x32">
+    <a class="jiathis_button_qzone"></a>
+    <a class="jiathis_button_tsina"></a>
+    <a class="jiathis_button_tqq"></a>
+    <a class="jiathis_button_weixin"></a>
+    <a class="jiathis_button_renren"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+    <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/11/27/git-remote/" title="Previous Post: git-远程协作">&laquo; git-远程协作</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2015/12/03/pubuliu-module-spm/" title="Next Post: 构建spm瀑布流模块包">构建spm瀑布流模块包 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>评论</h1>
+    <div id="disqus_thread" aria-live="polite"><!-- 多说评论框 start -->
+<div class="ds-thread" data-thread-key="/blog/2015/12/01/pubuliu" data-title="瀑布流" data-url="http://wenyang12.github.io/blog/2015/12/01/pubuliu/"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    var duoshuoQuery = {short_name:"ywenblog"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+        || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>近期文章</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2018/01/17/adb-chrome-develop/">Webview的调试方法</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/12/28/csp/">CSP(内容安全策略)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/08/31/native-drag/">原生拖放</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/08/17/email-read-adaption/">邮件读信页的自适应方案</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/07/07/file-upload-formdata/">Formdata异步上传文件的实现</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+<section class="about-me">
+  <h1>关于我</h1>
+  <div class="thumb">
+      <span></span>
+      <p>三重水</p>
+      <p>学习，积累，反思，阅读，分享</p>
+  </div>  
+  <p><a href="https://github.com/wenyang12" target="_blank">github</a><a href="http://wenyang12.github.io/" target="_blank">博客</a><a
+          href="https://www.qdfuns.com/u/13989/works/articles" target="_blank">前端网</a>
+          <!-- <a href="http://wenyang.sinaapp.com/" target="_blank">笔记</a>
+          <a href="http://ywenblog.sinaapp.com/" target="_blank">WordPress</a> -->
+        </p>
+</section>
+<section>
+    <h1>标签</h1>
+    <div class="cloud">
+        <a style="font-size: 159%" href="/blog/categories/node-dot-jskuang-jia/">Node.js框架</a>
+<a style="font-size: 90%" href="/blog/categories/adb/">adb</a>
+<a style="font-size: 145%" href="/blog/categories/ajax/">ajax</a>
+<a style="font-size: 90%" href="/blog/categories/bootstrap/">bootstrap</a>
+<a style="font-size: 90%" href="/blog/categories/csp/">csp</a>
+<a style="font-size: 90%" href="/blog/categories/cssyu-chu-li-qi/">css预处理器</a>
+<a style="font-size: 90%" href="/blog/categories/email/">email</a>
+<a style="font-size: 90%" href="/blog/categories/es5/">es5</a>
+<a style="font-size: 90%" href="/blog/categories/express/">express</a>
+<a style="font-size: 124%" href="/blog/categories/git/">git</a>
+<a style="font-size: 90%" href="/blog/categories/grunt/">grunt</a>
+<a style="font-size: 170%" href="/blog/categories/html5/">html5</a>
+<a style="font-size: 90%" href="/blog/categories/jquerycha-jian/">jQuery插件</a>
+<a style="font-size: 145%" href="/blog/categories/javascript/">javascript</a>
+<a style="font-size: 90%" href="/blog/categories/jquery/">jquery</a>
+<a style="font-size: 90%" href="/blog/categories/jquery-dot-validation/">jquery.validation</a>
+<a style="font-size: 90%" href="/blog/categories/less/">less</a>
+<a style="font-size: 145%" href="/blog/categories/loopback/">loopback</a>
+<a style="font-size: 90%" href="/blog/categories/markdown/">markdown</a>
+<a style="font-size: 145%" href="/blog/categories/mongodb/">mongodb</a>
+<a style="font-size: 124%" href="/blog/categories/octopress/">octopress</a>
+<a style="font-size: 90%" href="/blog/categories/react/">react</a>
+<a style="font-size: 90%" href="/blog/categories/sass/">sass</a>
+<a style="font-size: 124%" href="/blog/categories/spm/">spm</a>
+<a style="font-size: 90%" href="/blog/categories/webworker/">webWorker</a>
+<a style="font-size: 90%" href="/blog/categories/websoket/">websoket</a>
+<a style="font-size: 90%" href="/blog/categories/wordpress/">wordpress</a>
+<a style="font-size: 90%" href="/blog/categories/zhong-jie-zhe-mo-shi/">中介者模式</a>
+<a style="font-size: 90%" href="/blog/categories/dai-li-mo-shi/">代理模式</a>
+<a style="font-size: 90%" href="/blog/categories/dao-ji-shi/">倒计时</a>
+<a style="font-size: 90%" href="/blog/categories/nei-rong-an-quan-ce-lue/">内容安全策略</a>
+<a style="font-size: 90%" href="/blog/categories/qian-duan-gou-jian-gong-ju/">前端构建工具</a>
+<a style="font-size: 90%" href="/blog/categories/yuan-xing-mo-shi/">原型模式</a>
+<a style="font-size: 90%" href="/blog/categories/fu-xuan-kuang-zu-jian/">复选框组件</a>
+<a style="font-size: 90%" href="/blog/categories/dan-chu-kuang/">弹出框</a>
+<a style="font-size: 90%" href="/blog/categories/tuo-fang/">拖放</a>
+<a style="font-size: 124%" href="/blog/categories/wen-jian-shang-chuan/">文件上传</a>
+<a style="font-size: 90%" href="/blog/categories/jian-ce-shu-ju-lei-xing/">检测数据类型</a>
+<a style="font-size: 124%" href="/blog/categories/mo-kuai-bao/">模块包</a>
+<a style="font-size: 90%" href="/blog/categories/gun-dong-jian-ting/">滚动监听</a>
+<a style="font-size: 145%" href="/blog/categories/pu-bu-liu/">瀑布流</a>
+<a style="font-size: 90%" href="/blog/categories/deng-lu-zhu-ce-mo-ban/">登陆注册模板</a>
+<a style="font-size: 90%" href="/blog/categories/liao-tian-shi/">聊天室</a>
+<a style="font-size: 90%" href="/blog/categories/zi-gua-ying/">自适应</a>
+<a style="font-size: 90%" href="/blog/categories/guan-cha-zhe-mo-shi/">观察者模式</a>
+<a style="font-size: 159%" href="/blog/categories/she-ji-mo-shi/">设计模式</a>
+<a style="font-size: 90%" href="/blog/categories/diao-shi-webview/">调试webview</a>
+<a style="font-size: 90%" href="/blog/categories/xuan-xiang-qia/">选项卡</a>
+<a style="font-size: 90%" href="/blog/categories/mian-shi/">面试</a>
+<a style="font-size: 90%" href="/blog/categories/shu-biao-shi-jian/">鼠标事件</a>
+
+    </div>
+</section>
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><div class="wrapper">
+<p>
+  Copyright &copy; 2018 - 三重水 -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a>&nbsp;<a href="http://tongji.baidu.com/web/welcome/ico?s=ddb3466dedfe096084bfb3626c5d2311">百度统计</a></span>
+</p>
+</div>
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">(function(){document.write(unescape('%3Cdiv id="bdcs"%3E%3C/div%3E'));var bdcs = document.createElement('script');bdcs.type = 'text/javascript';bdcs.async = true;bdcs.src = 'http://znsv.baidu.com/customer_search/api/js?sid=5545127454396687048' + '&plate_url=' + encodeURIComponent(window.location.href) + '&t=' + Math.ceil(new Date()/3600000);var s = document.getElementsByTagName('script')[0];s.parentNode.insertBefore(bdcs, s);})();</script>
+</body>
+</html>

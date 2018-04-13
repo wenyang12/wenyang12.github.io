@@ -1,0 +1,745 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Less和sass的比较 - 三重水的博客</title>
+  <meta name="author" content="三重水">
+
+  
+  <meta name="description" content="前言 CSS预处理器(CSS Preprocessor)，是一种构架于css之上的高级语言，可以通过脚本编译生成CSS代码，其目的是为了让CSS开发者的工作更简单有趣，当前已经进入了较为成熟的阶段，基本上新的web开发项目大都已普遍使用。 SASS 2007年诞生，最早也是最成熟的CSS预处理器， &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="baidu-site-verification" content="ipSlYf2c3P" />
+  
+  <link rel="canonical" href="http://wenyang12.github.io/blog/2015/11/17/lessandsass/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="三重水的博客" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<script type="text/javascript">
+
+    function addBlankTargetForLinks () {
+
+        $('a[href^="http"]').each(function(){
+
+            $(this).attr('target', '_blank');
+
+        });
+
+    }
+
+    $(document).bind('DOMNodeInserted', function(event) {
+        addBlankTargetForLinks();
+
+    });
+
+</script>
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?ddb3466dedfe096084bfb3626c5d2311";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">三重水的博客</a></h1>
+  
+    <h2>在变化当中不断记录自己，充实自己，浏览自己</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><div class="wrapper">
+<ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form>
+  <fieldset role="search">
+    <input class="search" id="bdcsMain" type="text" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">首页</a></li>
+  <li><a href="/blog/archives">归档</a></li>
+  <!-- <li><a href="/about-me">关于我</a></li>
+  <li><a href="/wenxun/dist/">相册</a></li> -->
+</ul>
+
+</div></nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Less和sass的比较</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-17T10:12:15+08:00'><span class='date'>2015年11月17日</span> <span class='time'>10:12 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h2>前言</h2>
+
+<blockquote><p>CSS预处理器(CSS Preprocessor)，是一种构架于css之上的高级语言，可以通过脚本编译生成CSS代码，其目的是为了让CSS开发者的工作更简单有趣，当前已经进入了较为成熟的阶段，基本上新的web开发项目大都已普遍使用。</p>
+
+<p><a href="http://sass-lang.com/">SASS</a> 2007年诞生，最早也是最成熟的CSS预处理器，拥有ruby社区的支持和<a href="http://compass-style.org/">compass</a>这一最强大的css框架，目前受LESS影响，已经进化到了全面兼容CSS的SCSS，著名的Twitter <a href="http://www.bootcss.com/">Bootstrap</a>就是采用SASS做底层语言的。</p>
+
+<p><a href="http://lesscss.org/">LESS</a> 2009年出现，受SASS的影响较大，但又使用CSS的语法，让大部分开发者和设计师更容易上手，在ruby社区之外支持者远超过SASS，其缺点是比起SASS来，可编程功能不够，不过优点是简单和兼容CSS，反过来也影响了SASS演变到了SCSS的时代。</p></blockquote>
+
+<h2>定义比较</h2>
+
+<blockquote><p>LESS 将 CSS 赋予了动态语言的特性，如 变量， 继承， 运算， 函数. LESS 既可以在 客户端 上运行 (支持IE 6+, Webkit, Firefox)，也可以借助Node.js或者Rhino在服务端运行。</p>
+
+<p>Sass 是对 CSS 的扩展，让 CSS 语言更强大、优雅。 它允许你使用变量、嵌套规则、 mixins、导入等众多功能， 并且完全兼容 CSS 语法。 Sass 有助于保持大型样式表结构良好， 同时也让你能够快速开始小型项目， 特别是在搭配 Compass 样式库一同使用时。</p></blockquote>
+
+<h2>用法比较</h2>
+
+<p><code>变量</code></p>
+
+<blockquote><p>变量允许我们单独定义一系列通用的样式，然后在需要的时候去调用。所以在做全局样式调整的时候我们可能只需要修改几行代码就可以了。</p></blockquote>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//less
+</span><span class='line'>@color: #ff0000;
+</span><span class='line'>#header{
+</span><span class='line'>    color: @color;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//sass
+</span><span class='line'>$color: #ff0000;
+</span><span class='line'>#header{
+</span><span class='line'>    color: @color;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//生成的css
+</span><span class='line'>#header{
+</span><span class='line'>    color:#ff0000;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>解析：唯一的区别就是使用的前缀不一样，less使用<code>@</code> 作为变量前缀，而sass使用<code>$</code></p>
+
+<p><code>混合(mixin)</code></p>
+
+<blockquote><p>混合可以将一个定义好的class A轻松的引入到另一个class B中，从而简单实现class B继承class A中的所有属性。我们还可以带参数地调用，就像使用函数一样。</p>
+
+<p>sass中可用mixin定义一些代码片段，且可传参数，方便日后根据需求调用。从此处理css3的前缀兼容轻松便捷。</p></blockquote>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//less
+</span><span class='line'>.rounded-corners(@radius: 5px){
+</span><span class='line'>    border-radius: @radius;
+</span><span class='line'>    -webkit-border-radius: @radius;
+</span><span class='line'>    -moz-border-radius: @radius;
+</span><span class='line'>}
+</span><span class='line'>#header{
+</span><span class='line'>    .rounded-corners(10px);
+</span><span class='line'>}
+</span><span class='line'>#footer{
+</span><span class='line'>    .rounded-corners;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//sass
+</span><span class='line'>@mixin rounded-corners($radius: 5px){
+</span><span class='line'>           border-radius: $radius;
+</span><span class='line'>           -webkit-border-radius: $radius;
+</span><span class='line'>           -moz-border-radius: $radius;
+</span><span class='line'>       }
+</span><span class='line'>#header{
+</span><span class='line'>    @include rounded-corners(10px);
+</span><span class='line'>}
+</span><span class='line'>#footer{
+</span><span class='line'>    @include rounded-corners;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//生成的css
+</span><span class='line'>#header{
+</span><span class='line'>    border-radius: 10px;
+</span><span class='line'>    -webkit-border-radius: 10px;
+</span><span class='line'>    -moz-border-radius: 10px;
+</span><span class='line'>}
+</span><span class='line'>#footer{
+</span><span class='line'>    border-radius: 5px;
+</span><span class='line'>    -webkit-border-radius: 10px;
+</span><span class='line'>    -moz-border-radius: 10px;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>解析：less直接定义了一个类，然后加入变量，后边类引用的时候直接写入引用类即可；而sass定义一个类时，需要在前边加上<code>@mixin</code>,后边类引入的时候加入<code>@include</code></p>
+
+<p><code>扩展和继承</code></p>
+
+<blockquote><p>sass可通过@extend来实现代码组合声明，使代码更加优越简洁。（less直接引入类即可）这里说白了也属于混合中的，但是这里生成的css两者不一样所以得提取出来写写。</p></blockquote>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//less
+</span><span class='line'>.btn{
+</span><span class='line'>    border: none;
+</span><span class='line'>    width:200px;
+</span><span class='line'>    height:30px;
+</span><span class='line'>}
+</span><span class='line'>.btn-gray{
+</span><span class='line'>    .btn;
+</span><span class='line'>    background-color: #ff0000;
+</span><span class='line'>}
+</span><span class='line'>//sass
+</span><span class='line'>.btn{
+</span><span class='line'>    border: none;
+</span><span class='line'>    width:200px;
+</span><span class='line'>    height:30px;
+</span><span class='line'>}
+</span><span class='line'>.btn-gray{
+</span><span class='line'>    @extend .btn;
+</span><span class='line'>    background-color: #ff0000;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//less生成的css
+</span><span class='line'>.btn{
+</span><span class='line'>    border: none;
+</span><span class='line'>    width:200px;
+</span><span class='line'>    height:30px;
+</span><span class='line'>}
+</span><span class='line'>.btn-gray{
+</span><span class='line'>    border: none;
+</span><span class='line'>    width:200px;
+</span><span class='line'>    height:30px;
+</span><span class='line'>    background-color: #ff0000;
+</span><span class='line'>}
+</span><span class='line'>//sass 生成的css
+</span><span class='line'>.btn, .btn-gray{
+</span><span class='line'>    border: none;
+</span><span class='line'>    width:200px;
+</span><span class='line'>    height:30px;
+</span><span class='line'>}
+</span><span class='line'>.btn-gray{
+</span><span class='line'>    background-color: #ff0000;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>解析：从生成的css可以看出，sass在这方面是优于less的。两者区别就是引用的时候less直接引用类，而sass要在类前边加<code>@extend</code></p>
+
+<p><code>嵌套规则</code></p>
+
+<blockquote><p>我们可以在一个选择器中嵌套另一个选择器来实现继承，这样很大程度减少了代码量，并且代码看起来更加的清晰。</p></blockquote>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//less && sass
+</span><span class='line'>#header{
+</span><span class='line'>    h1{
+</span><span class='line'>        font-weight: normal;
+</span><span class='line'>        font-size: 24px;
+</span><span class='line'>    }
+</span><span class='line'>    p{
+</span><span class='line'>        font-size: 12px;
+</span><span class='line'>        line-height: 1.2;
+</span><span class='line'>        a{
+</span><span class='line'>            color:#ff0000;
+</span><span class='line'>        }
+</span><span class='line'>    }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#header h1{
+</span><span class='line'>    font-weight: normal;
+</span><span class='line'>    font-size: 24px;
+</span><span class='line'>}
+</span><span class='line'>#header p{
+</span><span class='line'>    font-size: 12px;
+</span><span class='line'>    line-height: 1.2;
+</span><span class='line'>}
+</span><span class='line'>#header p a{
+</span><span class='line'>    color:#ff0000;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>解析：嵌套规则less和sass是一样的</p>
+
+<p><code>函数 &amp; 运算</code></p>
+
+<blockquote><p>运算提供了加，减，乘，除操作；我们可以做属性值和颜色的运算，这样就可以实现属性值之间的复杂关系。LESS中的函数一一映射了JavaScript代码，如果你愿意的话可以操作属性值。</p>
+
+<p>sass可进行简单的加减乘除运算等</p></blockquote>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//less & sass
+</span><span class='line'>.container { width: 100%; }
+</span><span class='line'>article[role="main"] {
+</span><span class='line'>  float: left;
+</span><span class='line'>  width: 600px / 960px * 100%;
+</span><span class='line'>}
+</span><span class='line'>aside[role="complimentary"] {
+</span><span class='line'>  float: right;
+</span><span class='line'>  width: 300px / 960px * 100%;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//生成的css
+</span><span class='line'>#header {
+</span><span class='line'>  color: #333;
+</span><span class='line'>  border-left: 1px;
+</span><span class='line'>  border-right: 2px;
+</span><span class='line'>}
+</span><span class='line'>#footer {
+</span><span class='line'>  color: #114411;
+</span><span class='line'>  border-color: #7d2717;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>解析：两者基本一致，在含有变量的运算时，记得less是<code>@</code>前缀，sass是<code>$</code>前缀即可</p>
+
+<p><code>导入</code></p>
+
+<blockquote><p>sass（less）中如导入其他sass（less）文件，最后编译为一个css文件，优于纯css的@import</p></blockquote>
+
+<p><em>reset.less &amp;&amp; </em>reset.scss</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>body,h1,h2,p{
+</span><span class='line'>    margin: 0;
+</span><span class='line'>    padding: 0;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//less
+</span><span class='line'>@import "_reset";
+</span><span class='line'>#or
+</span><span class='line'>@impot "_reset.less";
+</span><span class='line'>//sass
+</span><span class='line'>@import "reset";
+</span><span class='line'>#or
+</span><span class='line'>@import "_reset";
+</span><span class='line'>#or
+</span><span class='line'>@import "reset.scss";
+</span><span class='line'>#or
+</span><span class='line'>@import "_reset.scss";</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>// 生成的css
+</span><span class='line'>body,h1,h2,p{
+</span><span class='line'>    margin: 0;
+</span><span class='line'>    padding: 0;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>解析：less中导入的 .less 文件, .less 后缀可带可不带;而sass中可以省略 .scss文件中的前缀<code>_</code> 下划线（less中不能省略下划线，必须全名），后缀.scss可带可不带</p>
+
+<h2>总结：</h2>
+
+<p>less和sass各有其优缺点，两者语法相差不大，都是css预处理器，less是基于javscript的，而sass是基于ruby，在编译大文件当中，sass会稍微略胜于less，但整体上几乎一样；对于底层的像bootstrap.css这样的底层文件，
+用的是sass开发的，因为sass的功能，很多扩展，稍微比less强大一点，而且sass生成的样式表，整个对应的标签嵌套的也比较专业；而less比较简洁，跟我们写css基本一样；小项目，不是大工程构建一个css出来给大家用的，用less就ok，所以看自己喜好来用吧。</p>
+
+<h2>参考文献</h2>
+
+<blockquote><p><a href="http://www.bootcss.com/p/lesscss/">http://www.bootcss.com/p/lesscss/</a></p>
+
+<p><a href="http://sass.bootcss.com/docs/sass-reference/">sass中文文档参考手册</a></p>
+
+<p><a href="http://www.w3cplus.com/sassguide/">sass十分钟入门</a></p>
+
+<p><a href="http://baike.baidu.com/link?url=pwijLMZhF8w6szgLafH1VzyFKNzcacdWzpItOG7A105kD4zM3wZbHvr-naNwa_8wXQ-iweMA85ZQ7wIrYjLHvGHa-ZiFKbF5C3Y8ISoJ-Su">compass百科</a></p></blockquote>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">三重水</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2015-11-17T10:12:15+08:00'><span class='date'>2015年11月17日</span> <span class='time'>10:12 am</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/cssyu-chu-li-qi/'>css预处理器</a>, <a class='category' href='/blog/categories/less/'>less</a>, <a class='category' href='/blog/categories/sass/'>sass</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+  
+  <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style_32x32">
+    <a class="jiathis_button_qzone"></a>
+    <a class="jiathis_button_tsina"></a>
+    <a class="jiathis_button_tqq"></a>
+    <a class="jiathis_button_weixin"></a>
+    <a class="jiathis_button_renren"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+    <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/11/05/websocket/" title="Previous Post: websocket 聊天室">&laquo; websocket 聊天室</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2015/11/19/countdown/" title="Next Post: 倒计时jquery插件">倒计时jquery插件 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>评论</h1>
+    <div id="disqus_thread" aria-live="polite"><!-- 多说评论框 start -->
+<div class="ds-thread" data-thread-key="/blog/2015/11/17/lessandsass" data-title="less和sass的比较" data-url="http://wenyang12.github.io/blog/2015/11/17/lessandsass/"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    var duoshuoQuery = {short_name:"ywenblog"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+        || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>近期文章</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2018/01/17/adb-chrome-develop/">Webview的调试方法</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/12/28/csp/">CSP(内容安全策略)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/08/31/native-drag/">原生拖放</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/08/17/email-read-adaption/">邮件读信页的自适应方案</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/07/07/file-upload-formdata/">Formdata异步上传文件的实现</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+<section class="about-me">
+  <h1>关于我</h1>
+  <div class="thumb">
+      <span></span>
+      <p>三重水</p>
+      <p>学习，积累，反思，阅读，分享</p>
+  </div>  
+  <p><a href="https://github.com/wenyang12" target="_blank">github</a><a href="http://wenyang12.github.io/" target="_blank">博客</a><a
+          href="https://www.qdfuns.com/u/13989/works/articles" target="_blank">前端网</a>
+          <!-- <a href="http://wenyang.sinaapp.com/" target="_blank">笔记</a>
+          <a href="http://ywenblog.sinaapp.com/" target="_blank">WordPress</a> -->
+        </p>
+</section>
+<section>
+    <h1>标签</h1>
+    <div class="cloud">
+        <a style="font-size: 159%" href="/blog/categories/node-dot-jskuang-jia/">Node.js框架</a>
+<a style="font-size: 90%" href="/blog/categories/adb/">adb</a>
+<a style="font-size: 145%" href="/blog/categories/ajax/">ajax</a>
+<a style="font-size: 90%" href="/blog/categories/bootstrap/">bootstrap</a>
+<a style="font-size: 90%" href="/blog/categories/csp/">csp</a>
+<a style="font-size: 90%" href="/blog/categories/cssyu-chu-li-qi/">css预处理器</a>
+<a style="font-size: 90%" href="/blog/categories/email/">email</a>
+<a style="font-size: 90%" href="/blog/categories/es5/">es5</a>
+<a style="font-size: 90%" href="/blog/categories/express/">express</a>
+<a style="font-size: 124%" href="/blog/categories/git/">git</a>
+<a style="font-size: 90%" href="/blog/categories/grunt/">grunt</a>
+<a style="font-size: 170%" href="/blog/categories/html5/">html5</a>
+<a style="font-size: 90%" href="/blog/categories/jquerycha-jian/">jQuery插件</a>
+<a style="font-size: 145%" href="/blog/categories/javascript/">javascript</a>
+<a style="font-size: 90%" href="/blog/categories/jquery/">jquery</a>
+<a style="font-size: 90%" href="/blog/categories/jquery-dot-validation/">jquery.validation</a>
+<a style="font-size: 90%" href="/blog/categories/less/">less</a>
+<a style="font-size: 145%" href="/blog/categories/loopback/">loopback</a>
+<a style="font-size: 90%" href="/blog/categories/markdown/">markdown</a>
+<a style="font-size: 145%" href="/blog/categories/mongodb/">mongodb</a>
+<a style="font-size: 124%" href="/blog/categories/octopress/">octopress</a>
+<a style="font-size: 90%" href="/blog/categories/react/">react</a>
+<a style="font-size: 90%" href="/blog/categories/sass/">sass</a>
+<a style="font-size: 124%" href="/blog/categories/spm/">spm</a>
+<a style="font-size: 90%" href="/blog/categories/webworker/">webWorker</a>
+<a style="font-size: 90%" href="/blog/categories/websoket/">websoket</a>
+<a style="font-size: 90%" href="/blog/categories/wordpress/">wordpress</a>
+<a style="font-size: 90%" href="/blog/categories/zhong-jie-zhe-mo-shi/">中介者模式</a>
+<a style="font-size: 90%" href="/blog/categories/dai-li-mo-shi/">代理模式</a>
+<a style="font-size: 90%" href="/blog/categories/dao-ji-shi/">倒计时</a>
+<a style="font-size: 90%" href="/blog/categories/nei-rong-an-quan-ce-lue/">内容安全策略</a>
+<a style="font-size: 90%" href="/blog/categories/qian-duan-gou-jian-gong-ju/">前端构建工具</a>
+<a style="font-size: 90%" href="/blog/categories/yuan-xing-mo-shi/">原型模式</a>
+<a style="font-size: 90%" href="/blog/categories/fu-xuan-kuang-zu-jian/">复选框组件</a>
+<a style="font-size: 90%" href="/blog/categories/dan-chu-kuang/">弹出框</a>
+<a style="font-size: 90%" href="/blog/categories/tuo-fang/">拖放</a>
+<a style="font-size: 124%" href="/blog/categories/wen-jian-shang-chuan/">文件上传</a>
+<a style="font-size: 90%" href="/blog/categories/jian-ce-shu-ju-lei-xing/">检测数据类型</a>
+<a style="font-size: 124%" href="/blog/categories/mo-kuai-bao/">模块包</a>
+<a style="font-size: 90%" href="/blog/categories/gun-dong-jian-ting/">滚动监听</a>
+<a style="font-size: 145%" href="/blog/categories/pu-bu-liu/">瀑布流</a>
+<a style="font-size: 90%" href="/blog/categories/deng-lu-zhu-ce-mo-ban/">登陆注册模板</a>
+<a style="font-size: 90%" href="/blog/categories/liao-tian-shi/">聊天室</a>
+<a style="font-size: 90%" href="/blog/categories/zi-gua-ying/">自适应</a>
+<a style="font-size: 90%" href="/blog/categories/guan-cha-zhe-mo-shi/">观察者模式</a>
+<a style="font-size: 159%" href="/blog/categories/she-ji-mo-shi/">设计模式</a>
+<a style="font-size: 90%" href="/blog/categories/diao-shi-webview/">调试webview</a>
+<a style="font-size: 90%" href="/blog/categories/xuan-xiang-qia/">选项卡</a>
+<a style="font-size: 90%" href="/blog/categories/mian-shi/">面试</a>
+<a style="font-size: 90%" href="/blog/categories/shu-biao-shi-jian/">鼠标事件</a>
+
+    </div>
+</section>
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><div class="wrapper">
+<p>
+  Copyright &copy; 2018 - 三重水 -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a>&nbsp;<a href="http://tongji.baidu.com/web/welcome/ico?s=ddb3466dedfe096084bfb3626c5d2311">百度统计</a></span>
+</p>
+</div>
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">(function(){document.write(unescape('%3Cdiv id="bdcs"%3E%3C/div%3E'));var bdcs = document.createElement('script');bdcs.type = 'text/javascript';bdcs.async = true;bdcs.src = 'http://znsv.baidu.com/customer_search/api/js?sid=5545127454396687048' + '&plate_url=' + encodeURIComponent(window.location.href) + '&t=' + Math.ceil(new Date()/3600000);var s = document.getElementsByTagName('script')[0];s.parentNode.insertBefore(bdcs, s);})();</script>
+</body>
+</html>

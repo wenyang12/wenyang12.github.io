@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Ajax | 三重水的博客]]></title>
+  <link href="http://wenyang12.github.io/blog/categories/ajax/atom.xml" rel="self"/>
+  <link href="http://wenyang12.github.io/"/>
+  <updated>2018-04-13T14:54:38+08:00</updated>
+  <id>http://wenyang12.github.io/</id>
+  <author>
+    <name><![CDATA[三重水]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Formdata异步上传文件的实现]]></title>
+    <link href="http://wenyang12.github.io/blog/2017/07/07/file-upload-formdata/"/>
+    <updated>2017-07-07T16:09:14+08:00</updated>
+    <id>http://wenyang12.github.io/blog/2017/07/07/file-upload-formdata</id>
+    <content type="html"><![CDATA[<h2>使用FormData来实现文件上传</h2>
+
+<pre><code>    var xhr = new XMLHttpRequest(),
+    fd = new FormData();
+    //file为上传的file对象，将文件放入FormData对象中,第三个参数是指定文件名,或者可以不指定。
+    fd.append('file', file, file.name); 
+    fd.append('type',1); // 继续追加数据   
+    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    xhr.addEventListener('load',function(evt){ // 监听上传完成
+        var response = evt.target.response;     // 返回的数据
+        //do something...
+    })
+    xhr.upload.addEventListener('progress', function(evt){ // 监听上传进度
+        //lengthComputabel: 文件长度是否可计算
+        if(evt.lengthComputable){
+            //evt.loaded: 已下载的字节数
+            //evt.total: 文件总字节数
+            var percent = Math.round(evt.loaded*100/evt.total);
+            console.log(percent);
+        }
+    })
+    xhr.abort() // 终止文件上传方法
+    xhr.addEventListener('abort', function(evt){ // 监听文件被终止上传
+        // do something...
+    })
+    xhr.addEventListener('error', function(evt){ // 监听上传错误
+        // do something...
+    })
+    xhr.addEventListener('loaded', function(evt){ // 监听传输结束事件: 不管成功或者失败都会触发
+        // do something...
+    })
+
+    xhr.open('post', url, true);
+    xhr.send(fd);
+</code></pre>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[原生AJAX]]></title>
+    <link href="http://wenyang12.github.io/blog/2016/01/04/yuan-sheng-ajax/"/>
+    <updated>2016-01-04T14:41:44+08:00</updated>
+    <id>http://wenyang12.github.io/blog/2016/01/04/yuan-sheng-ajax</id>
+    <content type="html"><![CDATA[<p>为了方便，我们一直用jquery写AJAX异步获取数据，要是别人问，您能否用原生的javascript自己写一个异步获取数据的脚本呢？我想应该很多人都忘记了。</p>
+
+<h2>AJAX是什么？</h2>
+
+<p>AJAX = Asynchronous JavaScript and XML（异步的 JavaScript 和 XML）。</p>
+
+<p>AJAX 不是新的编程语言，而是一种使用现有标准的新方法。</p>
+
+<p>AJAX 是与服务器交换数据并更新部分网页的艺术，在不重新加载整个页面的情况下。</p>
+
+<h2>XMLHttpRequest对象</h2>
+
+<p>其实，这个技术无非就是一个XMLHttpRequest对象而已，只要你熟悉这个对象的API的使用即可实现异步加载你想要的数据。</p>
+
+<p>那怎么来创建这个对象呢？</p>
+
+<!--more-->
+
+
+<p><strong>创建对象XMLHttpRequest</strong>
+<code>
+var xmlHttp = new XMLHttpRequest();
+</code></p>
+
+<blockquote><p>要是不用兼容旧浏览器IE5和IE6 就是以上一行代码即可创建这个对象。当然现在IE5和IE6，可以说淘汰了，所以就不兼容它了，没必要。想要兼容它就加个if判断即可，它的创建方式如下：</p></blockquote>
+
+<pre><code>var xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+//判断如：
+var xmlHttp;
+if(window.XMLHttpRequest){//现代浏览器
+    xmlHttp = new XMLHttpRequest();
+}else{//旧版浏览器IE5、IE6
+    xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+}
+</code></pre>
+
+<blockquote><p>以下给出的实例都不考虑旧版浏览器了，淘汰了没必要。</p></blockquote>
+
+<p><strong>这个对象有如下3个方法和5个属性，如下</strong></p>
+
+<p><strong>方法：</strong></p>
+
+<p>1、 <code>xmlHttp.open(method,url,async);</code></p>
+
+<p>参数method：规定请求的类型；GET或POST</p>
+
+<p>参数url: 请求的地址；</p>
+
+<p>参数async: true（异步）或false（同步）。</p>
+
+<p>GET 还是 POST？</p>
+
+<p>与 POST 相比，GET 更简单也更快，并且在大部分情况下都能用。</p>
+
+<p>然而，在以下情况中，请使用 POST 请求：</p>
+
+<ul>
+<li>无法使用缓存文件（更新服务器上的文件或数据库）</li>
+<li>向服务器发送大量数据（POST 没有数据量限制）</li>
+<li>发送包含未知字符的用户输入时，POST 比 GET 更稳定也更可靠</li>
+</ul>
+
+
+<p>2、 <code>xmlHttp.send(string)</code></p>
+
+<p>将请求发送到服务器</p>
+
+<p>参数String：仅用于POST请求</p>
+
+<p>3、 <code>xmlHttp.setRequestHeader(header, value)</code></p>
+
+<p>向请求添加http头</p>
+
+<p>header：规定头的名称</p>
+
+<p>value：规定头的值</p>
+
+<p>如：<code>xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");</code>  这个是告诉服务器端以这个类型类解析数据</p>
+
+<p><strong>属性：</strong></p>
+
+<p>1、 <code>onreadystatechange</code> :     存储函数（或函数名），每当 readyState 属性改变时，就会调用该函数。</p>
+
+<p>2、 <code>readyState</code>:</p>
+
+<p>存有 XMLHttpRequest 的状态。从 0 到 4 发生变化。</p>
+
+<ul>
+<li>0 请求未初始化</li>
+<li>1 服务器连接已建立</li>
+<li>2 请求已接收</li>
+<li>3 请求处理中</li>
+<li>4 请求已完成，且响应已就绪</li>
+</ul>
+
+
+<p>3、 <code>status</code>:</p>
+
+<p>200:&ldquo;ok&rdquo;</p>
+
+<p>404:&ldquo;未找到页面&rdquo;</p>
+
+<p>一般接收服务器返回的数据写法如下：</p>
+
+<pre><code>xmlhttp.onreadystatechange= function()
+  {
+  if (xmlhttp.readyState === 4 &amp;&amp; xmlhttp.status === 200)
+    {
+    document.getElementById("myDiv").innerHTML=xmlhttp.responseText;//获得字符串形式的响应数据。
+    }
+  } 
+</code></pre>
+
+<p>4、 <code>responseText</code>: 获得字符串形式的响应数据。</p>
+
+<p>5、 <code>responseXML</code> : 获得 XML 形式的响应数据。</p>
+
+<h2>代码实战</h2>
+
+<p>```
+&lt;!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ajax</title>
+</head>
+<body>
+<button id="getAjax1">获取responseText</button>
+<button id="getAjax2">获取responseXML</button>
+<br/></p>
+
+<div>
+    <p>responseText返回的文本：<span id="output1"></span></p>
+    <p>responseXML返回的文本：<span id="output2"></span></p>
+</div>
+
+
+<script>
+    //采用模块模式来封装代码
+    var myAjax = (function(){
+        function Temp(){
+            this.xmlHttp = new XMLHttpRequest();
+        }
+        Temp.prototype.init =function(method, url, callback) {
+            var self = this;
+            this.xmlHttp.onreadystatechange=function(){
+                if(self.xmlHttp.readyState === 4 && self.xmlHttp.status === 200){
+                    callback(self.xmlHttp);
+                }
+            };
+            this.xmlHttp.open(method,url,true);
+            this.xmlHttp.send();
+        };
+       return{
+           ajax: function(method, url, callback) {
+               var ajaxChild = new Temp();
+               ajaxChild.init(method, url, callback);
+           }
+       }
+    })();
+    //测试用例
+    document.getElementById('getAjax1').onclick = function() {
+        myAjax.ajax('GET', 'demo.php?name=wen', function (xmlHttp) {//获取responseText文本数据
+            document.getElementById('output1').innerHTML = xmlHttp.responseText;
+            console.log(xmlHttp.responseText);
+        })
+    };
+    document.getElementById('getAjax2').onclick = function() {
+        myAjax.ajax('GET', 'demo.xml',function(xmlHttp){//获取responseXML文档对象
+            var xmlEleValue = xmlHttp.responseXML.getElementsByTagName('name')[0].firstChild.nodeValue;
+            document.getElementById('output2').innerHTML=xmlEleValue;
+            console.dir(xmlHttp.responseXML);
+        });
+    }
+</script>
+
+
+<p></body>
+</html>
+<code>``
+</code>demo.php`</p>
+
+<pre><code>&lt;?php
+echo "hello world";
+</code></pre>
+
+<p><code>demo.xml</code></p>
+
+<pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;name&gt;wen&lt;/name&gt;
+</code></pre>
+
+<blockquote><p>以上用到的源码可以到我的github下载<a href="https://github.com/wenyang12/ajax-test">ajax-text</a></p></blockquote>
+
+<h2>参考链接</h2>
+
+<p><a href="http://www.runoob.com/ajax/ajax-tutorial.html">菜鸟教程-AJAX教程</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[拖拽文件异步上传]]></title>
+    <link href="http://wenyang12.github.io/blog/2015/08/11/asynchronous-upload-file/"/>
+    <updated>2015-08-11T09:40:58+08:00</updated>
+    <id>http://wenyang12.github.io/blog/2015/08/11/asynchronous-upload-file</id>
+    <content type="html"><![CDATA[<h2>文件目录为</h2>
+
+<blockquote><p><a href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMcAAABWCAIAAAD0XRV3AAAFLklEQVR4nO2dPWvbQBjH/bW0BOPvUOhc6HVvpvZDaOzQdO6S2Elx6oBJMyTZDAkhQ6gb6slkDS4ePAR1kC3fy3N683PSSfn/EEGW7kWQH3eH9DxSJwKAm07dFwBaCKwC/MAqwA+sAvwwW/Xryztt+zv5wdsF8B/nVjkQayQ6YrR7G0E4ZbkcYFCFVeS2QyewyncIq05PT/sUw+EwszlYBSLSqvl8Tlo1n88zm8tjDKxqPfQMOB6PNaXG43Ge5kpaNQ2DRJTtfrw3Ep01mxKyVduzHVm1aRgQR+XCHVjlDtqqxWIxGAwSpQaDwWKxyNMcu1WKS+v9xKqRkN3YFpiGYnNUqaXKCKucYV2tX19fJ1ZdXV3lbM7BWGUW2lilz2JKeX200gpjBnSJ1arVanV8fBwPVKvVKmdzdVsVhNO1UOszciVYVRVpdxZub2/7/f7d3V3+5nawStJAngFl2TJnwPiHZIxaS20MVjkj437V+fl5oeZK31lIJqxACGWsEsZiPXu1vp39pNbkskEYYqxyiM93QbUZEDQGn58uw6qmAqsAPz5bBZoKrAL8wCrAD6wC/MAqwA+sAvzAKsCPR1Yhk6I1eG1VbrHWD/7eHyRPqTniRUFZ+K06Ozt7fn4uUXGnJ9Pb59Gwqn74rYoD/S4vL/NHZcWUtoqKlYJVdeLKqjjc7/7+Pn/F0pkUsMo3HFqV5HvlSc6JylolBViJn9u5kI7BQkhVNTi3Kubh4SGzIsNYRVglD2QIgqgI51adnJw8Pj7mqejEKjVZC8NVNbi1ajKZvLy85Kzoyip4VDmurLq4uFgul4UqOpsB5RUWJsAq4LdqOBw+PT2VqMhwZ4FcrdN5zMAhvt9bL5tJAerEI6tAa4BVgB9YBfiBVYAfWAX4gVWAH1gF+PHLqm8Wbm5u6r40UIBmWHV4eAixGoSPVpkHl8vl0dERxGoKnlr18c+HeIvUAYyoI72nL5vyIQy7Bz+8ovBUf616G76JrdJO6cAq//DXqr1uzxyxdu2A2apCwaWwqiZgVTvw2qq9bi+ZB1NnQClEPRRGJLHtkxB6loT8zmQl2M9ovCNGSrNB+DsuMFrHcsnnNx3Cqpowx6r4b5TXqg6Vbkp+EoLOklgfJQYmsnF5rBqJxKDYJ/2l8bCqJna2ShYlCKf2l/dbsyTiE+ZkRzWuW5UUIPdhVU1UahW9wIJVDPhrlbxFpa2yfhKCzpKIm1CnOFNDWJWBp1YVOJVhlf2TEEaWhLTq2izcM6zatJGs1mFVFEV+WpVC3RcIcgGrAD9+WQXaAawC/MAqwA+sAvzAKsAPrAL8+GWV7YYCYoubRTOsQjZEs/DRKvMgsiGaRTOs4ru3zvEwrkBA6St9gaRfVs1ms9lsVvRUEWBVFfhl1c/v/+Rtr9vTjsTbDj3AqiqAVaXagFWpeGdVnATxef8gZV+pI0fOqd9JEqNtaJUUW0d8M0LJfKDfTmtLqZA7JrvTcihSCrcHH63K/KvUsVul/HOpN2ar6TabikKKt6Nfr01bZemOzqGgCrcHH63a6/Y+7X81fUqOK3XSxiqzkO3t/kp5fbSyBb9bqqvdpcclmz/bgI9WkWsp+bhSh82qIJyqoe2kG0Td9O5gVd2UtUqLNld3lR/2GdAIT1drUSkV2qRGd0dbRRVuD35ZVe5+VTJhBUIoY5UwF8SZq/Xt7Ce1Zkmp0NJN6e4sYxVRuD34ZRVf3HrF00qh7lo45WnAKhZglYJfVvEBq+qkrVaBOoFVgB9YBfiBVYCf/01ox8u3OIbxAAAAAElFTkSuQmCC">文件目录图</a></p></blockquote>
+
+<h2>没做ie浏览器兼容,用于测试，index.html代码如下</h2>
+
+<pre><code>    var dragUpload = {
+        file: document.getElementById('file'),
+        fileArea: document.getElementById('fileArea'),
+        init:function() {
+            var self = this;
+            this.fileArea.onclick = function() {
+                var event = document.createEvent('MouseEvents');//调用document对象的 createEvent 方法得到一个event的对象实例。
+                 /*initEvent接受3个参数：
+                 事件类型，是否冒泡，是否阻止浏览器的默认行为*/
+                event.initEvent('click', true, false);
+                self.file.dispatchEvent(event);//触发控件的单击事件
+            };
+            this.file.onchange = function() {
+                self.upload(this.files);
+            };
+            this.fileArea.ondragenter = function(ev) {
+                self.dragEnter(ev,this);
+            };
+            this.fileArea.ondragover = function(ev) {
+                self.dragOver(ev,this);
+            };
+            this.fileArea.ondrop = function(ev) {
+                self.drop(ev,this);
+            };
+        },
+        upload:function(fs) {//上传文件
+            for(var i = 0,len = fs.length; i &lt; len; i++) {
+                this.sendFile(fs[i]);
+            }
+        },
+        dragEnter:function(ev,my) {//文件进入回调函数
+            ev.preventDefault();
+            console.log('dragEnter');
+            my.className = 'up-area hover';
+        },
+        dragOver:function(ev,my) { //文件经过回调函数
+            ev.preventDefault();
+            console.log('dragOver');
+        },
+        drop:function(ev,my) {//放入文件回调函数
+            ev.preventDefault();
+            console.log('drop');
+            var dt = ev.dataTransfer;//获取文件对象
+            my.className = 'up-area';
+            dragUpload.upload(dt.files);
+        },
+        sendFile:function(file) {//上传文件主函数
+            var xhr = new XMLHttpRequest();
+            var fd = new FormData();
+            fd.append('file', file);
+            xhr.onreadystatechange = function() {
+                if(xhr.readyState ===4 &amp;&amp; xhr.status === 200) {
+                    document.getElementById('console').innerHTML += '&lt;br/&gt;'+xhr.responseText;
+                }
+            };
+            xhr.open('POST', 'upload.php ',true);
+            xhr.send(fd);
+        }
+    };
+    dragUpload.init();
+</code></pre>
+
+<h2>upload.php代码为</h2>
+
+<pre><code>&lt;?php
+$file = $_FILES['file'];//获取文件内容
+//存入上传的文件
+$path = 'file';
+if($file['size'] &gt; 10*1024*1024){
+    echo '{"error":"1000","message":"上传的文件超过限制，最大10M"}';
+}else{
+    $path .= '/file_'.time().'.png';
+    move_uploaded_file($file['tmp_name'],$path);
+    echo '上传成功：'. json_encode($file);
+}
+</code></pre>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Webworker | 三重水的博客]]></title>
+  <link href="http://wenyang12.github.io/blog/categories/webworker/atom.xml" rel="self"/>
+  <link href="http://wenyang12.github.io/"/>
+  <updated>2018-04-13T14:54:38+08:00</updated>
+  <id>http://wenyang12.github.io/</id>
+  <author>
+    <name><![CDATA[三重水]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[HTML5 Web Workers]]></title>
+    <link href="http://wenyang12.github.io/blog/2015/08/12/html5-web-workers/"/>
+    <updated>2015-08-12T18:01:50+08:00</updated>
+    <id>http://wenyang12.github.io/blog/2015/08/12/html5-web-workers</id>
+    <content type="html"><![CDATA[<h2>什么是 Web Worker？</h2>
+
+<p>当在 HTML 页面中执行脚本时，页面的状态是不可响应的，直到脚本已完成。
+web worker 是运行在后台的 JavaScript，独立于其他脚本，不会影响页面的性能。您可以继续做任何愿意做的事情：点击、选取内容等等，而此时 web worker 在后台运行。</p>
+
+<h2>浏览器支持情况</h2>
+
+<p>Internet Explorer 10, Firefox, Chrome, Safari 和 Opera 都支持Web workers.</p>
+
+<h2>局限性</h2>
+
+<ul>
+<li>不能跨域加载js；</li>
+<li>worker内代码不能访问DOM；</li>
+<li>各个浏览器对Worker的实现不大一致，例如FF里允许worker中创建新的worker,而Chrome中就不行；</li>
+<li>不是每个浏览器都支持这个新特性。</li>
+</ul>
+
+
+<h2>测试用例 代码如下：</h2>
+
+<p>```
+&lt;!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>web worker</title>
+</head>
+<body></p>
+
+<div>计数：<output id="result"></output> </div>
+
+
+<p><button id="btn1">开始计数</button>
+<button id="btn2">停止计数</button></p>
+
+<script>
+    /*web worker 是运行在后台的 JavaScript，不会影响页面的性能。*/
+    (function(){
+        var w;
+        function workerHand() {
+            if(typeof(Worker) !== 'undefined'){
+                if(typeof(w) === 'undefined'){
+                    w = new Worker('http://1.ywenblog.sinaapp.com/wp-content/themes/twentyeleven/js/demo_workers.js');
+                }
+                w.onmessage = function(e) {//监听脚本发送过来的信息
+                    document.getElementById('result').innerHTML = e.data;
+                };
+            }else{
+                document.getElementById('result').innerHTML = "抱歉！，您的浏览器不支持web workers...";
+            }
+        }
+        document.getElementById('btn1').onclick = function() {
+            workerHand();
+        };
+        document.getElementById('btn2').onclick = function() {
+            w.terminate();
+            w = undefined;
+        };
+    })()
+</script>
+
+
+<p></body>
+</html>
+```</p>
+
+<p><code>http://3.wenphp.sinaapp.com/test/demo_workers.js</code> 代码如下：</p>
+
+<pre><code>/**
+ * Created by Administrator on 2015/8/12.
+ */
+(function(){
+    var i = 0;
+    function calc() {
+        postMessage(i);//给worker对象放松信息i
+        i++;
+        setTimeout(calc, 1000);
+    }
+    calc();
+})();
+</code></pre>
+
+<blockquote><p>节选自菜鸟教程</p></blockquote>
+]]></content>
+  </entry>
+  
+</feed>

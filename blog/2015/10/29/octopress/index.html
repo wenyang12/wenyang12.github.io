@@ -1,0 +1,593 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Octopress 搭建博客静态网站 - 三重水的博客</title>
+  <meta name="author" content="三重水">
+
+  
+  <meta name="description" content="一、环境配置 安装以下软件 Git、Ruby、Devkit、MarkdownPad 的安装与配置 Git 版本管理工具，将代码托管到GitHub
+Ruby+Devkit 生成静态网页 这两个文件我已放到百度网盘里，点击下载
+MarkdownPad windows下Markdown语法编辑器（ &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="baidu-site-verification" content="ipSlYf2c3P" />
+  
+  <link rel="canonical" href="http://wenyang12.github.io/blog/2015/10/29/octopress/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="三重水的博客" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<script type="text/javascript">
+
+    function addBlankTargetForLinks () {
+
+        $('a[href^="http"]').each(function(){
+
+            $(this).attr('target', '_blank');
+
+        });
+
+    }
+
+    $(document).bind('DOMNodeInserted', function(event) {
+        addBlankTargetForLinks();
+
+    });
+
+</script>
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?ddb3466dedfe096084bfb3626c5d2311";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">三重水的博客</a></h1>
+  
+    <h2>在变化当中不断记录自己，充实自己，浏览自己</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><div class="wrapper">
+<ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form>
+  <fieldset role="search">
+    <input class="search" id="bdcsMain" type="text" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">首页</a></li>
+  <li><a href="/blog/archives">归档</a></li>
+  <!-- <li><a href="/about-me">关于我</a></li>
+  <li><a href="/wenxun/dist/">相册</a></li> -->
+</ul>
+
+</div></nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Octopress 搭建博客静态网站</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-10-29T15:41:51+08:00'><span class='date'>2015年10月29日</span> <span class='time'>3:41 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h2>一、环境配置</h2>
+
+<ul>
+<li>安装以下软件
+
+<ul>
+<li>Git、Ruby、Devkit、MarkdownPad 的安装与配置
+
+<ul>
+<li><a href="https://git-scm.com/downloads">Git</a> 版本管理工具，将代码托管到GitHub</li>
+<li>Ruby+Devkit 生成静态网页 这两个文件我已放到百度网盘里，点击<a href="http://pan.baidu.com/s/1civpEI">下载</a></li>
+<li>MarkdownPad windows下Markdown语法编辑器（可不用安装，只是为了方便查看或编辑markdown）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>配置
+
+<ul>
+<li>安装好ruby，检查是否安装成功可以运行 <code>ruby -v</code></li>
+<li>Devkit直接解压缩放到你任意文件夹下即可，我放在了D:/根目录下，不用安装，然后在devkit目录下运行<code>ruby dk.rb init</code> 和 <code>ruby dk.rb install</code> 来增强ruby</li>
+</ul>
+</li>
+</ul>
+
+
+<p>PS： 安装ruby后，devkit的作用是为了增强ruby的功能。而安装ruby会自动安装了它自身的包管理器gem，即可使用gem命令</p>
+
+<h2>二、开始安装Octopress</h2>
+
+<ul>
+<li>克隆 Octopress 至本地  可以到<a href="http://octopress.org/">Octopress</a>官网，也有介绍</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git clone git://github.com/imathis/octopress.git octopress</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>安装依赖项bundler。 安装了bundler后即可采用bundle命令来安装项目里Gemfile里定义的所有依赖gem，为了不手动gem install [包名] 这样一个个手动安装</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem install bundler</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>安装Gemfile里定义的所有gem包</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>bundle install</span></code></pre></td></tr></table></div></figure>
+
+
+<p>要是安装有问题，可以再次更新一下所有依赖项，还是不行，可以到ruby的安装目录下手动删除对应安装失败的包，例如我的目录为：<code>C:\Ruby22\lib\ruby\gems\2.2.0</code>下的<code>gems</code>和<code>cache</code>文件夹下删除</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>bundle update</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>安装并使用默认主题</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rake install</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>生成静态页面到public下</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rake generate</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>启动服务器</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rake preview</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>最后在浏览器中预览，输入地址为 localhost:4000 即可看到博客</li>
+</ul>
+
+
+<p>PS： 提示ruby SSL_connect returned=1 errno=0 state=SSLv3 read server certificate B: 这个说明ruby没有安装SSL证书，说要https的链接会被服务器拒绝。</p>
+
+<blockquote><p>解决方法：首先在这里下载证书<a href="https://curl.haxx.se/ca/cacert.pem">https://curl.haxx.se/ca/cacert.pem</a>,下载好后，然后再环境变量里设置SSL_CERT_FILE这个环境变量，并把value指向这个文件即可</p></blockquote>
+
+<h2>三、生成博客与单页面</h2>
+
+<ul>
+<li>新建博客</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rake new_post['title']</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>新建单页面（有两种一些形式）</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rake new_page[pagename]</span></code></pre></td></tr></table></div></figure>
+
+
+<blockquote><p>生成的目录结构 source/pagename/index.markdoown</p></blockquote>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rake new_page[pagename/page.html]</span></code></pre></td></tr></table></div></figure>
+
+
+<blockquote><p>生成的目录结构 source/pagename/page.html</p></blockquote>
+
+<ul>
+<li>使用markdown语法书写博客
+
+<ul>
+<li>工具
+
+<ul>
+<li>MarkdownPad 、记事本、Vim Emacs 等都可以</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+
+<h2>四、部署到github上</h2>
+
+<ul>
+<li><p>新建仓库</p>
+
+<blockquote><p>username.github.io
+必须要以这种格式新建仓库，username即是你在github上注册的用户名</p></blockquote></li>
+<li><p>与本地Octopress目录绑定</p></li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rake setup_github_pages</span></code></pre></td></tr></table></div></figure>
+
+
+<p>输入以上命令后会出现配置，让你输入github上的对应的仓库链接，输入链接回车即可把本地的资源与GitHub绑定并通过git初始化一个<em>deploy文件出来，然后可以用<code>rake deploy</code>命令把本地生成的</em>deploy文件夹下的资源都部署到刚配置仓库的master分支上。</p>
+
+<p>本地生成的_deploy下的文件其实是把<code>rake generate</code>命令生成到public的所有文件都复制过来而已。所有在使用 <code>rake deploy</code> 命令前应该先使用命令<code>rake generate</code> 先生成public才行。</p>
+
+<blockquote><p>让github与octopress目录绑定</p></blockquote>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rake deploy</span></code></pre></td></tr></table></div></figure>
+
+
+<blockquote><p>把本地代码部署到github上</p></blockquote>
+
+<h2>五、博客的自定义配置</h2>
+
+<ul>
+<li>完善主配置文件
+
+<ul>
+<li>在_config.yml文件中，配置url、title、author等基本信息</li>
+</ul>
+</li>
+<li>安装主题
+
+<ul>
+<li>把主题文件复制到.themes下，然后通过命令
+<code>
+rake install['主题名字']
+</code>
+
+<blockquote><p>注意：安装主题的时候要备份之前的所有文件，因为安装新主题会覆盖掉之前的所有配置。</p></blockquote></li>
+</ul>
+</li>
+</ul>
+
+
+<h2>六、自定义网站域名</h2>
+
+<ul>
+<li>在github上绑定自定义域名
+
+<ul>
+<li>创建 source/CNAME 文件并指定域名
+<code>
+echo 'domain.com' &gt;&gt; source/CNAME
+</code>
+OR
+<code>
+echo 'www.domain.com' &gt;&gt; source/CNAME
+</code></li>
+</ul>
+</li>
+<li>解析域名至github上
+
+<ul>
+<li><p>使用子域名</p>
+
+<blockquote><p>对于子域名（www.domain.com）,创建CNAME记录指向 charlie.github.io</p></blockquote></li>
+<li><p>使用顶级域名</p>
+
+<blockquote><p>对于顶级域名（domain.com），使用A记录指向 192.30.252.153（154）</p></blockquote></li>
+</ul>
+</li>
+</ul>
+
+
+<h2>七、Gemfile文件的说明</h2>
+
+<h3>设置Gem的版本</h3>
+
+<p>对于一个gem，你最常做的事情就是设置它的版本，如果你不设置版本的话，你也可以说任意的版本都可以。</p>
+
+<p><code>gem "my_gem", "&gt;= 0.0"</code>
+这里有7个操作符供你用来设置你的gem</p>
+
+<ul>
+<li> = Equal To &ldquo;=1.0&rdquo;</li>
+<li> != Not Equal To &ldquo;!=1.0&rdquo;</li>
+<li> > Greater Than &ldquo;>1.0&rdquo;</li>
+<li> &lt; Less Than &ldquo;&lt;1.0&rdquo;</li>
+<li> >= Greater Than or Equal To &ldquo;>=1.0&rdquo;</li>
+<li> &lt;= Less Than or Equal To &ldquo;&lt;=1.0&rdquo;</li>
+<li> ~> Pessimistically Greater Than or Equal To &ldquo;~>1.0&rdquo;</li>
+</ul>
+
+
+<p><strong>Pessimistically Greater Than or Equal To</strong></p>
+
+<p>~> 操作能够让你使用这个gem的未来的某个安全的版本。如果你觉得使用一个大的版本更安全，你能够像下面这样声明.</p>
+
+<p><code>gem "my_gem", "~&gt; 2.0"</code></p>
+
+<p>这能够允许你安装任意的2.x版本的gem，但是3.x版本是不被允许的。或许你对这么宽泛的版本感到不爽，你也可以声明一个更具体的版本，如下</p>
+
+<p><code>gem "my_gem", "~&gt; 2.5.0"</code></p>
+
+<p>这能够让你使用2.5.0到2.6.0之间的版本。下面的例子能够让你更加理解~> 操作符</p>
+
+<ul>
+<li> gem &ldquo;my_gem&rdquo;, &ldquo;~> 1.0&rdquo; –> gem &ldquo;my_gem&rdquo;, &ldquo;>= 1.0&rdquo;, &ldquo;&lt; 2.0&rdquo;</li>
+<li> gem &ldquo;my_gem&rdquo;, &ldquo;~> 1.5.0&rdquo; –> gem &ldquo;my_gem&rdquo;, &ldquo;>= 1.5.0&rdquo;, &ldquo;&lt; 1.6.0&rdquo;</li>
+<li> gem &ldquo;my_gem&rdquo;, &ldquo;~> 1.5.5&rdquo; –> gem &ldquo;my_gem&rdquo;, &ldquo;>= 1.5.5&rdquo;, &ldquo;&lt; 1.6.0&rdquo;</li>
+</ul>
+
+
+<h2>八、参考</h2>
+
+<p><a href="http://blog.csdn.net/efvn2008/article/details/48392047">Gemfile 详解</a></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">三重水</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2015-10-29T15:41:51+08:00'><span class='date'>2015年10月29日</span> <span class='time'>3:41 pm</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/markdown/'>markdown</a>, <a class='category' href='/blog/categories/octopress/'>octopress</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+  
+  <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style_32x32">
+    <a class="jiathis_button_qzone"></a>
+    <a class="jiathis_button_tsina"></a>
+    <a class="jiathis_button_tqq"></a>
+    <a class="jiathis_button_weixin"></a>
+    <a class="jiathis_button_renren"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+    <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/10/29/markdown/" title="Previous Post: Markdown">&laquo; Markdown</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2015/11/05/websocket/" title="Next Post: websocket 聊天室">websocket 聊天室 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>评论</h1>
+    <div id="disqus_thread" aria-live="polite"><!-- 多说评论框 start -->
+<div class="ds-thread" data-thread-key="/blog/2015/10/29/octopress" data-title="octopress 搭建博客静态网站" data-url="http://wenyang12.github.io/blog/2015/10/29/octopress/"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    var duoshuoQuery = {short_name:"ywenblog"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+        || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>近期文章</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2018/01/17/adb-chrome-develop/">Webview的调试方法</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/12/28/csp/">CSP(内容安全策略)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/08/31/native-drag/">原生拖放</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/08/17/email-read-adaption/">邮件读信页的自适应方案</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/07/07/file-upload-formdata/">Formdata异步上传文件的实现</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+<section class="about-me">
+  <h1>关于我</h1>
+  <div class="thumb">
+      <span></span>
+      <p>三重水</p>
+      <p>学习，积累，反思，阅读，分享</p>
+  </div>  
+  <p><a href="https://github.com/wenyang12" target="_blank">github</a><a href="http://wenyang12.github.io/" target="_blank">博客</a><a
+          href="https://www.qdfuns.com/u/13989/works/articles" target="_blank">前端网</a>
+          <!-- <a href="http://wenyang.sinaapp.com/" target="_blank">笔记</a>
+          <a href="http://ywenblog.sinaapp.com/" target="_blank">WordPress</a> -->
+        </p>
+</section>
+<section>
+    <h1>标签</h1>
+    <div class="cloud">
+        <a style="font-size: 159%" href="/blog/categories/node-dot-jskuang-jia/">Node.js框架</a>
+<a style="font-size: 90%" href="/blog/categories/adb/">adb</a>
+<a style="font-size: 145%" href="/blog/categories/ajax/">ajax</a>
+<a style="font-size: 90%" href="/blog/categories/bootstrap/">bootstrap</a>
+<a style="font-size: 90%" href="/blog/categories/csp/">csp</a>
+<a style="font-size: 90%" href="/blog/categories/cssyu-chu-li-qi/">css预处理器</a>
+<a style="font-size: 90%" href="/blog/categories/email/">email</a>
+<a style="font-size: 90%" href="/blog/categories/es5/">es5</a>
+<a style="font-size: 90%" href="/blog/categories/express/">express</a>
+<a style="font-size: 124%" href="/blog/categories/git/">git</a>
+<a style="font-size: 90%" href="/blog/categories/grunt/">grunt</a>
+<a style="font-size: 170%" href="/blog/categories/html5/">html5</a>
+<a style="font-size: 90%" href="/blog/categories/jquerycha-jian/">jQuery插件</a>
+<a style="font-size: 145%" href="/blog/categories/javascript/">javascript</a>
+<a style="font-size: 90%" href="/blog/categories/jquery/">jquery</a>
+<a style="font-size: 90%" href="/blog/categories/jquery-dot-validation/">jquery.validation</a>
+<a style="font-size: 90%" href="/blog/categories/less/">less</a>
+<a style="font-size: 145%" href="/blog/categories/loopback/">loopback</a>
+<a style="font-size: 90%" href="/blog/categories/markdown/">markdown</a>
+<a style="font-size: 145%" href="/blog/categories/mongodb/">mongodb</a>
+<a style="font-size: 124%" href="/blog/categories/octopress/">octopress</a>
+<a style="font-size: 90%" href="/blog/categories/react/">react</a>
+<a style="font-size: 90%" href="/blog/categories/sass/">sass</a>
+<a style="font-size: 124%" href="/blog/categories/spm/">spm</a>
+<a style="font-size: 90%" href="/blog/categories/webworker/">webWorker</a>
+<a style="font-size: 90%" href="/blog/categories/websoket/">websoket</a>
+<a style="font-size: 90%" href="/blog/categories/wordpress/">wordpress</a>
+<a style="font-size: 90%" href="/blog/categories/zhong-jie-zhe-mo-shi/">中介者模式</a>
+<a style="font-size: 90%" href="/blog/categories/dai-li-mo-shi/">代理模式</a>
+<a style="font-size: 90%" href="/blog/categories/dao-ji-shi/">倒计时</a>
+<a style="font-size: 90%" href="/blog/categories/nei-rong-an-quan-ce-lue/">内容安全策略</a>
+<a style="font-size: 90%" href="/blog/categories/qian-duan-gou-jian-gong-ju/">前端构建工具</a>
+<a style="font-size: 90%" href="/blog/categories/yuan-xing-mo-shi/">原型模式</a>
+<a style="font-size: 90%" href="/blog/categories/fu-xuan-kuang-zu-jian/">复选框组件</a>
+<a style="font-size: 90%" href="/blog/categories/dan-chu-kuang/">弹出框</a>
+<a style="font-size: 90%" href="/blog/categories/tuo-fang/">拖放</a>
+<a style="font-size: 124%" href="/blog/categories/wen-jian-shang-chuan/">文件上传</a>
+<a style="font-size: 90%" href="/blog/categories/jian-ce-shu-ju-lei-xing/">检测数据类型</a>
+<a style="font-size: 124%" href="/blog/categories/mo-kuai-bao/">模块包</a>
+<a style="font-size: 90%" href="/blog/categories/gun-dong-jian-ting/">滚动监听</a>
+<a style="font-size: 145%" href="/blog/categories/pu-bu-liu/">瀑布流</a>
+<a style="font-size: 90%" href="/blog/categories/deng-lu-zhu-ce-mo-ban/">登陆注册模板</a>
+<a style="font-size: 90%" href="/blog/categories/liao-tian-shi/">聊天室</a>
+<a style="font-size: 90%" href="/blog/categories/zi-gua-ying/">自适应</a>
+<a style="font-size: 90%" href="/blog/categories/guan-cha-zhe-mo-shi/">观察者模式</a>
+<a style="font-size: 159%" href="/blog/categories/she-ji-mo-shi/">设计模式</a>
+<a style="font-size: 90%" href="/blog/categories/diao-shi-webview/">调试webview</a>
+<a style="font-size: 90%" href="/blog/categories/xuan-xiang-qia/">选项卡</a>
+<a style="font-size: 90%" href="/blog/categories/mian-shi/">面试</a>
+<a style="font-size: 90%" href="/blog/categories/shu-biao-shi-jian/">鼠标事件</a>
+
+    </div>
+</section>
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><div class="wrapper">
+<p>
+  Copyright &copy; 2018 - 三重水 -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a>&nbsp;<a href="http://tongji.baidu.com/web/welcome/ico?s=ddb3466dedfe096084bfb3626c5d2311">百度统计</a></span>
+</p>
+</div>
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">(function(){document.write(unescape('%3Cdiv id="bdcs"%3E%3C/div%3E'));var bdcs = document.createElement('script');bdcs.type = 'text/javascript';bdcs.async = true;bdcs.src = 'http://znsv.baidu.com/customer_search/api/js?sid=5545127454396687048' + '&plate_url=' + encodeURIComponent(window.location.href) + '&t=' + Math.ceil(new Date()/3600000);var s = document.getElementsByTagName('script')[0];s.parentNode.insertBefore(bdcs, s);})();</script>
+</body>
+</html>

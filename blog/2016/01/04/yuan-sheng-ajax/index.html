@@ -1,0 +1,593 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>原生AJAX - 三重水的博客</title>
+  <meta name="author" content="三重水">
+
+  
+  <meta name="description" content="为了方便，我们一直用jquery写AJAX异步获取数据，要是别人问，您能否用原生的javascript自己写一个异步获取数据的脚本呢？我想应该很多人都忘记了。 AJAX是什么？ AJAX = Asynchronous JavaScript and XML（异步的 JavaScript 和 XML &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="baidu-site-verification" content="ipSlYf2c3P" />
+  
+  <link rel="canonical" href="http://wenyang12.github.io/blog/2016/01/04/yuan-sheng-ajax/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="三重水的博客" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<script type="text/javascript">
+
+    function addBlankTargetForLinks () {
+
+        $('a[href^="http"]').each(function(){
+
+            $(this).attr('target', '_blank');
+
+        });
+
+    }
+
+    $(document).bind('DOMNodeInserted', function(event) {
+        addBlankTargetForLinks();
+
+    });
+
+</script>
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?ddb3466dedfe096084bfb3626c5d2311";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">三重水的博客</a></h1>
+  
+    <h2>在变化当中不断记录自己，充实自己，浏览自己</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><div class="wrapper">
+<ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form>
+  <fieldset role="search">
+    <input class="search" id="bdcsMain" type="text" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">首页</a></li>
+  <li><a href="/blog/archives">归档</a></li>
+  <!-- <li><a href="/about-me">关于我</a></li>
+  <li><a href="/wenxun/dist/">相册</a></li> -->
+</ul>
+
+</div></nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">原生AJAX</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-01-04T14:41:44+08:00'><span class='date'>2016年01月04日</span> <span class='time'>2:41 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>为了方便，我们一直用jquery写AJAX异步获取数据，要是别人问，您能否用原生的javascript自己写一个异步获取数据的脚本呢？我想应该很多人都忘记了。</p>
+
+<h2>AJAX是什么？</h2>
+
+<p>AJAX = Asynchronous JavaScript and XML（异步的 JavaScript 和 XML）。</p>
+
+<p>AJAX 不是新的编程语言，而是一种使用现有标准的新方法。</p>
+
+<p>AJAX 是与服务器交换数据并更新部分网页的艺术，在不重新加载整个页面的情况下。</p>
+
+<h2>XMLHttpRequest对象</h2>
+
+<p>其实，这个技术无非就是一个XMLHttpRequest对象而已，只要你熟悉这个对象的API的使用即可实现异步加载你想要的数据。</p>
+
+<p>那怎么来创建这个对象呢？</p>
+
+<!--more-->
+
+
+<p><strong>创建对象XMLHttpRequest</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var xmlHttp = new XMLHttpRequest();</span></code></pre></td></tr></table></div></figure>
+
+
+<blockquote><p>要是不用兼容旧浏览器IE5和IE6 就是以上一行代码即可创建这个对象。当然现在IE5和IE6，可以说淘汰了，所以就不兼容它了，没必要。想要兼容它就加个if判断即可，它的创建方式如下：</p></blockquote>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+</span><span class='line'>//判断如：
+</span><span class='line'>var xmlHttp;
+</span><span class='line'>if(window.XMLHttpRequest){//现代浏览器
+</span><span class='line'>    xmlHttp = new XMLHttpRequest();
+</span><span class='line'>}else{//旧版浏览器IE5、IE6
+</span><span class='line'>    xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<blockquote><p>以下给出的实例都不考虑旧版浏览器了，淘汰了没必要。</p></blockquote>
+
+<p><strong>这个对象有如下3个方法和5个属性，如下</strong></p>
+
+<p><strong>方法：</strong></p>
+
+<p>1、 <code>xmlHttp.open(method,url,async);</code></p>
+
+<p>参数method：规定请求的类型；GET或POST</p>
+
+<p>参数url: 请求的地址；</p>
+
+<p>参数async: true（异步）或false（同步）。</p>
+
+<p>GET 还是 POST？</p>
+
+<p>与 POST 相比，GET 更简单也更快，并且在大部分情况下都能用。</p>
+
+<p>然而，在以下情况中，请使用 POST 请求：</p>
+
+<ul>
+<li>无法使用缓存文件（更新服务器上的文件或数据库）</li>
+<li>向服务器发送大量数据（POST 没有数据量限制）</li>
+<li>发送包含未知字符的用户输入时，POST 比 GET 更稳定也更可靠</li>
+</ul>
+
+
+<p>2、 <code>xmlHttp.send(string)</code></p>
+
+<p>将请求发送到服务器</p>
+
+<p>参数String：仅用于POST请求</p>
+
+<p>3、 <code>xmlHttp.setRequestHeader(header, value)</code></p>
+
+<p>向请求添加http头</p>
+
+<p>header：规定头的名称</p>
+
+<p>value：规定头的值</p>
+
+<p>如：<code>xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");</code>  这个是告诉服务器端以这个类型类解析数据</p>
+
+<p><strong>属性：</strong></p>
+
+<p>1、 <code>onreadystatechange</code> :     存储函数（或函数名），每当 readyState 属性改变时，就会调用该函数。</p>
+
+<p>2、 <code>readyState</code>:</p>
+
+<p>存有 XMLHttpRequest 的状态。从 0 到 4 发生变化。</p>
+
+<ul>
+<li>0 请求未初始化</li>
+<li>1 服务器连接已建立</li>
+<li>2 请求已接收</li>
+<li>3 请求处理中</li>
+<li>4 请求已完成，且响应已就绪</li>
+</ul>
+
+
+<p>3、 <code>status</code>:</p>
+
+<p>200:&ldquo;ok&rdquo;</p>
+
+<p>404:&ldquo;未找到页面&rdquo;</p>
+
+<p>一般接收服务器返回的数据写法如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>xmlhttp.onreadystatechange= function()
+</span><span class='line'>  {
+</span><span class='line'>  if (xmlhttp.readyState === 4 && xmlhttp.status === 200)
+</span><span class='line'>    {
+</span><span class='line'>    document.getElementById("myDiv").innerHTML=xmlhttp.responseText;//获得字符串形式的响应数据。
+</span><span class='line'>    }
+</span><span class='line'>  } </span></code></pre></td></tr></table></div></figure>
+
+
+<p>4、 <code>responseText</code>: 获得字符串形式的响应数据。</p>
+
+<p>5、 <code>responseXML</code> : 获得 XML 形式的响应数据。</p>
+
+<h2>代码实战</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;!DOCTYPE html&gt;
+</span><span class='line'>&lt;html lang="en"&gt;
+</span><span class='line'>&lt;head&gt;
+</span><span class='line'>    &lt;meta charset="UTF-8"&gt;
+</span><span class='line'>    &lt;title&gt;ajax&lt;/title&gt;
+</span><span class='line'>&lt;/head&gt;
+</span><span class='line'>&lt;body&gt;
+</span><span class='line'>&lt;button id="getAjax1"&gt;获取responseText&lt;/button&gt;
+</span><span class='line'>&lt;button id="getAjax2"&gt;获取responseXML&lt;/button&gt;
+</span><span class='line'>&lt;br/&gt;
+</span><span class='line'>&lt;div&gt;
+</span><span class='line'>    &lt;p&gt;responseText返回的文本：&lt;span id="output1"&gt;&lt;/span&gt;&lt;/p&gt;
+</span><span class='line'>    &lt;p&gt;responseXML返回的文本：&lt;span id="output2"&gt;&lt;/span&gt;&lt;/p&gt;
+</span><span class='line'>&lt;/div&gt;
+</span><span class='line'>&lt;script&gt;
+</span><span class='line'>    //采用模块模式来封装代码
+</span><span class='line'>    var myAjax = (function(){
+</span><span class='line'>        function Temp(){
+</span><span class='line'>            this.xmlHttp = new XMLHttpRequest();
+</span><span class='line'>        }
+</span><span class='line'>        Temp.prototype.init =function(method, url, callback) {
+</span><span class='line'>            var self = this;
+</span><span class='line'>            this.xmlHttp.onreadystatechange=function(){
+</span><span class='line'>                if(self.xmlHttp.readyState === 4 && self.xmlHttp.status === 200){
+</span><span class='line'>                    callback(self.xmlHttp);
+</span><span class='line'>                }
+</span><span class='line'>            };
+</span><span class='line'>            this.xmlHttp.open(method,url,true);
+</span><span class='line'>            this.xmlHttp.send();
+</span><span class='line'>        };
+</span><span class='line'>       return{
+</span><span class='line'>           ajax: function(method, url, callback) {
+</span><span class='line'>               var ajaxChild = new Temp();
+</span><span class='line'>               ajaxChild.init(method, url, callback);
+</span><span class='line'>           }
+</span><span class='line'>       }
+</span><span class='line'>    })();
+</span><span class='line'>    //测试用例
+</span><span class='line'>    document.getElementById('getAjax1').onclick = function() {
+</span><span class='line'>        myAjax.ajax('GET', 'demo.php?name=wen', function (xmlHttp) {//获取responseText文本数据
+</span><span class='line'>            document.getElementById('output1').innerHTML = xmlHttp.responseText;
+</span><span class='line'>            console.log(xmlHttp.responseText);
+</span><span class='line'>        })
+</span><span class='line'>    };
+</span><span class='line'>    document.getElementById('getAjax2').onclick = function() {
+</span><span class='line'>        myAjax.ajax('GET', 'demo.xml',function(xmlHttp){//获取responseXML文档对象
+</span><span class='line'>            var xmlEleValue = xmlHttp.responseXML.getElementsByTagName('name')[0].firstChild.nodeValue;
+</span><span class='line'>            document.getElementById('output2').innerHTML=xmlEleValue;
+</span><span class='line'>            console.dir(xmlHttp.responseXML);
+</span><span class='line'>        });
+</span><span class='line'>    }
+</span><span class='line'>&lt;/script&gt;
+</span><span class='line'>&lt;/body&gt;
+</span><span class='line'>&lt;/html&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>demo.php</code></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;?php
+</span><span class='line'>echo "hello world";</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>demo.xml</code></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+</span><span class='line'>&lt;name&gt;wen&lt;/name&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<blockquote><p>以上用到的源码可以到我的github下载<a href="https://github.com/wenyang12/ajax-test">ajax-text</a></p></blockquote>
+
+<h2>参考链接</h2>
+
+<p><a href="http://www.runoob.com/ajax/ajax-tutorial.html">菜鸟教程-AJAX教程</a></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">三重水</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2016-01-04T14:41:44+08:00'><span class='date'>2016年01月04日</span> <span class='time'>2:41 pm</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/ajax/'>ajax</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+  
+  <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style_32x32">
+    <a class="jiathis_button_qzone"></a>
+    <a class="jiathis_button_tsina"></a>
+    <a class="jiathis_button_tqq"></a>
+    <a class="jiathis_button_weixin"></a>
+    <a class="jiathis_button_renren"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+    <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/12/25/express-test-demo/" title="Previous Post: express测试用例">&laquo; express测试用例</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2016/01/07/mousenter-mouseleave-direction-callback/" title="Next Post: 鼠标进入和离开元素4个方向对应的相关操作">鼠标进入和离开元素4个方向对应的相关操作 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>评论</h1>
+    <div id="disqus_thread" aria-live="polite"><!-- 多说评论框 start -->
+<div class="ds-thread" data-thread-key="/blog/2016/01/04/yuan-sheng-ajax" data-title="原生AJAX" data-url="http://wenyang12.github.io/blog/2016/01/04/yuan-sheng-ajax/"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    var duoshuoQuery = {short_name:"ywenblog"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+        || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>近期文章</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2018/01/17/adb-chrome-develop/">Webview的调试方法</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/12/28/csp/">CSP(内容安全策略)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/08/31/native-drag/">原生拖放</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/08/17/email-read-adaption/">邮件读信页的自适应方案</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/07/07/file-upload-formdata/">Formdata异步上传文件的实现</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+<section class="about-me">
+  <h1>关于我</h1>
+  <div class="thumb">
+      <span></span>
+      <p>三重水</p>
+      <p>学习，积累，反思，阅读，分享</p>
+  </div>  
+  <p><a href="https://github.com/wenyang12" target="_blank">github</a><a href="http://wenyang12.github.io/" target="_blank">博客</a><a
+          href="https://www.qdfuns.com/u/13989/works/articles" target="_blank">前端网</a>
+          <!-- <a href="http://wenyang.sinaapp.com/" target="_blank">笔记</a>
+          <a href="http://ywenblog.sinaapp.com/" target="_blank">WordPress</a> -->
+        </p>
+</section>
+<section>
+    <h1>标签</h1>
+    <div class="cloud">
+        <a style="font-size: 159%" href="/blog/categories/node-dot-jskuang-jia/">Node.js框架</a>
+<a style="font-size: 90%" href="/blog/categories/adb/">adb</a>
+<a style="font-size: 145%" href="/blog/categories/ajax/">ajax</a>
+<a style="font-size: 90%" href="/blog/categories/bootstrap/">bootstrap</a>
+<a style="font-size: 90%" href="/blog/categories/csp/">csp</a>
+<a style="font-size: 90%" href="/blog/categories/cssyu-chu-li-qi/">css预处理器</a>
+<a style="font-size: 90%" href="/blog/categories/email/">email</a>
+<a style="font-size: 90%" href="/blog/categories/es5/">es5</a>
+<a style="font-size: 90%" href="/blog/categories/express/">express</a>
+<a style="font-size: 124%" href="/blog/categories/git/">git</a>
+<a style="font-size: 90%" href="/blog/categories/grunt/">grunt</a>
+<a style="font-size: 170%" href="/blog/categories/html5/">html5</a>
+<a style="font-size: 90%" href="/blog/categories/jquerycha-jian/">jQuery插件</a>
+<a style="font-size: 145%" href="/blog/categories/javascript/">javascript</a>
+<a style="font-size: 90%" href="/blog/categories/jquery/">jquery</a>
+<a style="font-size: 90%" href="/blog/categories/jquery-dot-validation/">jquery.validation</a>
+<a style="font-size: 90%" href="/blog/categories/less/">less</a>
+<a style="font-size: 145%" href="/blog/categories/loopback/">loopback</a>
+<a style="font-size: 90%" href="/blog/categories/markdown/">markdown</a>
+<a style="font-size: 145%" href="/blog/categories/mongodb/">mongodb</a>
+<a style="font-size: 124%" href="/blog/categories/octopress/">octopress</a>
+<a style="font-size: 90%" href="/blog/categories/react/">react</a>
+<a style="font-size: 90%" href="/blog/categories/sass/">sass</a>
+<a style="font-size: 124%" href="/blog/categories/spm/">spm</a>
+<a style="font-size: 90%" href="/blog/categories/webworker/">webWorker</a>
+<a style="font-size: 90%" href="/blog/categories/websoket/">websoket</a>
+<a style="font-size: 90%" href="/blog/categories/wordpress/">wordpress</a>
+<a style="font-size: 90%" href="/blog/categories/zhong-jie-zhe-mo-shi/">中介者模式</a>
+<a style="font-size: 90%" href="/blog/categories/dai-li-mo-shi/">代理模式</a>
+<a style="font-size: 90%" href="/blog/categories/dao-ji-shi/">倒计时</a>
+<a style="font-size: 90%" href="/blog/categories/nei-rong-an-quan-ce-lue/">内容安全策略</a>
+<a style="font-size: 90%" href="/blog/categories/qian-duan-gou-jian-gong-ju/">前端构建工具</a>
+<a style="font-size: 90%" href="/blog/categories/yuan-xing-mo-shi/">原型模式</a>
+<a style="font-size: 90%" href="/blog/categories/fu-xuan-kuang-zu-jian/">复选框组件</a>
+<a style="font-size: 90%" href="/blog/categories/dan-chu-kuang/">弹出框</a>
+<a style="font-size: 90%" href="/blog/categories/tuo-fang/">拖放</a>
+<a style="font-size: 124%" href="/blog/categories/wen-jian-shang-chuan/">文件上传</a>
+<a style="font-size: 90%" href="/blog/categories/jian-ce-shu-ju-lei-xing/">检测数据类型</a>
+<a style="font-size: 124%" href="/blog/categories/mo-kuai-bao/">模块包</a>
+<a style="font-size: 90%" href="/blog/categories/gun-dong-jian-ting/">滚动监听</a>
+<a style="font-size: 145%" href="/blog/categories/pu-bu-liu/">瀑布流</a>
+<a style="font-size: 90%" href="/blog/categories/deng-lu-zhu-ce-mo-ban/">登陆注册模板</a>
+<a style="font-size: 90%" href="/blog/categories/liao-tian-shi/">聊天室</a>
+<a style="font-size: 90%" href="/blog/categories/zi-gua-ying/">自适应</a>
+<a style="font-size: 90%" href="/blog/categories/guan-cha-zhe-mo-shi/">观察者模式</a>
+<a style="font-size: 159%" href="/blog/categories/she-ji-mo-shi/">设计模式</a>
+<a style="font-size: 90%" href="/blog/categories/diao-shi-webview/">调试webview</a>
+<a style="font-size: 90%" href="/blog/categories/xuan-xiang-qia/">选项卡</a>
+<a style="font-size: 90%" href="/blog/categories/mian-shi/">面试</a>
+<a style="font-size: 90%" href="/blog/categories/shu-biao-shi-jian/">鼠标事件</a>
+
+    </div>
+</section>
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><div class="wrapper">
+<p>
+  Copyright &copy; 2018 - 三重水 -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a>&nbsp;<a href="http://tongji.baidu.com/web/welcome/ico?s=ddb3466dedfe096084bfb3626c5d2311">百度统计</a></span>
+</p>
+</div>
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">(function(){document.write(unescape('%3Cdiv id="bdcs"%3E%3C/div%3E'));var bdcs = document.createElement('script');bdcs.type = 'text/javascript';bdcs.async = true;bdcs.src = 'http://znsv.baidu.com/customer_search/api/js?sid=5545127454396687048' + '&plate_url=' + encodeURIComponent(window.location.href) + '&t=' + Math.ceil(new Date()/3600000);var s = document.getElementsByTagName('script')[0];s.parentNode.insertBefore(bdcs, s);})();</script>
+</body>
+</html>

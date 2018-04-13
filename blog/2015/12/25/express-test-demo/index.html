@@ -1,0 +1,747 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Express测试用例 - 三重水的博客</title>
+  <meta name="author" content="三重水">
+
+  
+  <meta name="description" content="express是基于 Node.js 平台，快速、开放、极简的 web 开发框架。 开始 创建一个文件夹 $ mkdir express-test 进入express-test目录并创建包管理文件json $ cd express-test $ npm init 安装依赖包 $ npm &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="baidu-site-verification" content="ipSlYf2c3P" />
+  
+  <link rel="canonical" href="http://wenyang12.github.io/blog/2015/12/25/express-test-demo/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="三重水的博客" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<script type="text/javascript">
+
+    function addBlankTargetForLinks () {
+
+        $('a[href^="http"]').each(function(){
+
+            $(this).attr('target', '_blank');
+
+        });
+
+    }
+
+    $(document).bind('DOMNodeInserted', function(event) {
+        addBlankTargetForLinks();
+
+    });
+
+</script>
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?ddb3466dedfe096084bfb3626c5d2311";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">三重水的博客</a></h1>
+  
+    <h2>在变化当中不断记录自己，充实自己，浏览自己</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><div class="wrapper">
+<ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form>
+  <fieldset role="search">
+    <input class="search" id="bdcsMain" type="text" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">首页</a></li>
+  <li><a href="/blog/archives">归档</a></li>
+  <!-- <li><a href="/about-me">关于我</a></li>
+  <li><a href="/wenxun/dist/">相册</a></li> -->
+</ul>
+
+</div></nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Express测试用例</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-12-25T11:54:14+08:00'><span class='date'>2015年12月25日</span> <span class='time'>11:54 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>express是基于 Node.js 平台，快速、开放、极简的 web 开发框架。</p>
+
+<h2>开始</h2>
+
+<p>创建一个文件夹</p>
+
+<blockquote><p>$ mkdir express-test</p></blockquote>
+
+<p>进入express-test目录并创建包管理文件json</p>
+
+<blockquote><p>$ cd express-test</p>
+
+<p>$ npm init</p></blockquote>
+
+<p>安装依赖包</p>
+
+<blockquote><p>$ npm install express body-parser ejs &ndash;save</p></blockquote>
+
+<!--more-->
+
+
+<p>创建一个app.js 入口文件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var express = require('express');
+</span><span class='line'>var bodyParser = require('body-parser');
+</span><span class='line'>var app = express();
+</span><span class='line'>//json类型的body  如果用户通过post发送的数据，则采用json解析
+</span><span class='line'>app.use(bodyParser.json());
+</span><span class='line'>//query string类型body 通过get请求url附带数据发送过来的解析方式
+</span><span class='line'>app.use(bodyParser.urlencoded({
+</span><span class='line'>    extended: false
+</span><span class='line'>}));
+</span><span class='line'>//静态文件目录 请求一个文件时，优先到这个目录里找，找到返回
+</span><span class='line'>app.use(express.static(__dirname + '/public')); //把这个目录下的所有文件暴露给http接口
+</span><span class='line'>//路由与业务逻辑
+</span><span class='line'>app.set('view engine', 'ejs');//设置魔板引擎
+</span><span class='line'>app.set('views', __dirname + '/views');//设置魔板路径
+</span><span class='line'>app.get('/', function (req, res) {
+</span><span class='line'>    res.render('index.ejs', {name: 'wen'});
+</span><span class='line'>});
+</span><span class='line'>app.use('/user', require('./routes/users.js')); //可以通过localhost:8000/user/list/  访问
+</span><span class='line'>app.listen(8000);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>启动项目</p>
+
+<blockquote><p>$ node app.js</p></blockquote>
+
+<p>在浏览器输入<a href="http://localhost:8000">http://localhost:8000</a> 测试效果 以及可以通过 <a href="http://localhost:8000/user/list">http://localhost:8000/user/list</a> 测试效果 对应源码看看为什么这样输出</p>
+
+<p><strong><code>test1.js</code> 和<code>test2.js</code>是 挂载路径 app.mountpath 的例子</strong></p>
+
+<p>test1.js</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//app.mountpath demo
+</span><span class='line'>var express = require('express');
+</span><span class='line'>var app = express(); // the main app
+</span><span class='line'>var admin = express(); // the sub app
+</span><span class='line'>admin.get('/', function (req, res) {
+</span><span class='line'>    console.log(admin.mountpath); // /admin
+</span><span class='line'>    res.send('Admin Homepage');
+</span><span class='line'>});
+</span><span class='line'>app.use('/admin', admin); // mount the sub app
+</span><span class='line'>app.listen(3000);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>on get <a href="http://localhost:3000/admin">http://localhost:3000/admin</a>  the following is printed:</p>
+
+<p>/admin</p>
+
+<p>test2.js</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var express = require('express');
+</span><span class='line'>var admin = express();
+</span><span class='line'>var app = express();
+</span><span class='line'>admin.get('/', function (req, res) {
+</span><span class='line'>    console.log(admin.mountpath); // [ '/adm*n', '/manager' ]
+</span><span class='line'>    res.send('Admin Homepage');
+</span><span class='line'>});
+</span><span class='line'>var secret = express();
+</span><span class='line'>secret.get('/', function (req, res) {
+</span><span class='line'>    console.log(secret.mountpath); // /secr*t
+</span><span class='line'>    res.send('Admin Secret');
+</span><span class='line'>});
+</span><span class='line'>admin.use('/secr*t', secret); // load the 'secret' router on '/secr*t', on the 'admin' sub app
+</span><span class='line'>app.use(['/adm*n', '/manager'], admin); // load the 'admin' router on '/adm*n' and '/manager', on the parent app
+</span><span class='line'>app.listen(3000);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>on get <a href="http://localhost:3000/admin">http://localhost:3000/admin</a> or <a href="http://localhost:3000/manager">http://localhost:3000/manager</a>  the following is printed:</p>
+
+<p>[ &lsquo;/adm*n&rsquo;, &lsquo;/manager&rsquo; ]</p>
+
+<p>on get <a href="http://localhost:3000/admin/secret">http://localhost:3000/admin/secret</a> or <a href="http://localhost:3000/manage/secret">http://localhost:3000/manage/secret</a>  the following is printed:</p>
+
+<p>/secr*t</p>
+
+<p><strong><code>test3.js</code> 是Events 事件监听的例子</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var express = require('express');
+</span><span class='line'>var admin = express();
+</span><span class='line'>var app = express();
+</span><span class='line'>admin.on('mount', function (parent) {//监听mount事件
+</span><span class='line'>    console.log('Admin Mounted');
+</span><span class='line'>    console.log(parent); // refers to the parent app
+</span><span class='line'>});
+</span><span class='line'>admin.get('/', function (req, res) {
+</span><span class='line'>    res.send('Admin Homepage');
+</span><span class='line'>});
+</span><span class='line'>app.use('/admin', admin);
+</span><span class='line'>app.listen(3000);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>运行服务时就立马输出：Admin Mounted 和 输出指向父app的对象</p>
+
+<p>on GET <a href="http://localhost:3000/admin">http://localhost:3000/admin</a> the following is printed:</p>
+
+<p>页面输出：Admin Homepage</p>
+
+<p><strong><code>test4.js</code> 是使用回调函数数组处理路由例子</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//使用回调函数数组处理路由
+</span><span class='line'>var express = require('express');
+</span><span class='line'>var app = express();
+</span><span class='line'>var cb0 = function (req, res, next) {
+</span><span class='line'>    console.log('CB0');
+</span><span class='line'>    next();
+</span><span class='line'>};
+</span><span class='line'>var cb1 = function (req, res, next) {
+</span><span class='line'>    console.log('CB1');
+</span><span class='line'>    next();
+</span><span class='line'>};
+</span><span class='line'>var cb2 = function (req, res) {
+</span><span class='line'>    res.send('Hello from C!');
+</span><span class='line'>};
+</span><span class='line'>app.get('/', [cb0, cb1, cb2]);
+</span><span class='line'>app.listen(3000);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>on GET <a href="http://localhost:3000">http://localhost:3000</a> the following is printed:</p>
+
+<p>CB0</p>
+
+<p>CB1</p>
+
+<p>Hello from C!</p>
+
+<p><strong><code>test5.js</code> 是路由例子</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var express = require('express');
+</span><span class='line'>var app = express();
+</span><span class='line'>var birds = require('./routes/birds');
+</span><span class='line'>app.use('/birds', birds);
+</span><span class='line'>app.listen(3000);</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>./routes/birds.js</code></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var express = require('express');
+</span><span class='line'>var router = express.Router();
+</span><span class='line'>// 该路由使用的中间件
+</span><span class='line'>router.use(function timeLog(req, res, next) {
+</span><span class='line'>    console.log('Time: ', Date.now());
+</span><span class='line'>    next();
+</span><span class='line'>});
+</span><span class='line'>// 定义网站主页的路由
+</span><span class='line'>router.get('/', function(req, res) {
+</span><span class='line'>    res.send('Birds home page');
+</span><span class='line'>});
+</span><span class='line'>// 定义 about 页面的路由
+</span><span class='line'>router.get('/about', function(req, res) {
+</span><span class='line'>    res.send('About birds');
+</span><span class='line'>});
+</span><span class='line'>module.exports = router;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>on GET <a href="http://localhost:3000/birds">http://localhost:3000/birds</a> the following is printed:</p>
+
+<p>Time:  1451011422551</p>
+
+<p>页面显示：Birds home page</p>
+
+<p>on GET <a href="http://localhost:3000/birds/about">http://localhost:3000/birds/about</a> the following is printed:</p>
+
+<p>Time:  1451011578836</p>
+
+<p>页面显示：About birds</p>
+
+<p><strong><code>test6.js</code> 是param参数方法的使用例子</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var express = require('express');
+</span><span class='line'>var app = express();
+</span><span class='line'>app.param(['id', 'page'], function (req, res, next, value) {
+</span><span class='line'>    console.log('CALLED ONLY ONCE with', value);
+</span><span class='line'>    next();
+</span><span class='line'>});
+</span><span class='line'>app.get('/user/:id/:page', function (req, res, next) {
+</span><span class='line'>    console.log('although this matches');
+</span><span class='line'>    res.send(req.params);
+</span><span class='line'>    next();
+</span><span class='line'>});
+</span><span class='line'>app.get('/user/:id/:page', function (req, res) {
+</span><span class='line'>    console.log('and this matches too');
+</span><span class='line'>    res.end();
+</span><span class='line'>});
+</span><span class='line'>app.listen(3000);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>On GET /user/42/3, the following is printed:</p>
+
+<p>CALLED ONLY ONCE with 42</p>
+
+<p>CALLED ONLY ONCE with 3</p>
+
+<p>although this matches</p>
+
+<p>and this matches too</p>
+
+<p><strong><code>test7.js</code> 是jsonp的使用例子</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var express = require('express');
+</span><span class='line'>var app = express();
+</span><span class='line'>app.use(express.static('public'));
+</span><span class='line'>app.get('/test7', function(req ,res) {
+</span><span class='line'>    res.jsonp({user: 'wen'});
+</span><span class='line'>});
+</span><span class='line'>app.listen(3000);</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>./public/test7.html</code></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;!DOCTYPE html&gt;
+</span><span class='line'>&lt;html lang="en"&gt;
+</span><span class='line'>&lt;head&gt;
+</span><span class='line'>    &lt;meta charset="UTF-8"&gt;
+</span><span class='line'>    &lt;title&gt;test7&lt;/title&gt;
+</span><span class='line'>    &lt;script src="http://code.jquery.com/jquery-latest.js"&gt;&lt;/script&gt;
+</span><span class='line'>&lt;/head&gt;
+</span><span class='line'>&lt;body&gt;
+</span><span class='line'>&lt;div&gt;&lt;button id="btn"&gt;获取jsonp数据&lt;/button&gt;&lt;/label&gt;&lt;/div&gt;
+</span><span class='line'>&lt;div&gt;输出：&lt;span id="output"&gt;&lt;/span&gt;&lt;/div&gt;
+</span><span class='line'>&lt;script&gt;
+</span><span class='line'>    function foo(obj) {
+</span><span class='line'>        console.log('执行了foo函数：输出 %s',obj.user);
+</span><span class='line'>    }
+</span><span class='line'>    $('#btn').click(function() {
+</span><span class='line'>        $.getJSON('http://localhost:3000/test7?callback=?',function(data) {
+</span><span class='line'>            console.log(data);
+</span><span class='line'>            $('#output').html(data.user);
+</span><span class='line'>        })
+</span><span class='line'>    });
+</span><span class='line'>&lt;/script&gt;
+</span><span class='line'>&lt;script src="http://localhost:3000/test7?callback=foo"&gt;&lt;/script&gt;
+</span><span class='line'>&lt;/body&gt;
+</span><span class='line'>&lt;/html&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>On GET <a href="http://localhost:3000/test7.html,">http://localhost:3000/test7.html,</a> the following is printed:</p>
+
+<p>页面控制台此时输出了 “执行了foo函数：输出 wen” (说明页面加载时，执行了回调函数foo，并传入了服务器传回来的对象 {user: &lsquo;wen&rsquo;} 作为参数)</p>
+
+<p>点击页面上的<code>获取jsonp数据</code> 按钮 即可看到页面显示 “输出：wen”</p>
+
+<p>而控制面板则打印出对象： Object { user=&ldquo;wen&rdquo;}</p>
+
+<p>以上可以对应启动项目</p>
+
+<blockquote><p>$ node test1.js</p>
+
+<h2>OR</h2>
+
+<p>$ node test2.js</p></blockquote>
+
+<p>类似以上对应启动项目测试用例</p>
+
+<p>查看全部源码可以到我的github上下载：<a href="https://github.com/wenyang12/express-test">express-test</a></p>
+
+<h2>参考资料</h2>
+
+<p><a href="http://www.expressjs.com.cn/4x/api.html">Express 4.x API 中文手册</a></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">三重水</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2015-12-25T11:54:14+08:00'><span class='date'>2015年12月25日</span> <span class='time'>11:54 am</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/express/'>express</a>, <a class='category' href='/blog/categories/node-dot-jskuang-jia/'>node.js框架</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+  
+  <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style_32x32">
+    <a class="jiathis_button_qzone"></a>
+    <a class="jiathis_button_tsina"></a>
+    <a class="jiathis_button_tqq"></a>
+    <a class="jiathis_button_weixin"></a>
+    <a class="jiathis_button_renren"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+    <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/12/16/loopback-study-3/" title="Previous Post: Node.js框架lookback学习三">&laquo; Node.js框架lookback学习三</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2016/01/04/yuan-sheng-ajax/" title="Next Post: 原生AJAX">原生AJAX &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>评论</h1>
+    <div id="disqus_thread" aria-live="polite"><!-- 多说评论框 start -->
+<div class="ds-thread" data-thread-key="/blog/2015/12/25/express-test-demo" data-title="express测试用例" data-url="http://wenyang12.github.io/blog/2015/12/25/express-test-demo/"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    var duoshuoQuery = {short_name:"ywenblog"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+        || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>近期文章</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2018/01/17/adb-chrome-develop/">Webview的调试方法</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/12/28/csp/">CSP(内容安全策略)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/08/31/native-drag/">原生拖放</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/08/17/email-read-adaption/">邮件读信页的自适应方案</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/07/07/file-upload-formdata/">Formdata异步上传文件的实现</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+<section class="about-me">
+  <h1>关于我</h1>
+  <div class="thumb">
+      <span></span>
+      <p>三重水</p>
+      <p>学习，积累，反思，阅读，分享</p>
+  </div>  
+  <p><a href="https://github.com/wenyang12" target="_blank">github</a><a href="http://wenyang12.github.io/" target="_blank">博客</a><a
+          href="https://www.qdfuns.com/u/13989/works/articles" target="_blank">前端网</a>
+          <!-- <a href="http://wenyang.sinaapp.com/" target="_blank">笔记</a>
+          <a href="http://ywenblog.sinaapp.com/" target="_blank">WordPress</a> -->
+        </p>
+</section>
+<section>
+    <h1>标签</h1>
+    <div class="cloud">
+        <a style="font-size: 159%" href="/blog/categories/node-dot-jskuang-jia/">Node.js框架</a>
+<a style="font-size: 90%" href="/blog/categories/adb/">adb</a>
+<a style="font-size: 145%" href="/blog/categories/ajax/">ajax</a>
+<a style="font-size: 90%" href="/blog/categories/bootstrap/">bootstrap</a>
+<a style="font-size: 90%" href="/blog/categories/csp/">csp</a>
+<a style="font-size: 90%" href="/blog/categories/cssyu-chu-li-qi/">css预处理器</a>
+<a style="font-size: 90%" href="/blog/categories/email/">email</a>
+<a style="font-size: 90%" href="/blog/categories/es5/">es5</a>
+<a style="font-size: 90%" href="/blog/categories/express/">express</a>
+<a style="font-size: 124%" href="/blog/categories/git/">git</a>
+<a style="font-size: 90%" href="/blog/categories/grunt/">grunt</a>
+<a style="font-size: 170%" href="/blog/categories/html5/">html5</a>
+<a style="font-size: 90%" href="/blog/categories/jquerycha-jian/">jQuery插件</a>
+<a style="font-size: 145%" href="/blog/categories/javascript/">javascript</a>
+<a style="font-size: 90%" href="/blog/categories/jquery/">jquery</a>
+<a style="font-size: 90%" href="/blog/categories/jquery-dot-validation/">jquery.validation</a>
+<a style="font-size: 90%" href="/blog/categories/less/">less</a>
+<a style="font-size: 145%" href="/blog/categories/loopback/">loopback</a>
+<a style="font-size: 90%" href="/blog/categories/markdown/">markdown</a>
+<a style="font-size: 145%" href="/blog/categories/mongodb/">mongodb</a>
+<a style="font-size: 124%" href="/blog/categories/octopress/">octopress</a>
+<a style="font-size: 90%" href="/blog/categories/react/">react</a>
+<a style="font-size: 90%" href="/blog/categories/sass/">sass</a>
+<a style="font-size: 124%" href="/blog/categories/spm/">spm</a>
+<a style="font-size: 90%" href="/blog/categories/webworker/">webWorker</a>
+<a style="font-size: 90%" href="/blog/categories/websoket/">websoket</a>
+<a style="font-size: 90%" href="/blog/categories/wordpress/">wordpress</a>
+<a style="font-size: 90%" href="/blog/categories/zhong-jie-zhe-mo-shi/">中介者模式</a>
+<a style="font-size: 90%" href="/blog/categories/dai-li-mo-shi/">代理模式</a>
+<a style="font-size: 90%" href="/blog/categories/dao-ji-shi/">倒计时</a>
+<a style="font-size: 90%" href="/blog/categories/nei-rong-an-quan-ce-lue/">内容安全策略</a>
+<a style="font-size: 90%" href="/blog/categories/qian-duan-gou-jian-gong-ju/">前端构建工具</a>
+<a style="font-size: 90%" href="/blog/categories/yuan-xing-mo-shi/">原型模式</a>
+<a style="font-size: 90%" href="/blog/categories/fu-xuan-kuang-zu-jian/">复选框组件</a>
+<a style="font-size: 90%" href="/blog/categories/dan-chu-kuang/">弹出框</a>
+<a style="font-size: 90%" href="/blog/categories/tuo-fang/">拖放</a>
+<a style="font-size: 124%" href="/blog/categories/wen-jian-shang-chuan/">文件上传</a>
+<a style="font-size: 90%" href="/blog/categories/jian-ce-shu-ju-lei-xing/">检测数据类型</a>
+<a style="font-size: 124%" href="/blog/categories/mo-kuai-bao/">模块包</a>
+<a style="font-size: 90%" href="/blog/categories/gun-dong-jian-ting/">滚动监听</a>
+<a style="font-size: 145%" href="/blog/categories/pu-bu-liu/">瀑布流</a>
+<a style="font-size: 90%" href="/blog/categories/deng-lu-zhu-ce-mo-ban/">登陆注册模板</a>
+<a style="font-size: 90%" href="/blog/categories/liao-tian-shi/">聊天室</a>
+<a style="font-size: 90%" href="/blog/categories/zi-gua-ying/">自适应</a>
+<a style="font-size: 90%" href="/blog/categories/guan-cha-zhe-mo-shi/">观察者模式</a>
+<a style="font-size: 159%" href="/blog/categories/she-ji-mo-shi/">设计模式</a>
+<a style="font-size: 90%" href="/blog/categories/diao-shi-webview/">调试webview</a>
+<a style="font-size: 90%" href="/blog/categories/xuan-xiang-qia/">选项卡</a>
+<a style="font-size: 90%" href="/blog/categories/mian-shi/">面试</a>
+<a style="font-size: 90%" href="/blog/categories/shu-biao-shi-jian/">鼠标事件</a>
+
+    </div>
+</section>
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><div class="wrapper">
+<p>
+  Copyright &copy; 2018 - 三重水 -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a>&nbsp;<a href="http://tongji.baidu.com/web/welcome/ico?s=ddb3466dedfe096084bfb3626c5d2311">百度统计</a></span>
+</p>
+</div>
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">(function(){document.write(unescape('%3Cdiv id="bdcs"%3E%3C/div%3E'));var bdcs = document.createElement('script');bdcs.type = 'text/javascript';bdcs.async = true;bdcs.src = 'http://znsv.baidu.com/customer_search/api/js?sid=5545127454396687048' + '&plate_url=' + encodeURIComponent(window.location.href) + '&t=' + Math.ceil(new Date()/3600000);var s = document.getElementsByTagName('script')[0];s.parentNode.insertBefore(bdcs, s);})();</script>
+</body>
+</html>

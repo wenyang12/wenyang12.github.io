@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: 设计模式 | 三重水的博客]]></title>
+  <link href="http://wenyang12.github.io/blog/categories/she-ji-mo-shi/atom.xml" rel="self"/>
+  <link href="http://wenyang12.github.io/"/>
+  <updated>2018-04-13T14:54:38+08:00</updated>
+  <id>http://wenyang12.github.io/</id>
+  <author>
+    <name><![CDATA[三重水]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[设计模式--代理模式]]></title>
+    <link href="http://wenyang12.github.io/blog/2015/11/26/design-pattern-daili/"/>
+    <updated>2015-11-26T10:15:07+08:00</updated>
+    <id>http://wenyang12.github.io/blog/2015/11/26/design-pattern-daili</id>
+    <content type="html"><![CDATA[<h2>概念解读</h2>
+
+<p>文字解读</p>
+
+<p>代理，顾名思义就是帮助别人做事，GoF（《Design Patterns: Elements of Reusable Object-Oriented Software》（即后述《设计模式》一书），由 Erich Gamma、Richard Helm、Ralph Johnson 和 John Vlissides 合著（Addison-Wesley，1995）。这几位作者常被称为&ldquo;四人组（Gang of Four）&rdquo;）对代理模式的定义如下：</p>
+
+<blockquote><p>代理模式（Proxy），为其他对象提供一种代理以控制对这个对象的访问。
+代理模式使得代理对象控制具体对象的引用。代理几乎可以是任何对象：文件，资源，内存中的对象，或者是一些难以复制的东西。</p></blockquote>
+
+<h2>作用和主意事项</h2>
+
+<p>作用</p>
+
+<ul>
+<li>远程代理（一个对象将不同空间的对象进行局部代理）。</li>
+<li>虚拟代理（根据需要创建开销很大的对象如渲染网页暂时用占位代替真图）。</li>
+<li>安全代理（控制真实对象的访问权限）。</li>
+<li>智能指引（调用对象代理处理另外一些事情如垃圾回收机制）。</li>
+</ul>
+
+
+<p>注意事项</p>
+
+<p>不能滥用代理，有时候仅仅是给代码增加复杂度。</p>
+
+<h2>代码实战</h2>
+
+<pre><code>//创建 买家构造函数
+    var Maijia = function(name) {
+        this.name = name;
+    };
+    //创建 卖家对象 即房东
+    var fangdong = {//单一一个对象
+        //创建一个卖房的方法
+        sell : function(money,from) {
+            console.log("收到买家" + "【" + from.name + "】付的" + money + "人民币");
+        }
+    };
+    // 创建一个代理对象，即代理者,这个代理者是代理房东做事的
+    var daili = {//代表房东，一对一的关系
+        all:{},//用于储存买家的对象
+        zhuce:function(obj) {//买家到中介里登记个人
+            this.all[obj.name] = obj;
+        },
+        sell : function(money,from) {//创建一个卖房的方法
+            fangdong.sell(money,this.all[from.name]);
+        }
+    };
+    //运用
+    var maijiaA = new Maijia("maijiaA");//创建一个买家A
+    daili.zhuce(maijiaA);//买家A到中介注册
+    daili.sell("100万", maijiaA);//然后中介给买家A卖了一套100万的房，房东那边就可以收到钱了，中介给房东办了事
+</code></pre>
+
+<h2>题外话：代理模式跟中介者模式的区别</h2>
+
+<ul>
+<li>代理模式有以下特点：
+
+<ul>
+<li>一对一，这个代理只能代表一个对象。</li>
+<li>只能代表一方，PB是B的代理，A可以通过PB访问B，但是B不能通过PB访问A。</li>
+</ul>
+</li>
+<li>中介者模式有以下特点：
+
+<ul>
+<li>多对多，这些被管理的对象都可以通信，它们的业务关系应该是交织在一起的。</li>
+<li>A能够通过中介访问B，B也能够通过中介访问A</li>
+</ul>
+</li>
+</ul>
+
+
+<blockquote><p>以上信息来自<a href="http://www.jikexueyuan.com/">极客学院</a>的视频观看，属于个人记录，以及添加了一些个人理解。</p></blockquote>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[设计模式--观察者模式]]></title>
+    <link href="http://wenyang12.github.io/blog/2015/11/26/design-pattern-guanchaze/"/>
+    <updated>2015-11-26T09:41:27+08:00</updated>
+    <id>http://wenyang12.github.io/blog/2015/11/26/design-pattern-guanchaze</id>
+    <content type="html"><![CDATA[<h2>概念解读</h2>
+
+<p>文字解读</p>
+
+<blockquote><p>观察者模式由叫发布订阅模式（Publish/Subscribe），它定义了一种一对多的关系，让多个观察者对象同时监听某一个主题对象，这个主题对象的状态发生变化时就会通知所有的观察者对象，使得他们自动更新自己。</p></blockquote>
+
+<h2>作用和主意事项</h2>
+
+<p>作用</p>
+
+<ul>
+<li>支持简单广播通信，自动通知所有已订阅过的对象。</li>
+<li>载入页面后目标对象很容易与观察者存在一种动态关联，增加了灵活性。</li>
+<li>目标对象与观察者之间的抽象耦合关系能够单独扩展及重用。</li>
+</ul>
+
+
+<p>主意事项</p>
+
+<blockquote><p>监听要在触发之前</p></blockquote>
+
+<h2>代码实战</h2>
+
+<pre><code>    //用jquery来实现观察者模式
+    (function($) {
+        var o = $({});//创建一个jquery空对象
+        $.extend({//扩展两个jquery静态方法
+            dingyue:function() {//订阅方法
+                o.on.apply(o,arguments);
+            },
+            fabu:function() {//发布方法
+                o.trigger.apply(o,arguments);
+            },
+            tuiding:function() {//退订方法
+                o.off.apply(o, arguments);
+            }
+        });
+        //订阅者A
+        $.dingyue('tianqi',function(e,data){//订阅了天气
+            console.log('我是订阅者A【收到】'+data);
+        });
+        //订阅者B
+        $.dingyue('zazhi',function(e,data){//订阅了杂志
+            console.log('我是订阅者B【收到】'+data);
+        });
+        //发布者
+        $.fabu('tianqi', "今天夜间有雷阵雨");//发布者天气发布消息
+        $.fabu('zazhi', "杂志最近有新版本更新");//发布者杂志发布消息
+        $.tuiding('zazhi');
+        //第二次发布消息
+        $.fabu('tianqi', "天气第二次发布");//发布者天气发布消息
+        $.fabu('zazhi', "杂志第二次发布");//发布者杂志发布消息，此时发布的消息，订阅者B无法收到了，它退订了
+    })(jQuery);
+    //js原声代码实现
+    //创建发布者构造函数
+    function Publisher() {
+        this.subscribers = [];//这个属性用来保存订阅者的引用
+    }
+    //为发布者添加一个发送消息给订阅者的方法
+    Publisher.prototype.deliver = function(data) {
+        this.subscribers.forEach(function(fn) {
+            fn(data);
+        });
+        return this;
+    };
+    //创建订阅者，订阅方法
+    Function.prototype.subscribe = function(publisher) {
+        var that = this;
+        var alreadyExists = publisher.subscribers.some(function(el) {//判断订阅者在发布者属性subscribers是否存在
+            return el === that;
+        });
+        if(!alreadyExists){//如果不存在
+            publisher.subscribers.push(this);//把订阅者保存到发布者的属性subscribers中，即把订阅者注册到发布者中
+        }
+        return this;
+    };
+    // 创建订阅者，退订方法
+    Function.prototype.unsubscribe = function(publisher) {
+        var that = this;
+        publisher.subscribers = publisher.subscribers.filter(function(el) {
+            return el !== that;
+        });
+        return this;
+    };
+    //运用
+    var fbA = new Publisher();
+    var fbB = new Publisher();
+    //创建一个订阅者A
+    var dyA = function(data){
+        console.log("订阅者A接收到的消息为："+data);
+    };
+    var dyB = function(data) {
+        console.log("订阅者B接收到的消息为：" + data);
+    };
+    var dyC = function(data) {
+        console.log("订阅者C接收到的消息为：" + data);
+    };
+    dyA.subscribe(fbA);//订阅者A订阅了发布者fbA；
+    dyB.subscribe(fbB);//订阅者B订阅了发布者fbB；
+    dyC.subscribe(fbA).subscribe(fbB);//订阅者C订阅了发布者fbA和发布者fbB；
+    //有时候，有些订阅者在监听到某一次性的事件后会在回调阶段立即退订该事件。其做法大致如下：
+    //创建一个订阅者D
+    var dyD = function(data) {
+        console.log("订阅者D接收到的消息为：" + data);
+        //订阅后，立即退订
+        dyD.unsubscribe(fbB);
+    };
+    dyD.subscribe(fbB);//订阅了发布者B，然后监听完发布者B后立即退订
+    //发布者发送消息
+    fbA.deliver("欢迎您订阅了我，我是发布者A");//发布者发送资讯时，这个时候，注册到它这里的所有订阅者，都可以接收到这个信息
+    fbB.deliver("我这里有最新的javscript消息，我是发布者B").deliver('这是我第二次发布的消息');//第二次发布消息时，订阅者D是收不到消息的。
+</code></pre>
+
+<blockquote><p>以上信息来自<a href="http://www.jikexueyuan.com/">极客学院</a>的视频观看，属于个人记录，以及添加了一些个人理解。</p></blockquote>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[设计模式--中介者模式]]></title>
+    <link href="http://wenyang12.github.io/blog/2015/09/16/design-pattern-zhongjieze/"/>
+    <updated>2015-09-16T10:54:30+08:00</updated>
+    <id>http://wenyang12.github.io/blog/2015/09/16/design-pattern-zhongjieze</id>
+    <content type="html"><![CDATA[<h2>概念解读</h2>
+
+<p>文字解读</p>
+
+<blockquote><p>用一个中介对象来封装一序列的对象交互。中介者使各对象不需要显式的引用，从而使其耦合松散，而且可以独立的改变它们之间的交互。</p></blockquote>
+
+<h2>作用和注意事项</h2>
+
+<p>作用</p>
+
+<blockquote><p>软件开发中，中介者是一个行为设计模式，通过提供一个统一的接口让系统的不同部分进行通信。一般如果系统有很多子模块需要直接沟通，都需要创建一个中央控制点让其各模块通过该中央控制点进行交互。中介者模式可以让这些子模块不需要直接沟通，而达到进行解耦的目的。</p></blockquote>
+
+<p>主意事项</p>
+
+<blockquote><p>当系统出现多对多交互复杂的对象群时，先不要急着使用中介者模式，而是要思考一下是不是系统设计有问题。</p></blockquote>
+
+<h2>代码实战</h2>
+
+<pre><code>    //创建一个飞机的构造函数
+    var Plane = function(name) {
+        this.name = name;
+    };
+    //创建飞机发送消息的方法
+    Plane.prototype.send = function(msg,to) {
+        var from = this;
+        tatai.send(msg,from,to);//用塔台给我发信息,别自己发
+    };
+    //创建飞机接收信息的方法
+    Plane.prototype.recevie = function(msg,from) {
+        console.log(this.name + "【接收到】" + msg+"(消息来自"+from.name+")");
+    };
+    //创建一个塔台对象，即在这里充当了中介者对象
+    var tatai = {
+        all :{},//空对象，用于装载飞机的实例
+        zhuce : function(plane){//把飞机的实例传入即把飞机注册到塔台里
+            this.all[plane.name] = plane;
+        },
+        send : function(msg,from,to) {
+            if(to === undefined){//没传递to时，发送给所有飞机
+                for(var key in this.all){
+                    if(this.all[key] !== from) {
+                        this.all[key].recevie(msg, from);
+                    }
+                }
+            }else{
+                this.all[to.name].recevie(msg, from);
+            }
+        }
+    };
+    //运用
+    var planeA = new Plane('planeA');//创建飞机A
+    var planeB = new Plane('planeB');//创建飞机B
+    var planeC = new Plane('planeC');//创建飞机C
+    tatai.zhuce(planeA);//把飞机A注册到塔台里
+    tatai.zhuce(planeB);//把飞机B注册到塔台里
+    planeA.send("我距离地面还有500米", planeB);//飞机A给飞机B发送消息
+    planeB.send("我准备降落白云机场", planeA);//飞机B给飞机A发送消息
+    planeC.send("我飞机装到小鸟了，出现故障了！");//飞机C给所有飞机发送消息。注：飞机C因为没有注册到塔台，所以他不能接收到塔台传来的信息，但是它可以发送信息
+&lt;/script&gt;
+</code></pre>
+
+<blockquote><p>以上信息来自<a href="http://www.jikexueyuan.com/">极客学院</a>的视频观看，属于个人记录，以及添加了一些个人理解。</p></blockquote>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[设计模式--原型模式]]></title>
+    <link href="http://wenyang12.github.io/blog/2015/09/16/design-pattern-yuanxin/"/>
+    <updated>2015-09-16T10:20:18+08:00</updated>
+    <id>http://wenyang12.github.io/blog/2015/09/16/design-pattern-yuanxin</id>
+    <content type="html"><![CDATA[<h2>概念解读</h2>
+
+<p>文字解读</p>
+
+<blockquote><p>原型模式是指原型实例指向创建对象的种类，并且通过拷贝这些原型创建新的对象。
+对于原型模式，可以利用javascript特有的原型继承特性去创建对象的方式，真正的原型继承是作为最新版的ECMAScript5标准提出的，使用 Object.creat方法来创建这样的对象，如 Object.creat(prototype,optionalDescriptorObjects).</p></blockquote>
+
+<h2>作用和注意事项</h2>
+
+<p>作用</p>
+
+<blockquote><p>原型对象本身就是有效地利用了每个构造器创建的对象。</p></blockquote>
+
+<p> 主意事项</p>
+
+<blockquote><p>浅拷贝和深拷贝的问题，免得出现引申问题。</p>
+
+<p>现有的文献里查看原型模式的定义，没有针对JavaScript的，你可能发现讲解的都是关于类的，但是现实情况是基于原型继承的JavaScript完全避免了类（class）的概念。</p></blockquote>
+
+<h2>代码实战</h2>
+
+<p>```
+&lt;!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>原型模式</title>
+</head>
+<body></p>
+
+<script>
+    var myObj = {
+        str : "mystring",
+        number:1,
+        arr:[1,2,3],
+        obj: {
+            innerObj:{
+                num:5
+            },
+            str:'nini'
+        }
+    };
+    // 浅克隆(修改拷贝出来的对象的深层次属性时，原对象会跟着改变)
+    function clone(obj) {
+        var result = {};
+        for(var key in obj) {
+            result[key] = obj[key];
+        }
+        return result;
+    }
+    //深克隆（修改拷贝出来的对象的任何属性，都不会影响到原对象）
+    function deepClone(obj) {
+        var result;
+        var _toString = Object.prototype.toString;
+        if((result=(_toString.call(obj) ==='[object Array]')) || _toString.call(obj) === '[object Object]'){
+            result = result ? [] : {};
+            for(var key in obj) {
+                if(_toString.call(obj[key]) === '[object Array]' || _toString.call(obj[key]) === '[object Object]'){
+                    result[key] = deepClone(obj[key]);
+                }else{
+                    result[key] = obj[key];
+                }
+            }
+        }
+        return result;
+    }
+    //es5 原型模式
+    // Object.create() 方法创建一个拥有指定原型和若干个指定属性的对象。用于创建原型模式
+    var aa = Object.create(myObj,{
+        type:{
+            value:"人民银行",
+            writable:true,// 是否可以改写属性
+            enumerable:false,//是否可以被枚举
+            configurable:false//是否可以被删除
+        }
+    });
+    aa.type = '平安银行';// 修改
+    delete aa.type;//删除
+    for( var k in aa){//枚举
+        console.log(k);
+    }
+    //原型模式测试
+    aa.obj = {innerObj:'men'};//修改了对象下的obj对象，但是不影响myObj对象下的obj对象
+    aa.str = "wen";//修改了对象的str，不影响myObj对象的str
+    console.log("原型模式"+aa.obj.innerObj+' '+aa.str);
+    console.log("原型模式"+myObj.obj.innerObj+' '+myObj.str);//未改变
+    //深克隆测试
+    var sObj = deepClone(myObj);
+    sObj.obj.innerObj="深克隆";//修改了拷贝出来的qianObj的第二层属性（即指的深层属性）时
+    console.log(sObj.obj.innerObj)//“深克隆”
+    console.log(myObj.obj.innerObj)//{num：5}（未被改变）
+    //浅克隆测试
+    var qObj = clone(myObj);
+    qObj.obj.innerObj="浅克隆";//修改了拷贝出来的qianObj的第二层属性（即指的深层属性）时
+    console.log(qObj.obj.innerObj)//“浅克隆”
+    console.log(myObj.obj.innerObj)//“浅克隆”（可以看出，原对象被改变了）
+</script>
+
+
+<p></body>
+</html>
+```</p>
+
+<blockquote><p>以上信息来自<a href="http://www.jikexueyuan.com/">极客学院</a>的视频观看，属于个人记录，以及添加了一些个人理解。</p></blockquote>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,518 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>拖拽文件异步上传 - 三重水的博客</title>
+  <meta name="author" content="三重水">
+
+  
+  <meta name="description" content="文件目录为 文件目录图 没做ie浏览器兼容,用于测试，index.html代码如下 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="baidu-site-verification" content="ipSlYf2c3P" />
+  
+  <link rel="canonical" href="http://wenyang12.github.io/blog/2015/08/11/asynchronous-upload-file/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="三重水的博客" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<script type="text/javascript">
+
+    function addBlankTargetForLinks () {
+
+        $('a[href^="http"]').each(function(){
+
+            $(this).attr('target', '_blank');
+
+        });
+
+    }
+
+    $(document).bind('DOMNodeInserted', function(event) {
+        addBlankTargetForLinks();
+
+    });
+
+</script>
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?ddb3466dedfe096084bfb3626c5d2311";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">三重水的博客</a></h1>
+  
+    <h2>在变化当中不断记录自己，充实自己，浏览自己</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><div class="wrapper">
+<ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form>
+  <fieldset role="search">
+    <input class="search" id="bdcsMain" type="text" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">首页</a></li>
+  <li><a href="/blog/archives">归档</a></li>
+  <!-- <li><a href="/about-me">关于我</a></li>
+  <li><a href="/wenxun/dist/">相册</a></li> -->
+</ul>
+
+</div></nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">拖拽文件异步上传</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-08-11T09:40:58+08:00'><span class='date'>2015年08月11日</span> <span class='time'>9:40 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h2>文件目录为</h2>
+
+<blockquote><p><a href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMcAAABWCAIAAAD0XRV3AAAFLklEQVR4nO2dPWvbQBjH/bW0BOPvUOhc6HVvpvZDaOzQdO6S2Elx6oBJMyTZDAkhQ6gb6slkDS4ePAR1kC3fy3N683PSSfn/EEGW7kWQH3eH9DxSJwKAm07dFwBaCKwC/MAqwA+sAvwwW/Xryztt+zv5wdsF8B/nVjkQayQ6YrR7G0E4ZbkcYFCFVeS2QyewyncIq05PT/sUw+EwszlYBSLSqvl8Tlo1n88zm8tjDKxqPfQMOB6PNaXG43Ge5kpaNQ2DRJTtfrw3Ep01mxKyVduzHVm1aRgQR+XCHVjlDtqqxWIxGAwSpQaDwWKxyNMcu1WKS+v9xKqRkN3YFpiGYnNUqaXKCKucYV2tX19fJ1ZdXV3lbM7BWGUW2lilz2JKeX200gpjBnSJ1arVanV8fBwPVKvVKmdzdVsVhNO1UOszciVYVRVpdxZub2/7/f7d3V3+5nawStJAngFl2TJnwPiHZIxaS20MVjkj437V+fl5oeZK31lIJqxACGWsEsZiPXu1vp39pNbkskEYYqxyiM93QbUZEDQGn58uw6qmAqsAPz5bBZoKrAL8wCrAD6wC/MAqwA+sAvzAKsCPR1Yhk6I1eG1VbrHWD/7eHyRPqTniRUFZ+K06Ozt7fn4uUXGnJ9Pb59Gwqn74rYoD/S4vL/NHZcWUtoqKlYJVdeLKqjjc7/7+Pn/F0pkUsMo3HFqV5HvlSc6JylolBViJn9u5kI7BQkhVNTi3Kubh4SGzIsNYRVglD2QIgqgI51adnJw8Pj7mqejEKjVZC8NVNbi1ajKZvLy85Kzoyip4VDmurLq4uFgul4UqOpsB5RUWJsAq4LdqOBw+PT2VqMhwZ4FcrdN5zMAhvt9bL5tJAerEI6tAa4BVgB9YBfiBVYAfWAX4gVWAH1gF+PHLqm8Wbm5u6r40UIBmWHV4eAixGoSPVpkHl8vl0dERxGoKnlr18c+HeIvUAYyoI72nL5vyIQy7Bz+8ovBUf616G76JrdJO6cAq//DXqr1uzxyxdu2A2apCwaWwqiZgVTvw2qq9bi+ZB1NnQClEPRRGJLHtkxB6loT8zmQl2M9ovCNGSrNB+DsuMFrHcsnnNx3Cqpowx6r4b5TXqg6Vbkp+EoLOklgfJQYmsnF5rBqJxKDYJ/2l8bCqJna2ShYlCKf2l/dbsyTiE+ZkRzWuW5UUIPdhVU1UahW9wIJVDPhrlbxFpa2yfhKCzpKIm1CnOFNDWJWBp1YVOJVhlf2TEEaWhLTq2izcM6zatJGs1mFVFEV+WpVC3RcIcgGrAD9+WQXaAawC/MAqwA+sAvzAKsAPrAL8+GWV7YYCYoubRTOsQjZEs/DRKvMgsiGaRTOs4ru3zvEwrkBA6St9gaRfVs1ms9lsVvRUEWBVFfhl1c/v/+Rtr9vTjsTbDj3AqiqAVaXagFWpeGdVnATxef8gZV+pI0fOqd9JEqNtaJUUW0d8M0LJfKDfTmtLqZA7JrvTcihSCrcHH63K/KvUsVul/HOpN2ar6TabikKKt6Nfr01bZemOzqGgCrcHH63a6/Y+7X81fUqOK3XSxiqzkO3t/kp5fbSyBb9bqqvdpcclmz/bgI9WkWsp+bhSh82qIJyqoe2kG0Td9O5gVd2UtUqLNld3lR/2GdAIT1drUSkV2qRGd0dbRRVuD35ZVe5+VTJhBUIoY5UwF8SZq/Xt7Ce1Zkmp0NJN6e4sYxVRuD34ZRVf3HrF00qh7lo45WnAKhZglYJfVvEBq+qkrVaBOoFVgB9YBfiBVYCf/01ox8u3OIbxAAAAAElFTkSuQmCC">文件目录图</a></p></blockquote>
+
+<h2>没做ie浏览器兼容,用于测试，index.html代码如下</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var dragUpload = {
+</span><span class='line'>    file: document.getElementById('file'),
+</span><span class='line'>    fileArea: document.getElementById('fileArea'),
+</span><span class='line'>    init:function() {
+</span><span class='line'>        var self = this;
+</span><span class='line'>        this.fileArea.onclick = function() {
+</span><span class='line'>            var event = document.createEvent('MouseEvents');//调用document对象的 createEvent 方法得到一个event的对象实例。
+</span><span class='line'>             /*initEvent接受3个参数：
+</span><span class='line'>             事件类型，是否冒泡，是否阻止浏览器的默认行为*/
+</span><span class='line'>            event.initEvent('click', true, false);
+</span><span class='line'>            self.file.dispatchEvent(event);//触发控件的单击事件
+</span><span class='line'>        };
+</span><span class='line'>        this.file.onchange = function() {
+</span><span class='line'>            self.upload(this.files);
+</span><span class='line'>        };
+</span><span class='line'>        this.fileArea.ondragenter = function(ev) {
+</span><span class='line'>            self.dragEnter(ev,this);
+</span><span class='line'>        };
+</span><span class='line'>        this.fileArea.ondragover = function(ev) {
+</span><span class='line'>            self.dragOver(ev,this);
+</span><span class='line'>        };
+</span><span class='line'>        this.fileArea.ondrop = function(ev) {
+</span><span class='line'>            self.drop(ev,this);
+</span><span class='line'>        };
+</span><span class='line'>    },
+</span><span class='line'>    upload:function(fs) {//上传文件
+</span><span class='line'>        for(var i = 0,len = fs.length; i &lt; len; i++) {
+</span><span class='line'>            this.sendFile(fs[i]);
+</span><span class='line'>        }
+</span><span class='line'>    },
+</span><span class='line'>    dragEnter:function(ev,my) {//文件进入回调函数
+</span><span class='line'>        ev.preventDefault();
+</span><span class='line'>        console.log('dragEnter');
+</span><span class='line'>        my.className = 'up-area hover';
+</span><span class='line'>    },
+</span><span class='line'>    dragOver:function(ev,my) { //文件经过回调函数
+</span><span class='line'>        ev.preventDefault();
+</span><span class='line'>        console.log('dragOver');
+</span><span class='line'>    },
+</span><span class='line'>    drop:function(ev,my) {//放入文件回调函数
+</span><span class='line'>        ev.preventDefault();
+</span><span class='line'>        console.log('drop');
+</span><span class='line'>        var dt = ev.dataTransfer;//获取文件对象
+</span><span class='line'>        my.className = 'up-area';
+</span><span class='line'>        dragUpload.upload(dt.files);
+</span><span class='line'>    },
+</span><span class='line'>    sendFile:function(file) {//上传文件主函数
+</span><span class='line'>        var xhr = new XMLHttpRequest();
+</span><span class='line'>        var fd = new FormData();
+</span><span class='line'>        fd.append('file', file);
+</span><span class='line'>        xhr.onreadystatechange = function() {
+</span><span class='line'>            if(xhr.readyState ===4 && xhr.status === 200) {
+</span><span class='line'>                document.getElementById('console').innerHTML += '&lt;br/&gt;'+xhr.responseText;
+</span><span class='line'>            }
+</span><span class='line'>        };
+</span><span class='line'>        xhr.open('POST', 'upload.php ',true);
+</span><span class='line'>        xhr.send(fd);
+</span><span class='line'>    }
+</span><span class='line'>};
+</span><span class='line'>dragUpload.init();</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>upload.php代码为</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;?php
+</span><span class='line'>$file = $_FILES['file'];//获取文件内容
+</span><span class='line'>//存入上传的文件
+</span><span class='line'>$path = 'file';
+</span><span class='line'>if($file['size'] &gt; 10*1024*1024){
+</span><span class='line'>    echo '{"error":"1000","message":"上传的文件超过限制，最大10M"}';
+</span><span class='line'>}else{
+</span><span class='line'>    $path .= '/file_'.time().'.png';
+</span><span class='line'>    move_uploaded_file($file['tmp_name'],$path);
+</span><span class='line'>    echo '上传成功：'. json_encode($file);
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">三重水</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2015-08-11T09:40:58+08:00'><span class='date'>2015年08月11日</span> <span class='time'>9:40 am</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/ajax/'>ajax</a>, <a class='category' href='/blog/categories/html5/'>html5</a>, <a class='category' href='/blog/categories/wen-jian-shang-chuan/'>文件上传</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+  
+  <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style_32x32">
+    <a class="jiathis_button_qzone"></a>
+    <a class="jiathis_button_tsina"></a>
+    <a class="jiathis_button_tqq"></a>
+    <a class="jiathis_button_weixin"></a>
+    <a class="jiathis_button_renren"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+    <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/06/15/interview-notes/" title="Previous Post: 面试笔记">&laquo; 面试笔记</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2015/08/12/html5-web-workers/" title="Next Post: HTML5 Web Workers">HTML5 Web Workers &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>评论</h1>
+    <div id="disqus_thread" aria-live="polite"><!-- 多说评论框 start -->
+<div class="ds-thread" data-thread-key="/blog/2015/08/11/asynchronous-upload-file" data-title="拖拽文件异步上传" data-url="http://wenyang12.github.io/blog/2015/08/11/asynchronous-upload-file/"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    var duoshuoQuery = {short_name:"ywenblog"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+        || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>近期文章</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2018/01/17/adb-chrome-develop/">Webview的调试方法</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/12/28/csp/">CSP(内容安全策略)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/08/31/native-drag/">原生拖放</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/08/17/email-read-adaption/">邮件读信页的自适应方案</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/07/07/file-upload-formdata/">Formdata异步上传文件的实现</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+<section class="about-me">
+  <h1>关于我</h1>
+  <div class="thumb">
+      <span></span>
+      <p>三重水</p>
+      <p>学习，积累，反思，阅读，分享</p>
+  </div>  
+  <p><a href="https://github.com/wenyang12" target="_blank">github</a><a href="http://wenyang12.github.io/" target="_blank">博客</a><a
+          href="https://www.qdfuns.com/u/13989/works/articles" target="_blank">前端网</a>
+          <!-- <a href="http://wenyang.sinaapp.com/" target="_blank">笔记</a>
+          <a href="http://ywenblog.sinaapp.com/" target="_blank">WordPress</a> -->
+        </p>
+</section>
+<section>
+    <h1>标签</h1>
+    <div class="cloud">
+        <a style="font-size: 159%" href="/blog/categories/node-dot-jskuang-jia/">Node.js框架</a>
+<a style="font-size: 90%" href="/blog/categories/adb/">adb</a>
+<a style="font-size: 145%" href="/blog/categories/ajax/">ajax</a>
+<a style="font-size: 90%" href="/blog/categories/bootstrap/">bootstrap</a>
+<a style="font-size: 90%" href="/blog/categories/csp/">csp</a>
+<a style="font-size: 90%" href="/blog/categories/cssyu-chu-li-qi/">css预处理器</a>
+<a style="font-size: 90%" href="/blog/categories/email/">email</a>
+<a style="font-size: 90%" href="/blog/categories/es5/">es5</a>
+<a style="font-size: 90%" href="/blog/categories/express/">express</a>
+<a style="font-size: 124%" href="/blog/categories/git/">git</a>
+<a style="font-size: 90%" href="/blog/categories/grunt/">grunt</a>
+<a style="font-size: 170%" href="/blog/categories/html5/">html5</a>
+<a style="font-size: 90%" href="/blog/categories/jquerycha-jian/">jQuery插件</a>
+<a style="font-size: 145%" href="/blog/categories/javascript/">javascript</a>
+<a style="font-size: 90%" href="/blog/categories/jquery/">jquery</a>
+<a style="font-size: 90%" href="/blog/categories/jquery-dot-validation/">jquery.validation</a>
+<a style="font-size: 90%" href="/blog/categories/less/">less</a>
+<a style="font-size: 145%" href="/blog/categories/loopback/">loopback</a>
+<a style="font-size: 90%" href="/blog/categories/markdown/">markdown</a>
+<a style="font-size: 145%" href="/blog/categories/mongodb/">mongodb</a>
+<a style="font-size: 124%" href="/blog/categories/octopress/">octopress</a>
+<a style="font-size: 90%" href="/blog/categories/react/">react</a>
+<a style="font-size: 90%" href="/blog/categories/sass/">sass</a>
+<a style="font-size: 124%" href="/blog/categories/spm/">spm</a>
+<a style="font-size: 90%" href="/blog/categories/webworker/">webWorker</a>
+<a style="font-size: 90%" href="/blog/categories/websoket/">websoket</a>
+<a style="font-size: 90%" href="/blog/categories/wordpress/">wordpress</a>
+<a style="font-size: 90%" href="/blog/categories/zhong-jie-zhe-mo-shi/">中介者模式</a>
+<a style="font-size: 90%" href="/blog/categories/dai-li-mo-shi/">代理模式</a>
+<a style="font-size: 90%" href="/blog/categories/dao-ji-shi/">倒计时</a>
+<a style="font-size: 90%" href="/blog/categories/nei-rong-an-quan-ce-lue/">内容安全策略</a>
+<a style="font-size: 90%" href="/blog/categories/qian-duan-gou-jian-gong-ju/">前端构建工具</a>
+<a style="font-size: 90%" href="/blog/categories/yuan-xing-mo-shi/">原型模式</a>
+<a style="font-size: 90%" href="/blog/categories/fu-xuan-kuang-zu-jian/">复选框组件</a>
+<a style="font-size: 90%" href="/blog/categories/dan-chu-kuang/">弹出框</a>
+<a style="font-size: 90%" href="/blog/categories/tuo-fang/">拖放</a>
+<a style="font-size: 124%" href="/blog/categories/wen-jian-shang-chuan/">文件上传</a>
+<a style="font-size: 90%" href="/blog/categories/jian-ce-shu-ju-lei-xing/">检测数据类型</a>
+<a style="font-size: 124%" href="/blog/categories/mo-kuai-bao/">模块包</a>
+<a style="font-size: 90%" href="/blog/categories/gun-dong-jian-ting/">滚动监听</a>
+<a style="font-size: 145%" href="/blog/categories/pu-bu-liu/">瀑布流</a>
+<a style="font-size: 90%" href="/blog/categories/deng-lu-zhu-ce-mo-ban/">登陆注册模板</a>
+<a style="font-size: 90%" href="/blog/categories/liao-tian-shi/">聊天室</a>
+<a style="font-size: 90%" href="/blog/categories/zi-gua-ying/">自适应</a>
+<a style="font-size: 90%" href="/blog/categories/guan-cha-zhe-mo-shi/">观察者模式</a>
+<a style="font-size: 159%" href="/blog/categories/she-ji-mo-shi/">设计模式</a>
+<a style="font-size: 90%" href="/blog/categories/diao-shi-webview/">调试webview</a>
+<a style="font-size: 90%" href="/blog/categories/xuan-xiang-qia/">选项卡</a>
+<a style="font-size: 90%" href="/blog/categories/mian-shi/">面试</a>
+<a style="font-size: 90%" href="/blog/categories/shu-biao-shi-jian/">鼠标事件</a>
+
+    </div>
+</section>
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><div class="wrapper">
+<p>
+  Copyright &copy; 2018 - 三重水 -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a>&nbsp;<a href="http://tongji.baidu.com/web/welcome/ico?s=ddb3466dedfe096084bfb3626c5d2311">百度统计</a></span>
+</p>
+</div>
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">(function(){document.write(unescape('%3Cdiv id="bdcs"%3E%3C/div%3E'));var bdcs = document.createElement('script');bdcs.type = 'text/javascript';bdcs.async = true;bdcs.src = 'http://znsv.baidu.com/customer_search/api/js?sid=5545127454396687048' + '&plate_url=' + encodeURIComponent(window.location.href) + '&t=' + Math.ceil(new Date()/3600000);var s = document.getElementsByTagName('script')[0];s.parentNode.insertBefore(bdcs, s);})();</script>
+</body>
+</html>

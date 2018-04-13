@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: 检测数据类型 | 三重水的博客]]></title>
+  <link href="http://wenyang12.github.io/blog/categories/jian-ce-shu-ju-lei-xing/atom.xml" rel="self"/>
+  <link href="http://wenyang12.github.io/"/>
+  <updated>2018-04-13T14:54:38+08:00</updated>
+  <id>http://wenyang12.github.io/</id>
+  <author>
+    <name><![CDATA[三重水]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[安全监测javascript基本数据类型和内置对象]]></title>
+    <link href="http://wenyang12.github.io/blog/2015/06/04/safe-checkout-javascript-type/"/>
+    <updated>2015-06-04T17:13:36+08:00</updated>
+    <id>http://wenyang12.github.io/blog/2015/06/04/safe-checkout-javascript-type</id>
+    <content type="html"><![CDATA[<h2>实现代码</h2>
+
+<pre><code>//参数：o表示监测的值
+/*返回值：返回字符串“undefined”, "number", "boolean", "string" ,"function", "regexp" ,"array", "date", "error", "object" 或 "null" */
+function typeOf(o){
+    var _toString =  Object.prototype.toString;
+    // 获取对象的toString()方法引用
+    //列举基本数据类型和内置对象类型，可以进一步补充该数组的监测数据类型范围
+    var _type = {
+        "undefined" : "undefined",
+        "number" : "number",
+        "boolean" : "boolean",
+        "string" : "string",
+        "[object Function]" : "function",
+        "[object RegExp]" : "regexp",
+        "[object Array]" : "array",
+        "[object Date]" : "date",
+        "[object Error]" : "error"
+    };
+    return _type[typeof o] || _type[_toString.call(o)] || (o ? "object" : "null");
+}
+//测试
+console.log(typeOf(undefined));// "undefined"
+console.log(typeOf(2));// "number"
+console.log(typeOf(true));// "boolean"
+console.log(typeOf("hello"));// "string"
+console.log(typeOf(function(){}));// "function"
+console.log(typeOf(/hello/));// "regexp"
+console.log(typeOf([1,2,3]));// "array"
+console.log(typeOf(new Date()));// "date"
+console.log(typeOf(new Error()));// "error"
+console.log(typeOf({}));// "object"
+console.log(typeOf(null));// "null"
+</code></pre>
+
+<blockquote><p>节选自书&ndash;《编写高质量代码》</p></blockquote>
+]]></content>
+  </entry>
+  
+</feed>

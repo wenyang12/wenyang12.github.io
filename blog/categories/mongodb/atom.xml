@@ -1,0 +1,796 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Mongodb | 三重水的博客]]></title>
+  <link href="http://wenyang12.github.io/blog/categories/mongodb/atom.xml" rel="self"/>
+  <link href="http://wenyang12.github.io/"/>
+  <updated>2018-04-13T14:54:38+08:00</updated>
+  <id>http://wenyang12.github.io/</id>
+  <author>
+    <name><![CDATA[三重水]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Node.js框架lookback学习三]]></title>
+    <link href="http://wenyang12.github.io/blog/2015/12/16/loopback-study-3/"/>
+    <updated>2015-12-16T16:37:56+08:00</updated>
+    <id>http://wenyang12.github.io/blog/2015/12/16/loopback-study-3</id>
+    <content type="html"><![CDATA[<h2>loopback注册后发送邮箱验证</h2>
+
+<p><strong>开始</strong></p>
+
+<p>安装loopback源码（要是不知道slc命令的可以先看我的<a href="{{%20root_url%20}}/blog/2015/12/16/loopback-study-1/">Node.js框架lookback学习一</a>）</p>
+
+<blockquote><p>$ slc loopback</p></blockquote>
+
+<p>创建一个基于User的模型WenUsers(这个名字是随便取的)</p>
+
+<blockquote><p>$ slc loopback:model</p></blockquote>
+
+<pre><code>? Enter the model name: WenUsers
+? Enter the model name: WenUsers
+? Select the data-source to attach WenUsers to: db (memory)
+? Select model's base class User
+? Expose WenUsers via the REST API? Yes
+? Common model or server only? common
+Let's add some WenUsers properties now.
+Enter an empty property name when done.
+? Property name:
+</code></pre>
+
+<p>此时源码会多出目录<code>./common/models/</code>,在这个目录下会多出两个文件<code>wen-users.js</code>和<code>wen-users.json</code></p>
+
+<!--more-->
+
+
+<p>编辑<code>wen-users.js</code> 文件</p>
+
+<pre><code>module.exports = function(WenUsers) {
+  WenUsers.sayHi = function(callback) {//定义一个http接口方法
+    callback(null, 'hi');
+  };
+  WenUsers.remoteMethod(//把方法暴露给http接口
+    'sayHi',
+    {
+      'accepts': [],
+      'returns':[
+        {'arg': 'result','type': 'string'}
+      ],
+      'http':{
+        'verb': 'get',
+        'path': '/say-hi'
+      }
+    }
+  );
+  WenUsers.afterRemote('create',function(context, user, next) {//注册后的回调
+    console.log("&gt; user.afterRemote triggered");
+    var option={//配置邮件发送参数
+      type: 'email',
+      to: user.email, //邮件接收方，即注册时填入的有限地址
+      from: '408523614@qq.com',//邮件发送方
+      subject: 'Thanks for registering.',//发送的邮件标题
+      redirect: '/'//点击发送到邮件的链接激活账号后的回调http地址
+    };
+    user.verify(option, next);
+  })
+};
+</code></pre>
+
+<blockquote><p>以上代码，我们暴露了一个http接口方法sayHi,用于测试，此时你运行项目<code>slc run</code>,打开链接<a href="http://localhost:3000/explorer">http://localhost:3000/explorer</a> 就会看到页面多出了一个WenUsers接口，在接口下边多出了一个<code>WenUsers/say-hi</code>方法接口（说明刚创建的模型WenUsers接口是没问题的）</p></blockquote>
+
+<p>编辑<code>wen-users.json</code> 文件</p>
+
+<pre><code>{
+  "name": "WenUsers",
+  "base": "User",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {},
+  "validations": [],
+  "relations": {},
+  "acls": [
+    {
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "accessType": "READ",
+      "permission": "ALLOW"
+    }
+  ],
+  "methods": {}
+}
+</code></pre>
+
+<blockquote><p>acls这个配置是权限配置，让所有用户都可以访问自己定义的接口。</p></blockquote>
+
+<p>配置<code>.server/model-config.json</code>这个文件，即配置邮件数据源的指定,在文件的最后加入，代码如下：</p>
+
+<pre><code>"WenUsers": {
+    "dataSource": "db",
+    "public": true,
+    "options": {
+      "emailVerificationRequired": true
+    }
+  },
+  "Email":{
+    "dataSource": "email"
+  }
+</code></pre>
+
+<p>配置<code>./server/datasources.json</code>这个文件，即配置邮件数据源，在文件的最后加入，代码如下：</p>
+
+<pre><code> "email":{
+    "name":"email",
+    "connector": "mail",
+    "transports": [
+      {
+        "type": "smtp",
+        "host": "smtp.qq.com",
+        "secure": true,
+        "port": 465,
+        "tls": {
+          "rejectUnauthorized": false
+        },
+        "auth":{
+          "user": "408523614@qq.com",
+          "pass": "这里输入你的邮箱密码"
+        }
+      }
+    ]
+  }
+</code></pre>
+
+<blockquote><p>这里我填入的是我的qq邮箱，这个邮箱是用于发送配置的，即用这个邮箱给你待会注册的用户填入的邮箱，发送信息。</p></blockquote>
+
+<p>改一下<code>./server/config.json</code>这个文件中的host，发送邮件的时候会用到，本地测试一般都是127.0.0.1或localhost，修改如下图所示：</p>
+
+<pre><code>{
+    "host": "localhost"
+}
+</code></pre>
+
+<p>运行项目，测试注册一个用户，看是否会发送邮件，要是成功的话会看到如图所示：</p>
+
+<p><img src="{{%20root_url%20}}/images/loopback-pic-5-1.png" alt="测试注册发送邮件图" /></p>
+
+<blockquote><p>以上代码会多出了 <code>"verificationToken"</code>这个字段，这个字段的生成是用来验证登陆的。</p></blockquote>
+
+<p>此时登陆，是不成功的，如图：</p>
+
+<p><img src="{{%20root_url%20}}/images/loopback-pic-5-2.png" alt="测试注册发送邮件图" /></p>
+
+<p>打开你邮件收到的链接，即激活了用户，然后再登陆测试,此时即可成功登陆，会返回一个ttl，如图所示：</p>
+
+<p><img src="{{%20root_url%20}}/images/loopback-pic-5-3.png" alt="测试注册发送邮件图" /></p>
+
+<p>以上源码可以在我的github上下载<a href="https://github.com/wenyang12/loopback-email-test">loopback-email-test</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Node.js框架lookback学习二]]></title>
+    <link href="http://wenyang12.github.io/blog/2015/12/16/loopback-study-2/"/>
+    <updated>2015-12-16T15:51:35+08:00</updated>
+    <id>http://wenyang12.github.io/blog/2015/12/16/loopback-study-2</id>
+    <content type="html"><![CDATA[<h2>绑定github账号登陆</h2>
+
+<p><strong>准备</strong></p>
+
+<p>首先进入自己github的这个目录<a href="https://github.com/settings/developers">https://github.com/settings/developers</a></p>
+
+<p>然后注册一个新应用，如下图所示</p>
+
+<p><img src="{{%20root_url%20}}/images/loopback-pic-4.png" alt="注册新应用图" /></p>
+
+<p>第三个应用描述可以不填</p>
+
+<p>注册好后会生成一个&ldquo;clientID&rdquo;和 &ldquo;clientSecret&rdquo;;（用来配置providers.json的）</p>
+
+<p><strong>开始</strong></p>
+
+<p>首先下载测试源码到本地</p>
+
+<blockquote><p>git clone <a href="https://github.com/strongloop/loopback-example-passport">https://github.com/strongloop/loopback-example-passport</a></p></blockquote>
+
+<!--more-->
+
+
+<p>安装依赖</p>
+
+<blockquote><p>$ npm install</p>
+
+<p>$ npm install passport-github &ndash;save</p></blockquote>
+
+<p>配置providers.json(我们把providers.json.template这个文件复制一份出来，然后去掉后缀template，然后在这个基础上配置)</p>
+
+<pre><code>{
+  "local": {
+    "provider": "local",
+    "module": "passport-local",
+    "usernameField": "username",
+    "passwordField": "password",
+    "authPath": "/auth/local",
+    "successRedirect": "/auth/account",
+    "failureRedirect": "/local",
+    "failureFlash": true
+  },
+  "github-login": {
+    "provider": "github",
+    "module": "passport-github",
+    "clientID": "这里对应填入刚刚在github注册应用时生成的",
+    "clientSecret": "这里对应填入刚刚在github注册应用时生成的",
+    "callbackURL": "/auth/github/callback",
+    "authPath": "/auth/github",
+    "callbackPath": "/auth/github/callback",
+    "successRedirect": "/auth/account",
+    "failureRedirect": "/login",
+    "scope": ["email"],
+    "failureFlash": true
+  }
+}
+</code></pre>
+
+<p>写入一个github测试的登陆入口，打开./loopback-example-passport/server/views/pages/login.jade 这个文件，添加一行li，如：</p>
+
+<pre><code>block content
+  .row
+    .col-md-12
+      h1 Login:
+      ul.list-inline.list-unstyled
+        li
+          a.btn.btn-primary(href='/local') Login with local account
+        li
+          a.btn.btn-primary(href="/auth/facebook") Login with Facebook
+        li
+          a.btn.btn-primary(href="/auth/google") Login with Google
+        li
+          a.btn.btn-primary(href="/auth/twitter") Login with Twitter
+        li
+          a.btn.btn-primary(href="/auth/github") Login with github
+      br
+      if (messages.error)
+        p
+          span(style="color:red")= messages.error
+</code></pre>
+
+<p>这样就大功告成了，启动应用来测试吧</p>
+
+<blockquote><p>node .</p></blockquote>
+
+<p>打开<a href="http://localhost:3000/login">http://localhost:3000/login</a> 点击<code>Login with github</code> 按钮登录。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Node.js框架lookback学习一]]></title>
+    <link href="http://wenyang12.github.io/blog/2015/12/10/lookback-study-1/"/>
+    <updated>2015-12-10T10:41:59+08:00</updated>
+    <id>http://wenyang12.github.io/blog/2015/12/10/lookback-study-1</id>
+    <content type="html"><![CDATA[<ul>
+<li><a href="#1">loopback与express的关系</a></li>
+<li><a href="#2">loopback是一个MVC框架，分别包含哪些部分</a></li>
+<li><a href="#3">loopback源代码架构介绍</a></li>
+<li><a href="#4">安装strongloop工具链并创建项目</a></li>
+<li><a href="#5">测试注册登陆效果</a></li>
+<li><a href="#6">配置mongodb</a></li>
+<li><a href="#7">配置环境变量</a></li>
+</ul>
+
+
+<h2 id="1">loopback与express的关系</h2>
+
+
+<ul>
+<li>express是内核
+
+<ul>
+<li>不应该直接使用在商业项目</li>
+<li>粒度太小</li>
+<li>使用者需要handle太多细节</li>
+</ul>
+</li>
+<li>loopback是工具
+
+<ul>
+<li>对于搭建一个Web2.0即可交互的网站系统 粒度合适</li>
+</ul>
+</li>
+</ul>
+
+
+<h2 id="2">loopback是一个MVC框架，分别包含哪些部分</h2>
+
+
+
+
+<!--more-->
+
+
+<ul>
+<li>模型系统
+
+<ul>
+<li>PersistentModel</li>
+<li>鼓励使用者将大部分商业逻辑写于在模型中完成</li>
+</ul>
+</li>
+<li>控制器
+
+<ul>
+<li>remote methods</li>
+<li>remote hooks</li>
+</ul>
+</li>
+<li>视图（沿用express的视图模型）</li>
+<li>loopback组件
+
+<ul>
+<li>loopback-component-passport</li>
+<li>loopback-component-storage</li>
+<li>…</li>
+</ul>
+</li>
+</ul>
+
+
+<h2 id="3">loopback源代码架构介绍</h2>
+
+
+<p>源代码地址：<a href="https://github.com/strongloop/loopback">https://github.com/strongloop/loopback</a></p>
+
+<p>其中主要看common/models 这个目录下的结构，它里边的js都是基于面向对象编程写的。每个js都对应着一个类，跟<a href="https://apidocs.strongloop.com/loopback/">loopback文档</a>一一对应</p>
+
+<h2 id="4">安装strongloop工具链并创建项目</h2>
+
+
+<p>安装全局的<a href="https://strongloop.com/">strongloop</a></p>
+
+<blockquote><p>$ npm install -g strongloop</p></blockquote>
+
+<p>创建lookback项目(这里我输入的项目名为loopback-test)</p>
+
+<blockquote><p>$ slc loopback</p></blockquote>
+
+<p>运行项目</p>
+
+<blockquote><p>$ slc run</p></blockquote>
+
+<p>在浏览器输入<a href="http://localhost:3000/explorer">http://localhost:3000/explorer</a> 即可看到效果</p>
+
+<p><strong>或者你也可以不安装strongloop，直接到loopback的github下clone源代码下来</strong></p>
+
+<blockquote><p>$ git clone <a href="https://github.com/strongloop/loopback.git">https://github.com/strongloop/loopback.git</a></p></blockquote>
+
+<p>安装依赖</p>
+
+<blockquote><p>$ npm install</p></blockquote>
+
+<p>运行项目</p>
+
+<blockquote><p>$ node .</p></blockquote>
+
+<p>接下来我们创建一个模型model（一个模型对应一个数据表）</p>
+
+<blockquote><p>$ slc lookback:model</p></blockquote>
+
+<p>输入以上命令之后，会提示输入名称，然后输入字段名，字段名的类型等，假如输入的简略代码如下：
+<code>
+? Enter model name：WenUsers
+? Select the data-source to attach WenUsers to: db(memory) //选择数据源，即选用内存来存储数据
+? Select model's base class: User //让WenUsers模型继承内建的User类
+? ustom plural from(used to build REST URL):users //构建通过url访问这个WenUsers类的名称
+? Property name：fullname//定义自己需要的字段名
+? Proterty type: string //选择该字段的类型
+? Required? NO  //提交时该字段的值是否必须输入，这里现在NO，即可选
+</code></p>
+
+<p>建完之后，源代码会多出./common/models/这个路径，在这个路径下会有两个文件，文件结构（你也可以手动自己创建这些文件就不需要用strongloop构建了）为：</p>
+
+<ul>
+<li>common
+
+<ul>
+<li>models
+
+<ul>
+<li>wen-users.js</li>
+<li>wen-users.json</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+
+<p>wen-users.js</p>
+
+<pre><code>module.exports = function(WenUsers) {
+  //add code 可以在这里给模型WenUsers添加方法
+};
+</code></pre>
+
+<p>wen-users.json</p>
+
+<pre><code>{
+  "name": "WenUsers",
+  "plural": "users",
+  "base": "User",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "fullname": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}
+</code></pre>
+
+<p>而在./server/model-config.json中会添加一个配置WenUsers</p>
+
+<pre><code>{
+  "_meta": {
+    "sources": [
+      "loopback/common/models",
+      "loopback/server/models",
+      "../common/models",
+      "./models"
+    ],
+    "mixins": [
+      "loopback/common/mixins",
+      "loopback/server/mixins",
+      "../common/mixins",
+      "./mixins"
+    ]
+  },
+  "Users": {
+    "dataSource":"db"
+  },
+  "AccessToken": {
+    "dataSource": "db",
+    "public": false
+  },
+  "ACL": {
+    "dataSource": "db",
+    "public": false
+  },
+  "RoleMapping": {
+    "dataSource": "db",
+    "public": false
+  },
+  "Role": {
+    "dataSource": "db",
+    "public": false
+  },
+  "WenUsers": {
+    "dataSource": "db",
+    "public": true
+  }
+}
+</code></pre>
+
+<p>此时运行项目<code>$ slc run</code>  在浏览器<a href="http://localhost:3000/explorer">http://localhost:3000/explorer</a> 预览 会多出一个WenUsers调试接口</p>
+
+<p>接着我们要把内建的Users配置屏蔽掉（不屏蔽掉的话，下面我们调试WenUsers接口的时候会有问题），即让浏览器页面只显示WenUsers调试接口</p>
+
+<p>./server/model-config.json</p>
+
+<pre><code>{
+  "_meta": {
+    "sources": [
+      "loopback/common/models",
+      "loopback/server/models",
+      "../common/models",
+      "./models"
+    ],
+    "mixins": [
+      "loopback/common/mixins",
+      "loopback/server/mixins",
+      "../common/mixins",
+      "./mixins"
+    ]
+  },
+  "AccessToken": {
+    "dataSource": "db",
+    "public": false
+  },
+  "ACL": {
+    "dataSource": "db",
+    "public": false
+  },
+  "RoleMapping": {
+    "dataSource": "db",
+    "public": false
+  },
+  "Role": {
+    "dataSource": "db",
+    "public": false
+  },
+  "WenUsers": {
+    "dataSource": "db",
+    "public": true
+  }
+}
+</code></pre>
+
+<p>接下来我们想要给WenUsers加入一个sayHi方法，然后暴露接口给http，即可以通过http访问。该如何实现呢？</p>
+
+<p>首先，编辑一下这个文件<code>./common/models/wen-users.js</code></p>
+
+<p>wen-users.js</p>
+
+<pre><code>module.exports = function(WenUsers) {
+  WenUsers.sayHi = function(callback) {
+    callback(null, 'hi');
+  };
+  WenUsers.remoteMethod(
+    'sayHi',
+    {
+      'accepts': [],
+      'returns':[
+        {'arg': 'result','type': 'string'}
+      ],
+      'http':{
+        'verb': 'get',
+        'path': '/say-hi'
+      }
+    }
+  )
+};
+</code></pre>
+
+<p>接着在<code>./common/models/wen-users.json</code>配置访问权限</p>
+
+<p>wen-users.json</p>
+
+<pre><code>{
+  "name": "WenUsers",
+  "plural": "users",
+  "base": "User",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "fullname": {
+      "type": "string"
+    },
+    "age": {
+      "type": "number"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [
+    {
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "sayHi"
+    }
+  ],
+  "methods": {}
+}
+</code></pre>
+
+<p>现在重新运行项目<code>slc run</code> ,预览会发现，多出了一个<code>/users/say-hi</code>方法</p>
+
+<p>点击 <code>Try it out！</code> 即会返回测试效果如下图：</p>
+
+<p><img src="{{%20url_root%20}}/images/loopback-pic-1.png" alt="测试图" /></p>
+
+<p>成功返回了<code>{"result": "hi"}</code></p>
+
+<h2 id="5">测试注册登陆效果</h2>
+
+
+<p><strong>注册测试</strong></p>
+
+<p>在页面中打开<code>/users</code> 注册，如图：</p>
+
+<p><img src="{{%20url_root%20}}/images/loopback-pic-2.png" alt="测试图" /></p>
+
+<p>点击<code>Try it out！</code> 按钮，注册成功会返回状态码200，如图：</p>
+
+<p><img src="{{%20url_root%20}}/images/loopback-pic-2-1.png" alt="测试图" /></p>
+
+<p><strong>登录测试</strong></p>
+
+<p>在页面中打开<code>/users/login</code> 登录，如图：</p>
+
+<p><img src="{{%20url_root%20}}/images/loopback-pic-3.png" alt="测试图" /></p>
+
+<p>点击<code>Try it out！</code> 按钮，登录成功会返回状态码200，如图：</p>
+
+<p><img src="{{%20url_root%20}}/images/loopback-pic-3-1.png" alt="测试图" /></p>
+
+<blockquote><p>以上的数据是保存在内存中的，关闭项目，在重启项目之后，你会发现登录失败了，你刚刚注册的数据没有了，那怎么样才能让数据保留呢？</p></blockquote>
+
+<h2 id="6">配置mongodb</h2>
+
+
+<p><strong><em>首先在你的电脑上安装<a href="http://www.mongodb.org">mongodb</a>。</em></strong></p>
+
+<p>MongoDB提供了可用于32位和64位系统的预编译二进制包，你可以从MongoDB官网下载安装，MongoDB预编译二进制包下载地址：<a href="http://www.mongodb.org/downloads">http://www.mongodb.org/downloads</a></p>
+
+<p>不会如何安装的可以参考<a href="http://www.runoob.com/mongodb/mongodb-window-install.html">菜鸟教程mongodb安装</a></p>
+
+<blockquote><p>别忘记了创建数据目录 MongoDB将数据目录存储在 db 目录下。但是这个数据目录不会主动创建，我们在安装完成后需要创建它。请注意，数据目录应该放在根目录下（(如： C:\ 或者 D:\ 等 )。</p></blockquote>
+
+<p><strong>接下来要运用到mongodb数据库来保存用户数据,即要在loopback上添加mongodb数据源</strong></p>
+
+<blockquote><p>$ slc loopback:datasource</p></blockquote>
+
+<p>接着填写相关的信息</p>
+
+<pre><code>? Enter the data-source name: mongodb
+? Select the Connector for mongodb: MongoDB(supported by StrongLoop)
+</code></pre>
+
+<p>其实以上操作就是在<code>./server/datasources.json</code> 这个文件里添加了一个&ldquo;mongodb&rdquo;属性配置，代码如下：</p>
+
+<pre><code>{
+  "db": {
+    "name": "db",
+    "connector": "memory"
+  },
+  "mongodb": {
+    "url": "mongodb://localhost:27017/loopback-test",
+    "name": "mongodb",
+    "connector": "mongodb"
+  }
+}
+</code></pre>
+
+<blockquote><p>其中以上代码需要手动配置数据源的链接字符串&ldquo;mongodb://localhost:27017/loopback-test&rdquo;（项目的名称即用来充当了数据库的名称）。</p></blockquote>
+
+<p><strong><em>安装依赖</em></strong></p>
+
+<blockquote><p>$ npm install loopback-connector-mongodb &ndash;save  //这里安装的是loopback链接mongodb的连接器</p></blockquote>
+
+<p><strong><em>接着编辑代码<code>./server/model-config.json</code></em></strong></p>
+
+<p>让以下数据模型都采用mongodb数据源来存储数据，代码如下：</p>
+
+<pre><code>{
+  "_meta": {
+    "sources": [
+      "loopback/common/models",
+      "loopback/server/models",
+      "../common/models",
+      "./models"
+    ],
+    "mixins": [
+      "loopback/common/mixins",
+      "loopback/server/mixins",
+      "../common/mixins",
+      "./mixins"
+    ]
+  },
+  "AccessToken": {
+    "dataSource": "mongodb",
+    "public": false
+  },
+  "ACL": {
+    "dataSource": "mongodb",
+    "public": false
+  },
+  "RoleMapping": {
+    "dataSource": "mongodb",
+    "public": false
+  },
+  "Role": {
+    "dataSource": "mongodb",
+    "public": false
+  },
+  "WenUsers": {
+    "dataSource": "mongodb",
+    "public": true
+  }
+}
+</code></pre>
+
+<blockquote><p>即把原先的<code>"dataSource"："db"</code>都改成<code>"dataSource"："mongodb"</code></p></blockquote>
+
+<p><strong><em>测试运行</em></strong></p>
+
+<p>运行mongodb服务器</p>
+
+<blockquote><p>$ mongod</p></blockquote>
+
+<p>启动项目</p>
+
+<blockquote><p>$ slc run</p></blockquote>
+
+<p>预览重新测试注册，登录，在关掉项目重启项目，再次登录你会发现，登录还是成功的，因为数据已经保存在mongodb里了。</p>
+
+<p><strong><em>在mongodb里查看数据</em></strong></p>
+
+<p>显示所有数据库</p>
+
+<blockquote><p>$ show dbs</p></blockquote>
+
+<p>切换到loopback-test 数据库</p>
+
+<blockquote><p>$ use loopback-test</p></blockquote>
+
+<p>显示当前数据库</p>
+
+<blockquote><p>$ db</p></blockquote>
+
+<p>显示当前数据库下的集合</p>
+
+<blockquote><p>$ show collections</p></blockquote>
+
+<p>查看某个模型数据</p>
+
+<blockquote><p>$ db.WenUsers.findOne()</p></blockquote>
+
+<h2 id="7">配置环境变量</h2>
+
+
+<p>设置环境变量是为了，在开发环境里使用一个数据库，然后在生产环境里使用另一个数据库，互相使用对应的数据库。</p>
+
+<p>其实配置不同数据库，就是增加一个js文件，或者json文件都可以</p>
+
+<p>在<code>./server/</code> 这个目录下，增加一个datasources.dev.js文件，然后编辑如下：</p>
+
+<p>datasources.dev.js</p>
+
+<pre><code>exports.mongodb = {
+  'url': 'mongodb://localhost:27017/loopback-test-dev',
+  'name': 'mongodb',
+  'connector': 'mongodb'
+};
+</code></pre>
+
+<h2>OR</h2>
+
+<p>datasources.dev.json</p>
+
+<pre><code>{
+  "db": {
+    "name": "db",
+    "connector": "memory"
+  },
+  "mongodb": {
+    "url": "mongodb://localhost:27017/loopback-test-dev",
+    "name": "mongodb",
+    "connector": "mongodb"
+  }
+}
+</code></pre>
+
+<p>然后在开发环境里，要连接这个数据库loopback-test-dev即可输入以下命令：</p>
+
+<blockquote><p>$ set NODE_ENV=dev</p></blockquote>
+
+<p>接着运行项目，即可（此时要重新注册，然后登录测试，因为用了新的数据库）</p>
+
+<blockquote><p>$ slc run</p></blockquote>
+
+<p>要想切换回使用刚刚的数据库（loopback-test），设置环境变量为空即可，因为默认使用的数据库，就是文件./server/datasources.json指向的数据库</p>
+
+<blockquote><p>$ set NODE_ENV=&ldquo;&rdquo;
+$ slc run</p></blockquote>
+
+<h2>参考质料</h2>
+
+<p><a href="http://www.jikexueyuan.com/course/797_1.html">极客学院使用 loopback 快速搭建用户系统视频</a></p>
+
+<p><a href="http://www.runoob.com/mongodb/mongodb-window-install.html">菜鸟教程mongodb安装</a></p>
+
+<p>以上源码可以到我的github上下载<a href="https://github.com/wenyang12/loopback-email-test/tree/source">loopback测试</a></p>
+]]></content>
+  </entry>
+  
+</feed>

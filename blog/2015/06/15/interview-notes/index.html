@@ -1,0 +1,571 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>面试笔记 - 三重水的博客</title>
+  <meta name="author" content="三重水">
+
+  
+  <meta name="description" content="javascript有几种弹出框，各有什么区别？ alert() 显示带有一段消息和一个确认按钮的警告框。 confirm() 显示带有一段信息以及确认和取消按钮的对话框。 prompt() 显示可提示用户输入的对话框。 最常用的数组方法有哪些？ unshift(), shift(), push &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="baidu-site-verification" content="ipSlYf2c3P" />
+  
+  <link rel="canonical" href="http://wenyang12.github.io/blog/2015/06/15/interview-notes/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="三重水的博客" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<script type="text/javascript">
+
+    function addBlankTargetForLinks () {
+
+        $('a[href^="http"]').each(function(){
+
+            $(this).attr('target', '_blank');
+
+        });
+
+    }
+
+    $(document).bind('DOMNodeInserted', function(event) {
+        addBlankTargetForLinks();
+
+    });
+
+</script>
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?ddb3466dedfe096084bfb3626c5d2311";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">三重水的博客</a></h1>
+  
+    <h2>在变化当中不断记录自己，充实自己，浏览自己</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><div class="wrapper">
+<ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form>
+  <fieldset role="search">
+    <input class="search" id="bdcsMain" type="text" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">首页</a></li>
+  <li><a href="/blog/archives">归档</a></li>
+  <!-- <li><a href="/about-me">关于我</a></li>
+  <li><a href="/wenxun/dist/">相册</a></li> -->
+</ul>
+
+</div></nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">面试笔记</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-06-15T16:55:14+08:00'><span class='date'>2015年06月15日</span> <span class='time'>4:55 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h2>javascript有几种弹出框，各有什么区别？</h2>
+
+<blockquote><p>alert() 显示带有一段消息和一个确认按钮的警告框。</p>
+
+<p>confirm() 显示带有一段信息以及确认和取消按钮的对话框。</p>
+
+<p>prompt() 显示可提示用户输入的对话框。</p></blockquote>
+
+<h2>最常用的数组方法有哪些？</h2>
+
+<blockquote><p>unshift(), shift(), push(), pop(), silce(), splice(), join(), srot(), concat().</p></blockquote>
+
+<h2>javascript如何实现继承？</h2>
+
+<h3>类式继承</h3>
+
+<p>代码：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//一、类式继承：
+</span><span class='line'>//定义一个类式继承的扩展函数
+</span><span class='line'>function extend(subClass, superClass) {
+</span><span class='line'>    var F = function(){};
+</span><span class='line'>    F.prototype = superClass.prototype;
+</span><span class='line'>    subClass.prototype = new F();
+</span><span class='line'>    subClass.superClass = superClass.prototype;
+</span><span class='line'>    subClass.prototype.constructor = subClass;
+</span><span class='line'>    if(superClass.prototype.constructor === Object.prototype.constructor) {
+</span><span class='line'>        superClass.prototype.constructor = superClass;
+</span><span class='line'>    }
+</span><span class='line'>}
+</span><span class='line'>//定义一个父类
+</span><span class='line'>function Person(name) {
+</span><span class='line'>    this.name = name;
+</span><span class='line'>}
+</span><span class='line'>Person.prototype.getName=function(){
+</span><span class='line'>    console.log(this.name);
+</span><span class='line'>};
+</span><span class='line'>//定义一个子类
+</span><span class='line'>function Author(name ,city) {
+</span><span class='line'>    var superClass = Author.superClass.constructor;//引用父类
+</span><span class='line'>    superClass.call(this, name);//用对象冒充的方法，把子类的this和参数传递给父类.从而达到继承父类的属性
+</span><span class='line'>    this.city = city;
+</span><span class='line'>}
+</span><span class='line'>extend(Author, Person);//继承父类的方法
+</span><span class='line'>//定义一个自己的方法
+</span><span class='line'>Author.prototype.getCity=function(){
+</span><span class='line'>    console.log(this.city);
+</span><span class='line'>};
+</span><span class='line'>//测试
+</span><span class='line'>var newAuthor = new Author('wen', 'hainan');
+</span><span class='line'>newAuthor.getName();
+</span><span class='line'>newAuthor.getCity();</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>原型式继承</h3>
+
+<p>代码：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//二、原型继承：
+</span><span class='line'>//定义一个用于原型继承的函数
+</span><span class='line'>function clone(object) {
+</span><span class='line'>    var F = function(){};
+</span><span class='line'>    F.prototype = object;
+</span><span class='line'>    return new F();
+</span><span class='line'>}
+</span><span class='line'>//定义一个对象
+</span><span class='line'>var PersonObject = {
+</span><span class='line'>    name : 'name',
+</span><span class='line'>    getName : function() {
+</span><span class='line'>        console.log(this.name);
+</span><span class='line'>    }
+</span><span class='line'>};
+</span><span class='line'>var AuthorObject = clone(PersonObject);//继承父类Person的属性和方法
+</span><span class='line'>//测试
+</span><span class='line'>AuthorObject.name = 'wen';//定义一个自己的属性name用于覆盖父类的name属性，也可以定义一个自己的方法，用于覆盖父类的方法（ 注：父类的属性和方法还是不会改变，因为子类定义自己的属性和方法只是一个覆盖，而不是修改父类的属性和方法）
+</span><span class='line'>AuthorObject.getName();</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>面向对象有几种写法？</h2>
+
+<p>面向对象的4种写法
+代码：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//第一种：
+</span><span class='line'>function CicleOne(r) {
+</span><span class='line'>    this.r = r;
+</span><span class='line'>    this.area = function() {
+</span><span class='line'>        console.log('第一种：'+Math.PI * this.r * this.r) ;
+</span><span class='line'>    };
+</span><span class='line'>}
+</span><span class='line'>//测试
+</span><span class='line'>var newCicle = new CicleOne(2);
+</span><span class='line'>newCicle.area();</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//第二种：
+</span><span class='line'>function CicleTwo(r){
+</span><span class='line'>    this.r = r;
+</span><span class='line'>}
+</span><span class='line'>CicleTwo.prototype.area = function () {
+</span><span class='line'>    console.log('第二种：'+Math.PI * this.r * this.r) ;
+</span><span class='line'>};
+</span><span class='line'>//测试
+</span><span class='line'>var newCicleTwo = new CicleTwo(3);
+</span><span class='line'>newCicleTwo.area();</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//第三种：
+</span><span class='line'>var cicleObjectOne = {
+</span><span class='line'>    r : 1,
+</span><span class='line'>    area : function() {
+</span><span class='line'>     console.log('第三种：'+Math.PI*this.r*this.r)
+</span><span class='line'>    }
+</span><span class='line'>};
+</span><span class='line'>//测试
+</span><span class='line'>cicleObjectOne.r = 6;
+</span><span class='line'>cicleObjectOne.area();</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//第四种：
+</span><span class='line'>var cicleObjectTwo = {};
+</span><span class='line'>cicleObjectTwo.r = 5;
+</span><span class='line'>cicleObjectTwo.area = function() {
+</span><span class='line'>    console.log('第四种：'+Math.PI*this.r*this.r);
+</span><span class='line'>};
+</span><span class='line'>//测试
+</span><span class='line'>cicleObjectTwo.area();</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>使用过哪些javascript框架，各有什么作用？</h2>
+
+<ul>
+<li>jquery:
+  jquery是javascript的函数库，封装了很多方法。然我们写少的代码，做更多的事。</li>
+<li>AngularJS ：
+  AngularJS 通过新的属性和表达式扩展了 HTML。
+  AngularJS 可以构建一个单一页面应用程序。</li>
+</ul>
+
+
+<h2>jquery中的attr()和prop()有什么区别？</h2>
+
+<blockquote><p>当你用attr()获取复选框的checked属性（其中复选框没有设置checked属性）时，它会返回undefined，无论你勾选复选框或取消复选框，它都给你返回undefined；要是给复选框设置了checked属性，则它不管你选中或未选中复选框，他都会返回checked，这不是我们想要的结果。
+而当你使用prop获取复选框的checked属性时，它会对应你选中或未选中返回true或false；
+所以，当我们需要处理内置属性的值是true或false时，使用prop()就可以达到我们预期想要的处理效果。</p></blockquote>
+
+<h2>什么是xss攻击，如何防御xss攻击？</h2>
+
+<p>xss攻击是跨站脚本攻击。xss是经常出现在web应用中的安全漏洞，它允许恶意web用户将代码植入到提供给其他用户使用的页面中。
+防御：
+-对用户提交的代码进行匹配检查，对提交的信息含有“javascript”的代码进行过滤。
+-对所有用户提交内容进行可靠的输入验证，包括对URL、查询关键字、HTTP头、POST数据等，仅接受指定长度范围内、采用适当格式、采用所预期的字符的内容提交，对其他的一律过滤。
+-实现Session标记(session tokens)、CAPTCHA系统或者HTTP引用头检查，以防功能被第三方网站所执行。
+-确认接收的的内容被妥善的规范化，仅包含最小的、安全的标签(没有javascript)，去掉任何对远程内容的引用(尤其是样式表和javascript)。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">三重水</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2015-06-15T16:55:14+08:00'><span class='date'>2015年06月15日</span> <span class='time'>4:55 pm</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/mian-shi/'>面试</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+  
+  <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style_32x32">
+    <a class="jiathis_button_qzone"></a>
+    <a class="jiathis_button_tsina"></a>
+    <a class="jiathis_button_tqq"></a>
+    <a class="jiathis_button_weixin"></a>
+    <a class="jiathis_button_renren"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+    <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/06/11/utility-popup-box-and-tab/" title="Previous Post: 共用弹出框和选项卡jquery组件写法">&laquo; 共用弹出框和选项卡jquery组件写法</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2015/08/11/asynchronous-upload-file/" title="Next Post: 拖拽文件异步上传">拖拽文件异步上传 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>评论</h1>
+    <div id="disqus_thread" aria-live="polite"><!-- 多说评论框 start -->
+<div class="ds-thread" data-thread-key="/blog/2015/06/15/interview-notes" data-title="面试笔记" data-url="http://wenyang12.github.io/blog/2015/06/15/interview-notes/"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    var duoshuoQuery = {short_name:"ywenblog"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+        || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>近期文章</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2018/01/17/adb-chrome-develop/">Webview的调试方法</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/12/28/csp/">CSP(内容安全策略)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/08/31/native-drag/">原生拖放</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/08/17/email-read-adaption/">邮件读信页的自适应方案</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/07/07/file-upload-formdata/">Formdata异步上传文件的实现</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+<section class="about-me">
+  <h1>关于我</h1>
+  <div class="thumb">
+      <span></span>
+      <p>三重水</p>
+      <p>学习，积累，反思，阅读，分享</p>
+  </div>  
+  <p><a href="https://github.com/wenyang12" target="_blank">github</a><a href="http://wenyang12.github.io/" target="_blank">博客</a><a
+          href="https://www.qdfuns.com/u/13989/works/articles" target="_blank">前端网</a>
+          <!-- <a href="http://wenyang.sinaapp.com/" target="_blank">笔记</a>
+          <a href="http://ywenblog.sinaapp.com/" target="_blank">WordPress</a> -->
+        </p>
+</section>
+<section>
+    <h1>标签</h1>
+    <div class="cloud">
+        <a style="font-size: 159%" href="/blog/categories/node-dot-jskuang-jia/">Node.js框架</a>
+<a style="font-size: 90%" href="/blog/categories/adb/">adb</a>
+<a style="font-size: 145%" href="/blog/categories/ajax/">ajax</a>
+<a style="font-size: 90%" href="/blog/categories/bootstrap/">bootstrap</a>
+<a style="font-size: 90%" href="/blog/categories/csp/">csp</a>
+<a style="font-size: 90%" href="/blog/categories/cssyu-chu-li-qi/">css预处理器</a>
+<a style="font-size: 90%" href="/blog/categories/email/">email</a>
+<a style="font-size: 90%" href="/blog/categories/es5/">es5</a>
+<a style="font-size: 90%" href="/blog/categories/express/">express</a>
+<a style="font-size: 124%" href="/blog/categories/git/">git</a>
+<a style="font-size: 90%" href="/blog/categories/grunt/">grunt</a>
+<a style="font-size: 170%" href="/blog/categories/html5/">html5</a>
+<a style="font-size: 90%" href="/blog/categories/jquerycha-jian/">jQuery插件</a>
+<a style="font-size: 145%" href="/blog/categories/javascript/">javascript</a>
+<a style="font-size: 90%" href="/blog/categories/jquery/">jquery</a>
+<a style="font-size: 90%" href="/blog/categories/jquery-dot-validation/">jquery.validation</a>
+<a style="font-size: 90%" href="/blog/categories/less/">less</a>
+<a style="font-size: 145%" href="/blog/categories/loopback/">loopback</a>
+<a style="font-size: 90%" href="/blog/categories/markdown/">markdown</a>
+<a style="font-size: 145%" href="/blog/categories/mongodb/">mongodb</a>
+<a style="font-size: 124%" href="/blog/categories/octopress/">octopress</a>
+<a style="font-size: 90%" href="/blog/categories/react/">react</a>
+<a style="font-size: 90%" href="/blog/categories/sass/">sass</a>
+<a style="font-size: 124%" href="/blog/categories/spm/">spm</a>
+<a style="font-size: 90%" href="/blog/categories/webworker/">webWorker</a>
+<a style="font-size: 90%" href="/blog/categories/websoket/">websoket</a>
+<a style="font-size: 90%" href="/blog/categories/wordpress/">wordpress</a>
+<a style="font-size: 90%" href="/blog/categories/zhong-jie-zhe-mo-shi/">中介者模式</a>
+<a style="font-size: 90%" href="/blog/categories/dai-li-mo-shi/">代理模式</a>
+<a style="font-size: 90%" href="/blog/categories/dao-ji-shi/">倒计时</a>
+<a style="font-size: 90%" href="/blog/categories/nei-rong-an-quan-ce-lue/">内容安全策略</a>
+<a style="font-size: 90%" href="/blog/categories/qian-duan-gou-jian-gong-ju/">前端构建工具</a>
+<a style="font-size: 90%" href="/blog/categories/yuan-xing-mo-shi/">原型模式</a>
+<a style="font-size: 90%" href="/blog/categories/fu-xuan-kuang-zu-jian/">复选框组件</a>
+<a style="font-size: 90%" href="/blog/categories/dan-chu-kuang/">弹出框</a>
+<a style="font-size: 90%" href="/blog/categories/tuo-fang/">拖放</a>
+<a style="font-size: 124%" href="/blog/categories/wen-jian-shang-chuan/">文件上传</a>
+<a style="font-size: 90%" href="/blog/categories/jian-ce-shu-ju-lei-xing/">检测数据类型</a>
+<a style="font-size: 124%" href="/blog/categories/mo-kuai-bao/">模块包</a>
+<a style="font-size: 90%" href="/blog/categories/gun-dong-jian-ting/">滚动监听</a>
+<a style="font-size: 145%" href="/blog/categories/pu-bu-liu/">瀑布流</a>
+<a style="font-size: 90%" href="/blog/categories/deng-lu-zhu-ce-mo-ban/">登陆注册模板</a>
+<a style="font-size: 90%" href="/blog/categories/liao-tian-shi/">聊天室</a>
+<a style="font-size: 90%" href="/blog/categories/zi-gua-ying/">自适应</a>
+<a style="font-size: 90%" href="/blog/categories/guan-cha-zhe-mo-shi/">观察者模式</a>
+<a style="font-size: 159%" href="/blog/categories/she-ji-mo-shi/">设计模式</a>
+<a style="font-size: 90%" href="/blog/categories/diao-shi-webview/">调试webview</a>
+<a style="font-size: 90%" href="/blog/categories/xuan-xiang-qia/">选项卡</a>
+<a style="font-size: 90%" href="/blog/categories/mian-shi/">面试</a>
+<a style="font-size: 90%" href="/blog/categories/shu-biao-shi-jian/">鼠标事件</a>
+
+    </div>
+</section>
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><div class="wrapper">
+<p>
+  Copyright &copy; 2018 - 三重水 -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a>&nbsp;<a href="http://tongji.baidu.com/web/welcome/ico?s=ddb3466dedfe096084bfb3626c5d2311">百度统计</a></span>
+</p>
+</div>
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">(function(){document.write(unescape('%3Cdiv id="bdcs"%3E%3C/div%3E'));var bdcs = document.createElement('script');bdcs.type = 'text/javascript';bdcs.async = true;bdcs.src = 'http://znsv.baidu.com/customer_search/api/js?sid=5545127454396687048' + '&plate_url=' + encodeURIComponent(window.location.href) + '&t=' + Math.ceil(new Date()/3600000);var s = document.getElementsByTagName('script')[0];s.parentNode.insertBefore(bdcs, s);})();</script>
+</body>
+</html>

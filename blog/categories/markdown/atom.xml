@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Markdown | 三重水的博客]]></title>
+  <link href="http://wenyang12.github.io/blog/categories/markdown/atom.xml" rel="self"/>
+  <link href="http://wenyang12.github.io/"/>
+  <updated>2018-04-13T14:54:38+08:00</updated>
+  <id>http://wenyang12.github.io/</id>
+  <author>
+    <name><![CDATA[三重水]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Octopress 搭建博客静态网站]]></title>
+    <link href="http://wenyang12.github.io/blog/2015/10/29/octopress/"/>
+    <updated>2015-10-29T15:41:51+08:00</updated>
+    <id>http://wenyang12.github.io/blog/2015/10/29/octopress</id>
+    <content type="html"><![CDATA[<h2>一、环境配置</h2>
+
+<ul>
+<li>安装以下软件
+
+<ul>
+<li>Git、Ruby、Devkit、MarkdownPad 的安装与配置
+
+<ul>
+<li><a href="https://git-scm.com/downloads">Git</a> 版本管理工具，将代码托管到GitHub</li>
+<li>Ruby+Devkit 生成静态网页 这两个文件我已放到百度网盘里，点击<a href="http://pan.baidu.com/s/1civpEI">下载</a></li>
+<li>MarkdownPad windows下Markdown语法编辑器（可不用安装，只是为了方便查看或编辑markdown）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>配置
+
+<ul>
+<li>安装好ruby，检查是否安装成功可以运行 <code>ruby -v</code></li>
+<li>Devkit直接解压缩放到你任意文件夹下即可，我放在了D:/根目录下，不用安装，然后在devkit目录下运行<code>ruby dk.rb init</code> 和 <code>ruby dk.rb install</code> 来增强ruby</li>
+</ul>
+</li>
+</ul>
+
+
+<p>PS： 安装ruby后，devkit的作用是为了增强ruby的功能。而安装ruby会自动安装了它自身的包管理器gem，即可使用gem命令</p>
+
+<h2>二、开始安装Octopress</h2>
+
+<ul>
+<li>克隆 Octopress 至本地  可以到<a href="http://octopress.org/">Octopress</a>官网，也有介绍
+<code>
+git clone git://github.com/imathis/octopress.git octopress
+</code></li>
+<li>安装依赖项bundler。 安装了bundler后即可采用bundle命令来安装项目里Gemfile里定义的所有依赖gem，为了不手动gem install [包名] 这样一个个手动安装
+<code>
+gem install bundler
+</code></li>
+<li>安装Gemfile里定义的所有gem包</li>
+</ul>
+
+
+<pre><code>bundle install
+</code></pre>
+
+<p>要是安装有问题，可以再次更新一下所有依赖项，还是不行，可以到ruby的安装目录下手动删除对应安装失败的包，例如我的目录为：<code>C:\Ruby22\lib\ruby\gems\2.2.0</code>下的<code>gems</code>和<code>cache</code>文件夹下删除
+<code>
+bundle update
+</code>
+- 安装并使用默认主题
+<code>
+rake install
+</code>
+- 生成静态页面到public下
+<code>
+rake generate
+</code>
+- 启动服务器
+<code>
+rake preview
+</code>
+- 最后在浏览器中预览，输入地址为 localhost:4000 即可看到博客</p>
+
+<p>PS： 提示ruby SSL_connect returned=1 errno=0 state=SSLv3 read server certificate B: 这个说明ruby没有安装SSL证书，说要https的链接会被服务器拒绝。</p>
+
+<blockquote><p>解决方法：首先在这里下载证书<a href="https://curl.haxx.se/ca/cacert.pem">https://curl.haxx.se/ca/cacert.pem</a>,下载好后，然后再环境变量里设置SSL_CERT_FILE这个环境变量，并把value指向这个文件即可</p></blockquote>
+
+<h2>三、生成博客与单页面</h2>
+
+<ul>
+<li>新建博客
+<code>
+rake new_post['title']
+</code></li>
+<li><p>新建单页面（有两种一些形式）
+<code>
+rake new_page[pagename]
+</code></p>
+
+<blockquote><p>生成的目录结构 source/pagename/index.markdoown
+<code>
+rake new_page[pagename/page.html]
+</code>
+生成的目录结构 source/pagename/page.html</p></blockquote></li>
+<li><p>使用markdown语法书写博客</p>
+
+<ul>
+<li>工具
+
+<ul>
+<li>MarkdownPad 、记事本、Vim Emacs 等都可以</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+
+<h2>四、部署到github上</h2>
+
+<ul>
+<li><p>新建仓库</p>
+
+<blockquote><p>username.github.io
+必须要以这种格式新建仓库，username即是你在github上注册的用户名</p></blockquote></li>
+<li><p>与本地Octopress目录绑定
+<code>
+rake setup_github_pages
+</code>
+输入以上命令后会出现配置，让你输入github上的对应的仓库链接，输入链接回车即可把本地的资源与GitHub绑定并通过git初始化一个<em>deploy文件出来，然后可以用<code>rake deploy</code>命令把本地生成的</em>deploy文件夹下的资源都部署到刚配置仓库的master分支上。</p></li>
+</ul>
+
+
+<p>本地生成的_deploy下的文件其实是把<code>rake generate</code>命令生成到public的所有文件都复制过来而已。所有在使用 <code>rake deploy</code> 命令前应该先使用命令<code>rake generate</code> 先生成public才行。</p>
+
+<blockquote><p>让github与octopress目录绑定</p></blockquote>
+
+<pre><code>rake deploy
+</code></pre>
+
+<blockquote><p>把本地代码部署到github上</p></blockquote>
+
+<h2>五、博客的自定义配置</h2>
+
+<ul>
+<li>完善主配置文件
+
+<ul>
+<li>在_config.yml文件中，配置url、title、author等基本信息</li>
+</ul>
+</li>
+<li>安装主题
+
+<ul>
+<li>把主题文件复制到.themes下，然后通过命令
+<code>
+rake install['主题名字']
+</code>
+
+<blockquote><p>注意：安装主题的时候要备份之前的所有文件，因为安装新主题会覆盖掉之前的所有配置。</p></blockquote></li>
+</ul>
+</li>
+</ul>
+
+
+<h2>六、自定义网站域名</h2>
+
+<ul>
+<li>在github上绑定自定义域名
+
+<ul>
+<li>创建 source/CNAME 文件并指定域名
+<code>
+echo 'domain.com' &gt;&gt; source/CNAME
+</code>
+OR
+<code>
+echo 'www.domain.com' &gt;&gt; source/CNAME
+</code></li>
+</ul>
+</li>
+<li>解析域名至github上
+
+<ul>
+<li><p>使用子域名</p>
+
+<blockquote><p>对于子域名（www.domain.com）,创建CNAME记录指向 charlie.github.io</p></blockquote></li>
+<li><p>使用顶级域名</p>
+
+<blockquote><p>对于顶级域名（domain.com），使用A记录指向 192.30.252.153（154）</p></blockquote></li>
+</ul>
+</li>
+</ul>
+
+
+<h2>七、Gemfile文件的说明</h2>
+
+<h3>设置Gem的版本</h3>
+
+<p>对于一个gem，你最常做的事情就是设置它的版本，如果你不设置版本的话，你也可以说任意的版本都可以。</p>
+
+<p><code>gem "my_gem", "&gt;= 0.0"</code>
+这里有7个操作符供你用来设置你的gem</p>
+
+<ul>
+<li> = Equal To &ldquo;=1.0&rdquo;</li>
+<li> != Not Equal To &ldquo;!=1.0&rdquo;</li>
+<li> > Greater Than &ldquo;>1.0&rdquo;</li>
+<li> &lt; Less Than &ldquo;&lt;1.0&rdquo;</li>
+<li> >= Greater Than or Equal To &ldquo;>=1.0&rdquo;</li>
+<li> &lt;= Less Than or Equal To &ldquo;&lt;=1.0&rdquo;</li>
+<li> ~> Pessimistically Greater Than or Equal To &ldquo;~>1.0&rdquo;</li>
+</ul>
+
+
+<p><strong>Pessimistically Greater Than or Equal To</strong></p>
+
+<p>~> 操作能够让你使用这个gem的未来的某个安全的版本。如果你觉得使用一个大的版本更安全，你能够像下面这样声明.</p>
+
+<p><code>gem "my_gem", "~&gt; 2.0"</code></p>
+
+<p>这能够允许你安装任意的2.x版本的gem，但是3.x版本是不被允许的。或许你对这么宽泛的版本感到不爽，你也可以声明一个更具体的版本，如下</p>
+
+<p><code>gem "my_gem", "~&gt; 2.5.0"</code></p>
+
+<p>这能够让你使用2.5.0到2.6.0之间的版本。下面的例子能够让你更加理解~> 操作符</p>
+
+<ul>
+<li> gem &ldquo;my_gem&rdquo;, &ldquo;~> 1.0&rdquo; –> gem &ldquo;my_gem&rdquo;, &ldquo;>= 1.0&rdquo;, &ldquo;&lt; 2.0&rdquo;</li>
+<li> gem &ldquo;my_gem&rdquo;, &ldquo;~> 1.5.0&rdquo; –> gem &ldquo;my_gem&rdquo;, &ldquo;>= 1.5.0&rdquo;, &ldquo;&lt; 1.6.0&rdquo;</li>
+<li> gem &ldquo;my_gem&rdquo;, &ldquo;~> 1.5.5&rdquo; –> gem &ldquo;my_gem&rdquo;, &ldquo;>= 1.5.5&rdquo;, &ldquo;&lt; 1.6.0&rdquo;</li>
+</ul>
+
+
+<h2>八、参考</h2>
+
+<p><a href="http://blog.csdn.net/efvn2008/article/details/48392047">Gemfile 详解</a></p>
+]]></content>
+  </entry>
+  
+</feed>

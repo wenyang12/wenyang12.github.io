@@ -1,0 +1,507 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Javascript | 三重水的博客]]></title>
+  <link href="http://wenyang12.github.io/blog/categories/javascript/atom.xml" rel="self"/>
+  <link href="http://wenyang12.github.io/"/>
+  <updated>2018-04-13T14:54:38+08:00</updated>
+  <id>http://wenyang12.github.io/</id>
+  <author>
+    <name><![CDATA[三重水]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[鼠标进入和离开元素4个方向对应的相关操作]]></title>
+    <link href="http://wenyang12.github.io/blog/2016/01/07/mousenter-mouseleave-direction-callback/"/>
+    <updated>2016-01-07T10:21:01+08:00</updated>
+    <id>http://wenyang12.github.io/blog/2016/01/07/mousenter-mouseleave-direction-callback</id>
+    <content type="html"><![CDATA[<h2>介绍</h2>
+
+<p>这个模块<a href="http://spmjs.io/package/wen_direction">wen_direction</a>用于判断鼠标是从哪个方向进入和离开元素后的相关回调操作</p>
+
+<p>1、这个对象暴露的run方法，有三个参数：wen_direction.run(id, enterObject, leaveObject)</p>
+
+<ul>
+<li>id : 元素的id</li>
+<li>enterObject：用于判断鼠标是从哪个方向进入元素后的对象，对象必须含有四个方向的回调方法，即如下</li>
+</ul>
+
+
+<pre><code>enterObjext = {
+    left：function(self){//self是对id这个元素的引用
+        //这里是鼠标从左边进入元素后的回调
+    }，
+    right: function(self){
+        //这里是鼠标从右边进入元素后的回调
+    }，
+    top: function(self){
+        //这里是鼠标从上边进入元素后的回调
+    }，
+    bottoom: function(self){
+        //这里是鼠标从下边进入元素后的回调
+    }
+}
+</code></pre>
+
+<!--more-->
+
+
+<ul>
+<li>leaveObject：用于判断鼠标是从哪个方向离开元素后的对象，对象必须含有四个方向的回调方法，即如下：</li>
+</ul>
+
+
+<pre><code>leaveObject = {
+   left：function(self){//self是对id这个元素的引用
+       //这里是鼠标从左边离开元素后的回调
+   }，
+   right: function(self){
+       //这里是鼠标从右边离开元素后的回调
+   }，
+   top: function(self){
+       //这里是鼠标从上边离开元素后的回调
+   }，
+   bottoom: function(self){
+       //这里是鼠标从下边离开元素后的回调
+   }
+}
+</code></pre>
+
+<p>2、这个对象暴露了的jqRun方法，有2个参数：wen_direction.jqRun(id, e);这个方法是基于jQuery的</p>
+
+<ul>
+<li>id : 元素的jquery对象的引用</li>
+<li>e ：传入的query的事件对象</li>
+</ul>
+
+
+<h2>代码实战</h2>
+
+<p><strong>html</strong></p>
+
+<p>```</p>
+
+<h2>run接口测试：</h2>
+
+
+<div id="box"></div>
+
+
+<h2>jqRun接口测试：</h2>
+
+
+<div id="jqbox">
+    <div id="client"></div>
+    <div id="hidden"></div>
+</div>
+
+
+<pre><code>**css**
+</code></pre>
+
+<h1>box{</h1>
+
+<pre><code>width: 100px;
+height: 100px;
+background: #dddddd;
+margin: 100px;
+</code></pre>
+
+<p>}</p>
+
+<h1>jqbox{</h1>
+
+<pre><code>position: relative;
+width: 100px;
+height: 100px;
+margin: 100px;
+overflow: hidden;
+</code></pre>
+
+<p>}</p>
+
+<h1>client , #hidden{</h1>
+
+<pre><code>width:100%;
+height:100%;
+background: #dddddd;
+position: absolute;
+</code></pre>
+
+<p>}</p>
+
+<h1>client{</h1>
+
+<pre><code>left:0;
+top:0;
+</code></pre>
+
+<p>}</p>
+
+<h1>hidden{</h1>
+
+<pre><code>background: #6bc30d;
+left:-100%;
+top:-100%;
+</code></pre>
+
+<p>}
+```
+<strong>javascript</strong></p>
+
+<pre><code>//采用模块模式来封装代码，可以方便发布成为spm包，方便今后引用。
+var wen_direction = (function () {
+    var jqDirection;
+    function Direction(id) {
+        this.id = document.getElementById(id) || id ;
+    }
+    Direction.prototype.init = function (enterObj, leaveObj) {
+        //鼠标滑入元素
+        var self = this;
+        this.id.addEventListener('mouseenter', function (e) {
+            var directionNumber = self.main(e); //返回数字  返回0:上方进入， 返回1:右方进入，返回2：下方进入，返回3：左方进入
+            var funArray = [enterObj.top, enterObj.right, enterObj.bottom, enterObj.left];
+            funArray[directionNumber](self.id);
+        },false);
+        this.id.addEventListener('mouseleave', function (e) {
+            var directionNumber = self.main(e); //返回数字  返回0:上方离开， 返回1:右方离开，返回2：下方离开，返回3：左方离开
+            var funArray = [leaveObj.top, leaveObj.right, leaveObj.bottom, leaveObj.left];
+            funArray[directionNumber](self.id);
+        },false);
+    };
+    /*主函数 返回数字来判断从哪个方向进入*/
+    Direction.prototype.main = function (e) {
+        var w = this.id.scrollWidth;
+        var h = this.id.scrollHeight;
+        var x = (e.offsetX - (w / 2)) * (w &gt; h ? (h / w) : 1);
+        var y = (e.offsetY - (h / 2)) * (h &gt; w ? (w / h) : 1);
+        var number = Math.round((((Math.atan2(y, x) * (180 / Math.PI)) + 180) / 90) + 3) % 4;
+        return number;
+    };
+    /*基于jquery的事件对象*/
+    Direction.prototype.jqRun=function(e) {
+        var directionNumber = this.jqMain(e);
+        var obj = {};
+        switch(directionNumber)
+        {
+            case 0://from top
+                obj.left = 0;
+                obj.top = "-100%";
+                break;
+            case 1://from right
+                obj.left = "100%";
+                obj.top = 0;
+                break;
+            case 2://from bottom
+                obj.left = 0;
+                obj.top = "100%";
+                break;
+            case 3://from left
+                obj.left = "-100%";
+                obj.top = 0;
+                break;
+        }
+        return obj;
+    };
+    Direction.prototype.jqMain = function (e) {
+        var w = this.id.width();
+        var h = this.id.height();
+        /*计算x和y得到一个角到elem的中心，得到相对于x和y值到div的中心*/
+        var x = (e.pageX - this.id.offset().left - (w / 2)) * (w &gt; h ? (h / w) : 1);
+        var y = (e.pageY - this.id.offset().top - (h / 2)) * (h &gt; w ? (w / h) : 1);
+        /** 鼠标从哪里来 / 角度 和 方向出去顺时针（得出的结果是TRBL 0 1 2 3
+         * 首先计算点的角度，
+         * 再加上180度摆脱负值
+         * 除于90得到的象限（象限，又称象限角，意思就是一个圆之四分之一等份）
+         * 加上3，做一个模（求模 求余数）4的象限转移到一个适当的顺时针 得出 TRBL 0 1 2 3（上/右/下/左）
+         **/
+        var number = Math.round((((Math.atan2(y, x) * (180 / Math.PI)) + 180) / 90) + 3) % 4;
+        return number;
+    };
+    return {
+        run: function (id, enterObj, leaveObj) {//这个接口用于原生js
+            var directionChild = new Direction(id);
+            directionChild.init(enterObj, leaveObj);
+        },
+        jqRun: function(id, e){//暴露的这个接口是基于jquery的
+            if(!jqDirection){
+                jqDirection = new Direction(id);
+            }
+            return jqDirection.jqRun(e);//返回一个样式对象{left：string，top：string}
+        }
+    }
+})();
+//测试用例
+var enterObject = {
+    left: function(self) {
+        self.innerHTML = "从左边进入";
+        console.log("从左边进入");
+    },
+    right: function(self) {
+        self.innerHTML = "从右边进入";
+        console.log("从右边进入");
+    },
+    top: function(self) {
+        self.innerHTML = "从上边进入";
+        console.log("从上边进入");
+    },
+    bottom: function(self) {
+        self.innerHTML = "从下边进入";
+        console.log("从下边进入");
+    }
+};
+var leaveObject = {
+    left: function(self) {
+        self.innerHTML = "从左边离开";
+        console.log("从左边离开");
+    },
+    right: function(self) {
+        self.innerHTML = "从右边离开";
+        console.log("从右边离开");
+    },
+    top: function(self) {
+        self.innerHTML = "从上边离开";
+        console.log("从上边离开");
+    },
+    bottom: function(self) {
+        self.innerHTML = "从下边离开";
+        console.log("从下边离开");
+    }
+};
+//run接口
+wen_direction.run('box',enterObject, leaveObject);
+//jqRun接口
+var jqbox = $("#jqbox");
+var hidden = jqbox.children("#hidden");
+jqbox.hover(function(e) {
+    hidden.css(wen_direction.jqRun(jqbox,e)).stop(true,true).animate({left: '0', top: '0'},200);
+},function(e) {
+    hidden.stop(true, true).animate(wen_direction.jqRun(jqbox,e), 200);
+});
+</code></pre>
+
+<p>代码的效果可以移步这里<a href="http://docs.spmjs.io/wen_direction/latest/examples/index.html">http://docs.spmjs.io/wen_direction/latest/examples/index.html</a></p>
+
+<p>以上采用模块模式封装的wen_direction 我已经发布到我的spm上了 地址为：<a href="http://spmjs.io/package/wen_direction">http://spmjs.io/package/wen_direction</a>。</p>
+
+<p>怎么发布spm包可以移步这里<a href="http://wenyang12.github.io/blog/2015/12/03/pubuliu-module-spm/">构建spm瀑布流模块包</a> 有兴趣的可以模仿这个发布一下wen_direction这个我用模块模式封装好的代码</p>
+
+<p>既然发布了，肯定就要涉及到使用这个包，如何使用呢？感兴趣的可以移步这里<a href="http://wenyang12.github.io/blog/2015/12/03/pubuliu-module-spm-use/">Spm瀑布流模块包的使用</a></p>
+
+<p>我自己发布wen_direction模块包的源码已经放到我的github上了，地址为：<a href="https://github.com/wenyang12/wen_direction">https://github.com/wenyang12/wen_direction</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[JavaScript ES5之Object.create函数详解]]></title>
+    <link href="http://wenyang12.github.io/blog/2015/09/11/javascript-es5-object-create/"/>
+    <updated>2015-09-11T16:09:03+08:00</updated>
+    <id>http://wenyang12.github.io/blog/2015/09/11/javascript-es5-object-create</id>
+    <content type="html"><![CDATA[<h2>介绍</h2>
+
+<p>在创建对象的时候，我们有2种常用方法</p>
+
+<p>一个是文本标记法(var obj = {}),一种是运用Object函数进行对象的创建(new Object()).</p>
+
+<p>但是这两种方式并不是创建的一个完完全全“干干净净”的对象,这里的干净只得是没有继承链.</p>
+
+<p>幸运的是，ES5为我们提供了一种创建完全”干净”的对象的方法，Object.create函数,接下我将向大家介绍Object.create的详细使用</p>
+
+<h2>语法</h2>
+
+<pre><code>Object.create(proto, [ propertiesObject ]);
+</code></pre>
+
+<h2>参数介绍</h2>
+
+<ul>
+<li><p>proto</p>
+
+<blockquote><p>一个对象，作为新创建对象的原型。如果 proto 参数不是 null 或一个对象值，则抛出一个 TypeError 异常。null表示没有原型对象(这样就创建了一个”干净的对象”)</p></blockquote></li>
+<li><p>propertiesObject</p>
+
+<blockquote><p>一个对象值，可以包含若干个属性，属性名为新建对象的属性名，属性值为那个属性的属性描述符对象.(属性将做简单介绍，后面将详细解答)</p></blockquote></li>
+</ul>
+
+
+<blockquote><p>value: 设置属性的值</p>
+
+<p>writable: 布尔值,设置属性是否可以被重写,默认属性值为false(不能被重写)</p>
+
+<p>enumerable: 布尔值,设置属性是否可以被枚举,默认属性值为false(不能被枚举)</p>
+
+<p>configurable: 布尔值,设置属性是否可以被删除，默认属性值为false(不能被删除)</p>
+
+<p>get: 函数,设置属性返回结果(后面解答)</p>
+
+<p>set: 函数,有一个参数(后面解答)</p></blockquote>
+
+<h2>详细使用</h2>
+
+<h3>简单对象创建</h3>
+
+<p>继续上面的创建”干净”的对象，我们可以这么做:</p>
+
+<pre><code>javascript   var clearObj = Object.create(null);
+   //Object with no prototype
+</code></pre>
+
+<p>现在我想创建一个银行账户对象，占时关注它是哪个银行的</p>
+
+<pre><code>var account = Object.create(Object.prototype,{
+   type: {
+       value: "建设银行"
+       //enumerable: false
+       //configurable: false
+       //writable: false
+   }
+   });
+   account.type; // "建设银行"
+</code></pre>
+
+<h3>writable属性使用</h3>
+
+<p>继续上面的例子，有好奇的同学可能已经发现了，上面的例子中，我们做一下操作:</p>
+
+<pre><code>account.type = "人民银行"; //"人民银行"
+account.type; // "建设银行"
+</code></pre>
+
+<p>这是怎么回事？别急，这就是writable属性惹得货，如果我们将属性设置为true</p>
+
+<pre><code>account.type = "人民银行"; //"人民银行"
+account.type; // "人民银行"
+</code></pre>
+
+<h3>configurable属性使用</h3>
+
+<p>还是上面的例子，突然，我不想要account对象的type属性了，自然的我们会想到</p>
+
+<pre><code>delete account.type // false
+</code></pre>
+
+<p>我去！！！删都不让我删！？ 别急，这次是configurable属性的问题，如果我们将它设置为true</p>
+
+<pre><code>account.type; // "建设银行"
+delete account.type // true
+account.type; // undefined
+</code></pre>
+
+<h3>enumerable属性值</h3>
+
+<p>现在我要遍历account对象</p>
+
+<pre><code>for(var i in account){
+           console.log(account[i]);
+       }
+       // undefined
+</code></pre>
+
+<p>没有结果！？type属性去哪了！？我知道大家都很聪明，这次肯定是enumerable属性值惹得祸,如果enumerable属性设置为true</p>
+
+<pre><code>for(var i in account){
+           console.log(account[i]);
+       }
+       // "建设银行"
+</code></pre>
+
+<h3>get和set的用法</h3>
+
+<p>现在我需要我的account对象有另外一个属性：账户号码,我需要如果修改了给出特定格式，没有账户需要给出警告</p>
+
+<pre><code>var account = Object.create(Object.prototype,{
+    type: {
+       value: "建设银行",
+       enumerable: true,
+       configurable: false, // 不能被删除
+       writable: false // 不能被修改
+   },
+   number: {
+       get: function(){
+           if((typeof number) === "undefined"){
+               //说明没有设置number
+               return "您还没有开通账户!请联系前台!";
+           }
+           return "您的账户号码是："+number;
+       },
+       set: function(num){
+           number = num;
+           if(this.cTime === 0){
+               console.log("账户开通成功！");
+               this.cTime++;
+           }else{
+               console.log("账户号码已经被修改！");
+           }
+       }
+   },
+   cTime: {
+       value: 0,
+       writable: true
+   }
+});
+account.type; // "建设银行"
+account.number; // "您还没有开通账户!请联系前台!"
+account.number = "610XXXXXXXXXX21";
+// "账户开通成功！"
+account.number; // "您的账户号码是：610XXXXXXXXXX21"
+account.number = "610XXXXXXXXXX88";
+// "账户号码已经被修改！"
+account.number; // "您的账户号码是：610XXXXXXXXXX88"
+</code></pre>
+
+<h2>注意</h2>
+
+<p>以上代码均在Chrome浏览器console环境下测试
+在使用set,get函数的时候，不能和value属性和writable属性一起用，会报错
+文章出自：<a href="http://hao.jser.com/archive/8062/?utm_source=tuicool">http://hao.jser.com/archive/8062/?utm_source=tuicool</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[安全监测javascript基本数据类型和内置对象]]></title>
+    <link href="http://wenyang12.github.io/blog/2015/06/04/safe-checkout-javascript-type/"/>
+    <updated>2015-06-04T17:13:36+08:00</updated>
+    <id>http://wenyang12.github.io/blog/2015/06/04/safe-checkout-javascript-type</id>
+    <content type="html"><![CDATA[<h2>实现代码</h2>
+
+<pre><code>//参数：o表示监测的值
+/*返回值：返回字符串“undefined”, "number", "boolean", "string" ,"function", "regexp" ,"array", "date", "error", "object" 或 "null" */
+function typeOf(o){
+    var _toString =  Object.prototype.toString;
+    // 获取对象的toString()方法引用
+    //列举基本数据类型和内置对象类型，可以进一步补充该数组的监测数据类型范围
+    var _type = {
+        "undefined" : "undefined",
+        "number" : "number",
+        "boolean" : "boolean",
+        "string" : "string",
+        "[object Function]" : "function",
+        "[object RegExp]" : "regexp",
+        "[object Array]" : "array",
+        "[object Date]" : "date",
+        "[object Error]" : "error"
+    };
+    return _type[typeof o] || _type[_toString.call(o)] || (o ? "object" : "null");
+}
+//测试
+console.log(typeOf(undefined));// "undefined"
+console.log(typeOf(2));// "number"
+console.log(typeOf(true));// "boolean"
+console.log(typeOf("hello"));// "string"
+console.log(typeOf(function(){}));// "function"
+console.log(typeOf(/hello/));// "regexp"
+console.log(typeOf([1,2,3]));// "array"
+console.log(typeOf(new Date()));// "date"
+console.log(typeOf(new Error()));// "error"
+console.log(typeOf({}));// "object"
+console.log(typeOf(null));// "null"
+</code></pre>
+
+<blockquote><p>节选自书&ndash;《编写高质量代码》</p></blockquote>
+]]></content>
+  </entry>
+  
+</feed>

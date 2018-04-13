@@ -1,0 +1,1067 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Node.js框架lookback学习一 - 三重水的博客</title>
+  <meta name="author" content="三重水">
+
+  
+  <meta name="description" content="loopback与express的关系
+loopback是一个MVC框架，分别包含哪些部分
+loopback源代码架构介绍
+安装strongloop工具链并创建项目
+测试注册登陆效果
+配置mongodb
+配置环境变量 loopback与express的关系 express是内核 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="baidu-site-verification" content="ipSlYf2c3P" />
+  
+  <link rel="canonical" href="http://wenyang12.github.io/blog/2015/12/10/lookback-study-1/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="三重水的博客" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<script type="text/javascript">
+
+    function addBlankTargetForLinks () {
+
+        $('a[href^="http"]').each(function(){
+
+            $(this).attr('target', '_blank');
+
+        });
+
+    }
+
+    $(document).bind('DOMNodeInserted', function(event) {
+        addBlankTargetForLinks();
+
+    });
+
+</script>
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?ddb3466dedfe096084bfb3626c5d2311";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">三重水的博客</a></h1>
+  
+    <h2>在变化当中不断记录自己，充实自己，浏览自己</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><div class="wrapper">
+<ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form>
+  <fieldset role="search">
+    <input class="search" id="bdcsMain" type="text" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">首页</a></li>
+  <li><a href="/blog/archives">归档</a></li>
+  <!-- <li><a href="/about-me">关于我</a></li>
+  <li><a href="/wenxun/dist/">相册</a></li> -->
+</ul>
+
+</div></nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Node.js框架lookback学习一</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-12-10T10:41:59+08:00'><span class='date'>2015年12月10日</span> <span class='time'>10:41 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><ul>
+<li><a href="#1">loopback与express的关系</a></li>
+<li><a href="#2">loopback是一个MVC框架，分别包含哪些部分</a></li>
+<li><a href="#3">loopback源代码架构介绍</a></li>
+<li><a href="#4">安装strongloop工具链并创建项目</a></li>
+<li><a href="#5">测试注册登陆效果</a></li>
+<li><a href="#6">配置mongodb</a></li>
+<li><a href="#7">配置环境变量</a></li>
+</ul>
+
+
+<h2 id="1">loopback与express的关系</h2>
+
+
+<ul>
+<li>express是内核
+
+<ul>
+<li>不应该直接使用在商业项目</li>
+<li>粒度太小</li>
+<li>使用者需要handle太多细节</li>
+</ul>
+</li>
+<li>loopback是工具
+
+<ul>
+<li>对于搭建一个Web2.0即可交互的网站系统 粒度合适</li>
+</ul>
+</li>
+</ul>
+
+
+<h2 id="2">loopback是一个MVC框架，分别包含哪些部分</h2>
+
+
+
+
+<!--more-->
+
+
+<ul>
+<li>模型系统
+
+<ul>
+<li>PersistentModel</li>
+<li>鼓励使用者将大部分商业逻辑写于在模型中完成</li>
+</ul>
+</li>
+<li>控制器
+
+<ul>
+<li>remote methods</li>
+<li>remote hooks</li>
+</ul>
+</li>
+<li>视图（沿用express的视图模型）</li>
+<li>loopback组件
+
+<ul>
+<li>loopback-component-passport</li>
+<li>loopback-component-storage</li>
+<li>…</li>
+</ul>
+</li>
+</ul>
+
+
+<h2 id="3">loopback源代码架构介绍</h2>
+
+
+<p>源代码地址：<a href="https://github.com/strongloop/loopback">https://github.com/strongloop/loopback</a></p>
+
+<p>其中主要看common/models 这个目录下的结构，它里边的js都是基于面向对象编程写的。每个js都对应着一个类，跟<a href="https://apidocs.strongloop.com/loopback/">loopback文档</a>一一对应</p>
+
+<h2 id="4">安装strongloop工具链并创建项目</h2>
+
+
+<p>安装全局的<a href="https://strongloop.com/">strongloop</a></p>
+
+<blockquote><p>$ npm install -g strongloop</p></blockquote>
+
+<p>创建lookback项目(这里我输入的项目名为loopback-test)</p>
+
+<blockquote><p>$ slc loopback</p></blockquote>
+
+<p>运行项目</p>
+
+<blockquote><p>$ slc run</p></blockquote>
+
+<p>在浏览器输入<a href="http://localhost:3000/explorer">http://localhost:3000/explorer</a> 即可看到效果</p>
+
+<p><strong>或者你也可以不安装strongloop，直接到loopback的github下clone源代码下来</strong></p>
+
+<blockquote><p>$ git clone <a href="https://github.com/strongloop/loopback.git">https://github.com/strongloop/loopback.git</a></p></blockquote>
+
+<p>安装依赖</p>
+
+<blockquote><p>$ npm install</p></blockquote>
+
+<p>运行项目</p>
+
+<blockquote><p>$ node .</p></blockquote>
+
+<p>接下来我们创建一个模型model（一个模型对应一个数据表）</p>
+
+<blockquote><p>$ slc lookback:model</p></blockquote>
+
+<p>输入以上命令之后，会提示输入名称，然后输入字段名，字段名的类型等，假如输入的简略代码如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>? Enter model name：WenUsers
+</span><span class='line'>? Select the data-source to attach WenUsers to: db(memory) //选择数据源，即选用内存来存储数据
+</span><span class='line'>? Select model's base class: User //让WenUsers模型继承内建的User类
+</span><span class='line'>? ustom plural from(used to build REST URL):users //构建通过url访问这个WenUsers类的名称
+</span><span class='line'>? Property name：fullname//定义自己需要的字段名
+</span><span class='line'>? Proterty type: string //选择该字段的类型
+</span><span class='line'>? Required? NO  //提交时该字段的值是否必须输入，这里现在NO，即可选</span></code></pre></td></tr></table></div></figure>
+
+
+<p>建完之后，源代码会多出./common/models/这个路径，在这个路径下会有两个文件，文件结构（你也可以手动自己创建这些文件就不需要用strongloop构建了）为：</p>
+
+<ul>
+<li>common
+
+<ul>
+<li>models
+
+<ul>
+<li>wen-users.js</li>
+<li>wen-users.json</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+
+<p>wen-users.js</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>module.exports = function(WenUsers) {
+</span><span class='line'>  //add code 可以在这里给模型WenUsers添加方法
+</span><span class='line'>};</span></code></pre></td></tr></table></div></figure>
+
+
+<p>wen-users.json</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>{
+</span><span class='line'>  "name": "WenUsers",
+</span><span class='line'>  "plural": "users",
+</span><span class='line'>  "base": "User",
+</span><span class='line'>  "idInjection": true,
+</span><span class='line'>  "options": {
+</span><span class='line'>    "validateUpsert": true
+</span><span class='line'>  },
+</span><span class='line'>  "properties": {
+</span><span class='line'>    "fullname": {
+</span><span class='line'>      "type": "string"
+</span><span class='line'>    }
+</span><span class='line'>  },
+</span><span class='line'>  "validations": [],
+</span><span class='line'>  "relations": {},
+</span><span class='line'>  "acls": [],
+</span><span class='line'>  "methods": {}
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>而在./server/model-config.json中会添加一个配置WenUsers</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>{
+</span><span class='line'>  "_meta": {
+</span><span class='line'>    "sources": [
+</span><span class='line'>      "loopback/common/models",
+</span><span class='line'>      "loopback/server/models",
+</span><span class='line'>      "../common/models",
+</span><span class='line'>      "./models"
+</span><span class='line'>    ],
+</span><span class='line'>    "mixins": [
+</span><span class='line'>      "loopback/common/mixins",
+</span><span class='line'>      "loopback/server/mixins",
+</span><span class='line'>      "../common/mixins",
+</span><span class='line'>      "./mixins"
+</span><span class='line'>    ]
+</span><span class='line'>  },
+</span><span class='line'>  "Users": {
+</span><span class='line'>    "dataSource":"db"
+</span><span class='line'>  },
+</span><span class='line'>  "AccessToken": {
+</span><span class='line'>    "dataSource": "db",
+</span><span class='line'>    "public": false
+</span><span class='line'>  },
+</span><span class='line'>  "ACL": {
+</span><span class='line'>    "dataSource": "db",
+</span><span class='line'>    "public": false
+</span><span class='line'>  },
+</span><span class='line'>  "RoleMapping": {
+</span><span class='line'>    "dataSource": "db",
+</span><span class='line'>    "public": false
+</span><span class='line'>  },
+</span><span class='line'>  "Role": {
+</span><span class='line'>    "dataSource": "db",
+</span><span class='line'>    "public": false
+</span><span class='line'>  },
+</span><span class='line'>  "WenUsers": {
+</span><span class='line'>    "dataSource": "db",
+</span><span class='line'>    "public": true
+</span><span class='line'>  }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>此时运行项目<code>$ slc run</code>  在浏览器<a href="http://localhost:3000/explorer">http://localhost:3000/explorer</a> 预览 会多出一个WenUsers调试接口</p>
+
+<p>接着我们要把内建的Users配置屏蔽掉（不屏蔽掉的话，下面我们调试WenUsers接口的时候会有问题），即让浏览器页面只显示WenUsers调试接口</p>
+
+<p>./server/model-config.json</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>{
+</span><span class='line'>  "_meta": {
+</span><span class='line'>    "sources": [
+</span><span class='line'>      "loopback/common/models",
+</span><span class='line'>      "loopback/server/models",
+</span><span class='line'>      "../common/models",
+</span><span class='line'>      "./models"
+</span><span class='line'>    ],
+</span><span class='line'>    "mixins": [
+</span><span class='line'>      "loopback/common/mixins",
+</span><span class='line'>      "loopback/server/mixins",
+</span><span class='line'>      "../common/mixins",
+</span><span class='line'>      "./mixins"
+</span><span class='line'>    ]
+</span><span class='line'>  },
+</span><span class='line'>  "AccessToken": {
+</span><span class='line'>    "dataSource": "db",
+</span><span class='line'>    "public": false
+</span><span class='line'>  },
+</span><span class='line'>  "ACL": {
+</span><span class='line'>    "dataSource": "db",
+</span><span class='line'>    "public": false
+</span><span class='line'>  },
+</span><span class='line'>  "RoleMapping": {
+</span><span class='line'>    "dataSource": "db",
+</span><span class='line'>    "public": false
+</span><span class='line'>  },
+</span><span class='line'>  "Role": {
+</span><span class='line'>    "dataSource": "db",
+</span><span class='line'>    "public": false
+</span><span class='line'>  },
+</span><span class='line'>  "WenUsers": {
+</span><span class='line'>    "dataSource": "db",
+</span><span class='line'>    "public": true
+</span><span class='line'>  }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>接下来我们想要给WenUsers加入一个sayHi方法，然后暴露接口给http，即可以通过http访问。该如何实现呢？</p>
+
+<p>首先，编辑一下这个文件<code>./common/models/wen-users.js</code></p>
+
+<p>wen-users.js</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>module.exports = function(WenUsers) {
+</span><span class='line'>  WenUsers.sayHi = function(callback) {
+</span><span class='line'>    callback(null, 'hi');
+</span><span class='line'>  };
+</span><span class='line'>  WenUsers.remoteMethod(
+</span><span class='line'>    'sayHi',
+</span><span class='line'>    {
+</span><span class='line'>      'accepts': [],
+</span><span class='line'>      'returns':[
+</span><span class='line'>        {'arg': 'result','type': 'string'}
+</span><span class='line'>      ],
+</span><span class='line'>      'http':{
+</span><span class='line'>        'verb': 'get',
+</span><span class='line'>        'path': '/say-hi'
+</span><span class='line'>      }
+</span><span class='line'>    }
+</span><span class='line'>  )
+</span><span class='line'>};</span></code></pre></td></tr></table></div></figure>
+
+
+<p>接着在<code>./common/models/wen-users.json</code>配置访问权限</p>
+
+<p>wen-users.json</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>{
+</span><span class='line'>  "name": "WenUsers",
+</span><span class='line'>  "plural": "users",
+</span><span class='line'>  "base": "User",
+</span><span class='line'>  "idInjection": true,
+</span><span class='line'>  "options": {
+</span><span class='line'>    "validateUpsert": true
+</span><span class='line'>  },
+</span><span class='line'>  "properties": {
+</span><span class='line'>    "fullname": {
+</span><span class='line'>      "type": "string"
+</span><span class='line'>    },
+</span><span class='line'>    "age": {
+</span><span class='line'>      "type": "number"
+</span><span class='line'>    }
+</span><span class='line'>  },
+</span><span class='line'>  "validations": [],
+</span><span class='line'>  "relations": {},
+</span><span class='line'>  "acls": [
+</span><span class='line'>    {
+</span><span class='line'>      "principalType": "ROLE",
+</span><span class='line'>      "principalId": "$everyone",
+</span><span class='line'>      "permission": "ALLOW",
+</span><span class='line'>      "property": "sayHi"
+</span><span class='line'>    }
+</span><span class='line'>  ],
+</span><span class='line'>  "methods": {}
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>现在重新运行项目<code>slc run</code> ,预览会发现，多出了一个<code>/users/say-hi</code>方法</p>
+
+<p>点击 <code>Try it out！</code> 即会返回测试效果如下图：</p>
+
+<p><img src="/images/loopback-pic-1.png" alt="测试图" /></p>
+
+<p>成功返回了<code>{"result": "hi"}</code></p>
+
+<h2 id="5">测试注册登陆效果</h2>
+
+
+<p><strong>注册测试</strong></p>
+
+<p>在页面中打开<code>/users</code> 注册，如图：</p>
+
+<p><img src="/images/loopback-pic-2.png" alt="测试图" /></p>
+
+<p>点击<code>Try it out！</code> 按钮，注册成功会返回状态码200，如图：</p>
+
+<p><img src="/images/loopback-pic-2-1.png" alt="测试图" /></p>
+
+<p><strong>登录测试</strong></p>
+
+<p>在页面中打开<code>/users/login</code> 登录，如图：</p>
+
+<p><img src="/images/loopback-pic-3.png" alt="测试图" /></p>
+
+<p>点击<code>Try it out！</code> 按钮，登录成功会返回状态码200，如图：</p>
+
+<p><img src="/images/loopback-pic-3-1.png" alt="测试图" /></p>
+
+<blockquote><p>以上的数据是保存在内存中的，关闭项目，在重启项目之后，你会发现登录失败了，你刚刚注册的数据没有了，那怎么样才能让数据保留呢？</p></blockquote>
+
+<h2 id="6">配置mongodb</h2>
+
+
+<p><strong><em>首先在你的电脑上安装<a href="http://www.mongodb.org">mongodb</a>。</em></strong></p>
+
+<p>MongoDB提供了可用于32位和64位系统的预编译二进制包，你可以从MongoDB官网下载安装，MongoDB预编译二进制包下载地址：<a href="http://www.mongodb.org/downloads">http://www.mongodb.org/downloads</a></p>
+
+<p>不会如何安装的可以参考<a href="http://www.runoob.com/mongodb/mongodb-window-install.html">菜鸟教程mongodb安装</a></p>
+
+<blockquote><p>别忘记了创建数据目录 MongoDB将数据目录存储在 db 目录下。但是这个数据目录不会主动创建，我们在安装完成后需要创建它。请注意，数据目录应该放在根目录下（(如： C:\ 或者 D:\ 等 )。</p></blockquote>
+
+<p><strong>接下来要运用到mongodb数据库来保存用户数据,即要在loopback上添加mongodb数据源</strong></p>
+
+<blockquote><p>$ slc loopback:datasource</p></blockquote>
+
+<p>接着填写相关的信息</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>? Enter the data-source name: mongodb
+</span><span class='line'>? Select the Connector for mongodb: MongoDB(supported by StrongLoop)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>其实以上操作就是在<code>./server/datasources.json</code> 这个文件里添加了一个&ldquo;mongodb&rdquo;属性配置，代码如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>{
+</span><span class='line'>  "db": {
+</span><span class='line'>    "name": "db",
+</span><span class='line'>    "connector": "memory"
+</span><span class='line'>  },
+</span><span class='line'>  "mongodb": {
+</span><span class='line'>    "url": "mongodb://localhost:27017/loopback-test",
+</span><span class='line'>    "name": "mongodb",
+</span><span class='line'>    "connector": "mongodb"
+</span><span class='line'>  }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<blockquote><p>其中以上代码需要手动配置数据源的链接字符串&ldquo;mongodb://localhost:27017/loopback-test&rdquo;（项目的名称即用来充当了数据库的名称）。</p></blockquote>
+
+<p><strong><em>安装依赖</em></strong></p>
+
+<blockquote><p>$ npm install loopback-connector-mongodb &ndash;save  //这里安装的是loopback链接mongodb的连接器</p></blockquote>
+
+<p><strong><em>接着编辑代码<code>./server/model-config.json</code></em></strong></p>
+
+<p>让以下数据模型都采用mongodb数据源来存储数据，代码如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>{
+</span><span class='line'>  "_meta": {
+</span><span class='line'>    "sources": [
+</span><span class='line'>      "loopback/common/models",
+</span><span class='line'>      "loopback/server/models",
+</span><span class='line'>      "../common/models",
+</span><span class='line'>      "./models"
+</span><span class='line'>    ],
+</span><span class='line'>    "mixins": [
+</span><span class='line'>      "loopback/common/mixins",
+</span><span class='line'>      "loopback/server/mixins",
+</span><span class='line'>      "../common/mixins",
+</span><span class='line'>      "./mixins"
+</span><span class='line'>    ]
+</span><span class='line'>  },
+</span><span class='line'>  "AccessToken": {
+</span><span class='line'>    "dataSource": "mongodb",
+</span><span class='line'>    "public": false
+</span><span class='line'>  },
+</span><span class='line'>  "ACL": {
+</span><span class='line'>    "dataSource": "mongodb",
+</span><span class='line'>    "public": false
+</span><span class='line'>  },
+</span><span class='line'>  "RoleMapping": {
+</span><span class='line'>    "dataSource": "mongodb",
+</span><span class='line'>    "public": false
+</span><span class='line'>  },
+</span><span class='line'>  "Role": {
+</span><span class='line'>    "dataSource": "mongodb",
+</span><span class='line'>    "public": false
+</span><span class='line'>  },
+</span><span class='line'>  "WenUsers": {
+</span><span class='line'>    "dataSource": "mongodb",
+</span><span class='line'>    "public": true
+</span><span class='line'>  }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<blockquote><p>即把原先的<code>"dataSource"："db"</code>都改成<code>"dataSource"："mongodb"</code></p></blockquote>
+
+<p><strong><em>测试运行</em></strong></p>
+
+<p>运行mongodb服务器</p>
+
+<blockquote><p>$ mongod</p></blockquote>
+
+<p>启动项目</p>
+
+<blockquote><p>$ slc run</p></blockquote>
+
+<p>预览重新测试注册，登录，在关掉项目重启项目，再次登录你会发现，登录还是成功的，因为数据已经保存在mongodb里了。</p>
+
+<p><strong><em>在mongodb里查看数据</em></strong></p>
+
+<p>显示所有数据库</p>
+
+<blockquote><p>$ show dbs</p></blockquote>
+
+<p>切换到loopback-test 数据库</p>
+
+<blockquote><p>$ use loopback-test</p></blockquote>
+
+<p>显示当前数据库</p>
+
+<blockquote><p>$ db</p></blockquote>
+
+<p>显示当前数据库下的集合</p>
+
+<blockquote><p>$ show collections</p></blockquote>
+
+<p>查看某个模型数据</p>
+
+<blockquote><p>$ db.WenUsers.findOne()</p></blockquote>
+
+<h2 id="7">配置环境变量</h2>
+
+
+<p>设置环境变量是为了，在开发环境里使用一个数据库，然后在生产环境里使用另一个数据库，互相使用对应的数据库。</p>
+
+<p>其实配置不同数据库，就是增加一个js文件，或者json文件都可以</p>
+
+<p>在<code>./server/</code> 这个目录下，增加一个datasources.dev.js文件，然后编辑如下：</p>
+
+<p>datasources.dev.js</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>exports.mongodb = {
+</span><span class='line'>  'url': 'mongodb://localhost:27017/loopback-test-dev',
+</span><span class='line'>  'name': 'mongodb',
+</span><span class='line'>  'connector': 'mongodb'
+</span><span class='line'>};</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>OR</h2>
+
+<p>datasources.dev.json</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>{
+</span><span class='line'>  "db": {
+</span><span class='line'>    "name": "db",
+</span><span class='line'>    "connector": "memory"
+</span><span class='line'>  },
+</span><span class='line'>  "mongodb": {
+</span><span class='line'>    "url": "mongodb://localhost:27017/loopback-test-dev",
+</span><span class='line'>    "name": "mongodb",
+</span><span class='line'>    "connector": "mongodb"
+</span><span class='line'>  }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然后在开发环境里，要连接这个数据库loopback-test-dev即可输入以下命令：</p>
+
+<blockquote><p>$ set NODE_ENV=dev</p></blockquote>
+
+<p>接着运行项目，即可（此时要重新注册，然后登录测试，因为用了新的数据库）</p>
+
+<blockquote><p>$ slc run</p></blockquote>
+
+<p>要想切换回使用刚刚的数据库（loopback-test），设置环境变量为空即可，因为默认使用的数据库，就是文件./server/datasources.json指向的数据库</p>
+
+<blockquote><p>$ set NODE_ENV=&ldquo;&rdquo;
+$ slc run</p></blockquote>
+
+<h2>参考质料</h2>
+
+<p><a href="http://www.jikexueyuan.com/course/797_1.html">极客学院使用 loopback 快速搭建用户系统视频</a></p>
+
+<p><a href="http://www.runoob.com/mongodb/mongodb-window-install.html">菜鸟教程mongodb安装</a></p>
+
+<p>以上源码可以到我的github上下载<a href="https://github.com/wenyang12/loopback-email-test/tree/source">loopback测试</a></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">三重水</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2015-12-10T10:41:59+08:00'><span class='date'>2015年12月10日</span> <span class='time'>10:41 am</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/loopback/'>loopback</a>, <a class='category' href='/blog/categories/mongodb/'>mongodb</a>, <a class='category' href='/blog/categories/node-dot-jskuang-jia/'>node.js框架</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+  
+  <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style_32x32">
+    <a class="jiathis_button_qzone"></a>
+    <a class="jiathis_button_tsina"></a>
+    <a class="jiathis_button_tqq"></a>
+    <a class="jiathis_button_weixin"></a>
+    <a class="jiathis_button_renren"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+    <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/12/04/react-study-notes/" title="Previous Post: React学习笔记">&laquo; React学习笔记</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2015/12/16/loopback-study-2/" title="Next Post: Node.js框架lookback学习二">Node.js框架lookback学习二 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>评论</h1>
+    <div id="disqus_thread" aria-live="polite"><!-- 多说评论框 start -->
+<div class="ds-thread" data-thread-key="/blog/2015/12/10/lookback-study-1" data-title="Node.js框架lookback学习一" data-url="http://wenyang12.github.io/blog/2015/12/10/lookback-study-1/"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    var duoshuoQuery = {short_name:"ywenblog"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+        || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>近期文章</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2018/01/17/adb-chrome-develop/">Webview的调试方法</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/12/28/csp/">CSP(内容安全策略)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/08/31/native-drag/">原生拖放</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/08/17/email-read-adaption/">邮件读信页的自适应方案</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/07/07/file-upload-formdata/">Formdata异步上传文件的实现</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+<section class="about-me">
+  <h1>关于我</h1>
+  <div class="thumb">
+      <span></span>
+      <p>三重水</p>
+      <p>学习，积累，反思，阅读，分享</p>
+  </div>  
+  <p><a href="https://github.com/wenyang12" target="_blank">github</a><a href="http://wenyang12.github.io/" target="_blank">博客</a><a
+          href="https://www.qdfuns.com/u/13989/works/articles" target="_blank">前端网</a>
+          <!-- <a href="http://wenyang.sinaapp.com/" target="_blank">笔记</a>
+          <a href="http://ywenblog.sinaapp.com/" target="_blank">WordPress</a> -->
+        </p>
+</section>
+<section>
+    <h1>标签</h1>
+    <div class="cloud">
+        <a style="font-size: 159%" href="/blog/categories/node-dot-jskuang-jia/">Node.js框架</a>
+<a style="font-size: 90%" href="/blog/categories/adb/">adb</a>
+<a style="font-size: 145%" href="/blog/categories/ajax/">ajax</a>
+<a style="font-size: 90%" href="/blog/categories/bootstrap/">bootstrap</a>
+<a style="font-size: 90%" href="/blog/categories/csp/">csp</a>
+<a style="font-size: 90%" href="/blog/categories/cssyu-chu-li-qi/">css预处理器</a>
+<a style="font-size: 90%" href="/blog/categories/email/">email</a>
+<a style="font-size: 90%" href="/blog/categories/es5/">es5</a>
+<a style="font-size: 90%" href="/blog/categories/express/">express</a>
+<a style="font-size: 124%" href="/blog/categories/git/">git</a>
+<a style="font-size: 90%" href="/blog/categories/grunt/">grunt</a>
+<a style="font-size: 170%" href="/blog/categories/html5/">html5</a>
+<a style="font-size: 90%" href="/blog/categories/jquerycha-jian/">jQuery插件</a>
+<a style="font-size: 145%" href="/blog/categories/javascript/">javascript</a>
+<a style="font-size: 90%" href="/blog/categories/jquery/">jquery</a>
+<a style="font-size: 90%" href="/blog/categories/jquery-dot-validation/">jquery.validation</a>
+<a style="font-size: 90%" href="/blog/categories/less/">less</a>
+<a style="font-size: 145%" href="/blog/categories/loopback/">loopback</a>
+<a style="font-size: 90%" href="/blog/categories/markdown/">markdown</a>
+<a style="font-size: 145%" href="/blog/categories/mongodb/">mongodb</a>
+<a style="font-size: 124%" href="/blog/categories/octopress/">octopress</a>
+<a style="font-size: 90%" href="/blog/categories/react/">react</a>
+<a style="font-size: 90%" href="/blog/categories/sass/">sass</a>
+<a style="font-size: 124%" href="/blog/categories/spm/">spm</a>
+<a style="font-size: 90%" href="/blog/categories/webworker/">webWorker</a>
+<a style="font-size: 90%" href="/blog/categories/websoket/">websoket</a>
+<a style="font-size: 90%" href="/blog/categories/wordpress/">wordpress</a>
+<a style="font-size: 90%" href="/blog/categories/zhong-jie-zhe-mo-shi/">中介者模式</a>
+<a style="font-size: 90%" href="/blog/categories/dai-li-mo-shi/">代理模式</a>
+<a style="font-size: 90%" href="/blog/categories/dao-ji-shi/">倒计时</a>
+<a style="font-size: 90%" href="/blog/categories/nei-rong-an-quan-ce-lue/">内容安全策略</a>
+<a style="font-size: 90%" href="/blog/categories/qian-duan-gou-jian-gong-ju/">前端构建工具</a>
+<a style="font-size: 90%" href="/blog/categories/yuan-xing-mo-shi/">原型模式</a>
+<a style="font-size: 90%" href="/blog/categories/fu-xuan-kuang-zu-jian/">复选框组件</a>
+<a style="font-size: 90%" href="/blog/categories/dan-chu-kuang/">弹出框</a>
+<a style="font-size: 90%" href="/blog/categories/tuo-fang/">拖放</a>
+<a style="font-size: 124%" href="/blog/categories/wen-jian-shang-chuan/">文件上传</a>
+<a style="font-size: 90%" href="/blog/categories/jian-ce-shu-ju-lei-xing/">检测数据类型</a>
+<a style="font-size: 124%" href="/blog/categories/mo-kuai-bao/">模块包</a>
+<a style="font-size: 90%" href="/blog/categories/gun-dong-jian-ting/">滚动监听</a>
+<a style="font-size: 145%" href="/blog/categories/pu-bu-liu/">瀑布流</a>
+<a style="font-size: 90%" href="/blog/categories/deng-lu-zhu-ce-mo-ban/">登陆注册模板</a>
+<a style="font-size: 90%" href="/blog/categories/liao-tian-shi/">聊天室</a>
+<a style="font-size: 90%" href="/blog/categories/zi-gua-ying/">自适应</a>
+<a style="font-size: 90%" href="/blog/categories/guan-cha-zhe-mo-shi/">观察者模式</a>
+<a style="font-size: 159%" href="/blog/categories/she-ji-mo-shi/">设计模式</a>
+<a style="font-size: 90%" href="/blog/categories/diao-shi-webview/">调试webview</a>
+<a style="font-size: 90%" href="/blog/categories/xuan-xiang-qia/">选项卡</a>
+<a style="font-size: 90%" href="/blog/categories/mian-shi/">面试</a>
+<a style="font-size: 90%" href="/blog/categories/shu-biao-shi-jian/">鼠标事件</a>
+
+    </div>
+</section>
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><div class="wrapper">
+<p>
+  Copyright &copy; 2018 - 三重水 -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a>&nbsp;<a href="http://tongji.baidu.com/web/welcome/ico?s=ddb3466dedfe096084bfb3626c5d2311">百度统计</a></span>
+</p>
+</div>
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">(function(){document.write(unescape('%3Cdiv id="bdcs"%3E%3C/div%3E'));var bdcs = document.createElement('script');bdcs.type = 'text/javascript';bdcs.async = true;bdcs.src = 'http://znsv.baidu.com/customer_search/api/js?sid=5545127454396687048' + '&plate_url=' + encodeURIComponent(window.location.href) + '&t=' + Math.ceil(new Date()/3600000);var s = document.getElementsByTagName('script')[0];s.parentNode.insertBefore(bdcs, s);})();</script>
+</body>
+</html>

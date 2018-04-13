@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Wordpress | 三重水的博客]]></title>
+  <link href="http://wenyang12.github.io/blog/categories/wordpress/atom.xml" rel="self"/>
+  <link href="http://wenyang12.github.io/"/>
+  <updated>2018-04-13T14:54:38+08:00</updated>
+  <id>http://wenyang12.github.io/</id>
+  <author>
+    <name><![CDATA[三重水]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[把wordpress里的文章迁移到octopress中]]></title>
+    <link href="http://wenyang12.github.io/blog/2015/11/23/wordpress-to-octopress/"/>
+    <updated>2015-11-23T10:20:01+08:00</updated>
+    <id>http://wenyang12.github.io/blog/2015/11/23/wordpress-to-octopress</id>
+    <content type="html"><![CDATA[<h2>从wordpress里导出所有文章,导出的格式为.xml后缀</h2>
+
+<ul>
+<li>wordpress里进入自己的后台，进入<code>./wp-admin/export.php</code>这个目录下导出自己的所有文章</li>
+<li>然后把导出的文件复制到octopress根目录下重命名为<code>wordpress.xml</code></li>
+<li>然后需要下载一个把xml文件编译成markdown文件并放到你./source/_post/这个目录下的ruby文件，<a href="https://github.com/wenyang12/wenyang12.github.io/blob/source/wordpress.rb">下载地址</a>;</li>
+<li>最后把下载好的这个wordpress.rb文件也放到你的octopress根目录下</li>
+</ul>
+
+
+<h2>执行命令即可完成迁移</h2>
+
+<p>执行命令前，要安装编译用到的依赖包open_gem、<a href="http://jekyll.bootcss.com/">jekyll(一款非常出色的静态博客网站生成工具，它是用Ruby开发而成的)</a> 、<a href="https://github.com/jeremyevans/sequel">sequel(用于 Ruby 编程语言的一个简单灵活强大的数据库访问工具包，提供了线程安全、连接池以及 DSL 语言用来构造查询和表模型)</a> 、<a href="https://github.com/hpricot/hpricot">hpricot(一个HTML解释的库)</a>即4个依赖</p>
+
+<blockquote><p>gem install open_gem jekyll sequel hpricot</p></blockquote>
+
+<p>然后接着输入以下命令即可</p>
+
+<blockquote><p>ruby -r &ldquo;./wordpress.rb&rdquo; -e &ldquo;Jekyll::WordpressDotCom.process&rdquo;</p></blockquote>
+
+<p>完成以上命令后，你会发现你的<code>./source/_post/</code>目录下有了wordpress的所有文章，而且都是<code>.markdown</code>后缀的,然后在这个基础上，修改里边的内容让其符合markdown语法的文章即可大功告成</p>
+
+<h2>参考质料</h2>
+
+<blockquote><p><a href="http://justcoding.iteye.com/blog/1954653">http://justcoding.iteye.com/blog/1954653</a></p>
+
+<p><a href="http://blog.dayanjia.com/2012/04/migration-to-octopress-from-wordpress/">http://blog.dayanjia.com/2012/04/migration-to-octopress-from-wordpress/</a></p></blockquote>
+]]></content>
+  </entry>
+  
+</feed>
