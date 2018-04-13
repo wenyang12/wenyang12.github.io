@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Markdown | 三重水的博客]]></title>
   <link href="http://wenyang12.github.io/blog/categories/markdown/atom.xml" rel="self"/>
   <link href="http://wenyang12.github.io/"/>
-  <updated>2018-04-13T14:54:38+08:00</updated>
+  <updated>2018-04-13T16:43:17+08:00</updated>
   <id>http://wenyang12.github.io/</id>
   <author>
     <name><![CDATA[三重水]]></name>
@@ -236,6 +236,20 @@ echo 'www.domain.com' &gt;&gt; source/CNAME
 <h2>八、参考</h2>
 
 <p><a href="http://blog.csdn.net/efvn2008/article/details/48392047">Gemfile 详解</a></p>
+
+<h2>lfs里遇到push不到远程分支问题</h2>
+
+<p>如果提示batch response: Git credentials for <a href="https://github.com/wenyang12/wenyang12.github.io.git">https://github.com/wenyang12/wenyang12.github.io.git</a> not found
+执行</p>
+
+<pre><code> git remote update
+ git lfs install
+ git lfs track &lt;file&gt;
+ git add .
+ git commit -m"add lfs file"
+ git config --global credential.helper wincred
+ git push --force origin master
+</code></pre>
 ]]></content>
   </entry>
   
