@@ -154,5 +154,22 @@ rake deploy
    * gem "my_gem", "~> 1.5.0" –> gem "my_gem", ">= 1.5.0", "< 1.6.0"
    * gem "my_gem", "~> 1.5.5" –> gem "my_gem", ">= 1.5.5", "< 1.6.0"
 
+
 ## 八、参考
 [Gemfile 详解](http://blog.csdn.net/efvn2008/article/details/48392047)
+
+## lfs里遇到push不到远程分支问题
+如果提示batch response: Git credentials for https://github.com/wenyang12/wenyang12.github.io.git not found
+执行
+
+```
+ git remote update
+ git lfs install
+ git lfs track <file>
+ git add .
+ git commit -m"add lfs file"
+ git config --global credential.helper wincred
+ git push --force origin master
+
+```
+
