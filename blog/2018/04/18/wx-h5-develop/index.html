@@ -1,0 +1,658 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>微信h5页面开发遇到的坑 - 三重水的博客</title>
+  <meta name="author" content="三重水">
+
+  
+  <meta name="description" content="一、 长按图片为base64的图片，识别图中的二维码时，base64的字符个数有限制 经过测试大于大概为258286字符(大约500KB)的时候，在识别图时可以弹出正常的菜单，但是点击菜单项“识别图中二维码”则无反应。 需求背景： 拓展业务时，都会生成一个二维码页面用于分享给别人； &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="baidu-site-verification" content="ipSlYf2c3P" />
+  
+  <link rel="canonical" href="http://wenyang12.github.io/blog/2018/04/18/wx-h5-develop/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="三重水的博客" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<script type="text/javascript">
+
+    function addBlankTargetForLinks () {
+
+        $('a[href^="http"]').each(function(){
+
+            $(this).attr('target', '_blank');
+
+        });
+
+    }
+
+    $(document).bind('DOMNodeInserted', function(event) {
+        addBlankTargetForLinks();
+
+    });
+
+</script>
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?ddb3466dedfe096084bfb3626c5d2311";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">三重水的博客</a></h1>
+  
+    <h2>在变化当中不断记录自己，充实自己，浏览自己</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><div class="wrapper">
+<ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form>
+  <fieldset role="search">
+    <input class="search" id="bdcsMain" type="text" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">首页</a></li>
+  <li><a href="/blog/archives">归档</a></li>
+  <!-- <li><a href="/about-me">关于我</a></li>
+  <li><a href="/wenxun/dist/">相册</a></li> -->
+</ul>
+
+</div></nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">微信h5页面开发遇到的坑</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2018-04-18T10:08:46+08:00'><span class='date'>2018年04月18日</span> <span class='time'>10:08 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h2>一、 长按图片为base64的图片，识别图中的二维码时，base64的字符个数有限制</h2>
+
+<blockquote><p>经过测试大于大概为258286字符(大约500KB)的时候，在识别图时可以弹出正常的菜单，但是点击菜单项“识别图中二维码”则无反应。</p></blockquote>
+
+<p>需求背景： 拓展业务时，都会生成一个二维码页面用于分享给别人； 而二维码页面包含有，二维码图片，公司logo图，背景图，<strong>动态产品介绍文案</strong> 等构成的一个页面。</p>
+
+<p>用于分享出去的东西最好的预期是，能把整个页面转换为图片分享出去效果是最好的，而不单单只分享一个二维码图片。所以就有以下需求点需要解决：</p>
+
+<ul>
+<li>把页面转换为图片</li>
+<li>让微信能正常识别图中的二维码</li>
+</ul>
+
+
+<p>利用微信内置的长按功能即可以实现以上需求。在长按后，弹出来的菜单中，可以自己选择“保存为图片”，或者点击“识别图中二维码”直接进入推广页，或者也可以直接发送给朋友。</p>
+
+<p>根据以上需求点，那么问题来了。</p>
+
+<p><strong>页面如何转换为图片呢？</strong></p>
+
+<blockquote><p>通过html2canvas把页面转换为canvas，然后在通过canvas.toDataURL方法转换为base64图即可</p></blockquote>
+
+<p>用到的技术为<a href="https://github.com/niklasvh/html2canvas">html2canvas</a></p>
+
+<p><strong>如何使用呢？</strong></p>
+
+<!--more-->
+
+
+<p>直接在自己项目中安装</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>yarn add html2canvas -D</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在项目中引用</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>import html2canvas from 'html2canvas';
+</span><span class='line'>
+</span><span class='line'>// 把页面生成为base64图
+</span><span class='line'>html2canvas(document.body).then((canvas) =&gt; {
+</span><span class='line'>  const base64Image = canvas.toDataURL('image/png');
+</span><span class='line'>  console.log(`转换出的base64图为：${base64Image}`);
+</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
+
+
+<p>把转换出来的base64图，替换掉页面即可，用户是无感知的。</p>
+
+<p>那么问题来了，通过<code>canvas.toDataURL</code> 转换出来的base64字符过长，超出了微信base64字符限制，这怎么办呢？</p>
+
+<p>可以利用canvas.toDataURL 转换为image/jpeg 然后添加第二个参数，改变图片质量，把字符将到限制以下即可。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>canvas.toDataURL('image/jpeg', 0.3) // 在指定图片格式为 image/jpeg 或 image/webp的情况下，可以从 0 到 1 的区间内选择图片的质量</span></code></pre></td></tr></table></div></figure>
+
+
+<p>更多详细的toDataURL方法的使用可以参考<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLCanvasElement/toDataURL">MDN文档</a></p>
+
+<h2>二、页面首次登录发起的微信静默登录后，后台重定向回到当前页面，要点击两次返回才能回到上一个页面问题。</h2>
+
+<p>要分析整个问题，得先理解微信的静默登录的流程是如何的，流程如下：
+微信静默登录的地址为： <code>https://open.weixin.qq.com/connect/oauth2/authorize?appid=[企业号appId]&amp;redirect_uri=[后台回调url]&amp;response_type=code&amp;scope=snsapi_base&amp;state=[前端页面url]#wechat_redirect</code></p>
+
+<ul>
+<li><p>第一 ，当页面请求某个后台接口时，后台接口会返回一些东西，让你知道用户未登录；通常的做法是，后台会返回状态码401，然后前端根据401状态吗，执行location.replace([微信静默登录地址])，让页面加载这连接就会执行静默登录。</p></li>
+<li><p>第二，加载以上连接后，微信会把响应的一些参数code和参数state指定的前端页面拼接到传入的<strong>后台回调url</strong>，然后执行这个后台url请求。</p></li>
+<li><p>第三，请求后台时，后台会根据拼接传给他的参数，去获取用户的openid，和access_token，成功后，会重定向回到state参数指定的前端页面url。</p></li>
+</ul>
+
+
+<p><strong>原因分析：</strong></p>
+
+<p>后台重定向是无法替换掉历史记录的，所以导致这个问题。
+对于这个问题的误解：当发起微信静默登录时，采用location.replace()时，一直以为，为什么不会替换掉历史记录，问题的考虑点就错了，问题点不在这，因为问题点是重定向不会替换掉历史记录。所以当用户登录成功后，点击第一次返回，会回到当前页，再次点击返回时，才能回到上一个页面，所以会出现，点击2次返回才能回到上一个页面问题。</p>
+
+<p><strong>那么问题来了，如何解决这个问题呢？</strong></p>
+
+<p>假如有两个页面A(不需要登录态),B(需要登录态)</p>
+
+<p>首先得分析一下页面的历史记录如下：</p>
+
+<ul>
+<li>当进入页面A时，历史记录为1，当点击跳转到B页面时，执行了微信静默登录，此时历史记录+1 即为2。</li>
+<li>然后登录成功后重定向回到B页面，此时历史记录再+1 即为3了。</li>
+</ul>
+
+
+<p>我们可以重定向回到B页面时，还未进入到B页面，就让历史回退<code>history.go(-2)</code>到A页面(此时历史记录为1),然后A页面在根据一些参数来判断，跳转到B页面(此时的历史记录为2)，即可实现当点击B页面可以直接回到A页面。</p>
+
+<blockquote><p>ps:这里我的项目主要用到了中间页进行登录了。没有中间页的情况，直接<code>history.go(-1)</code>即可。</p></blockquote>
+
+<p>还是直接上代码吧，代码(截取的是自己vue项目的一个实现,部分代码)如下：</p>
+
+<p>vue项目为单页面应用，所以把逻辑放到全局路由守卫（当进入A，B页面时都会执行，即进入A或B路由时，首先会执行的逻辑判断</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>// 静默登录时，传给state的前端url参数，后边加了一个参数"?isLogin=true" 添加了这个参数，同时也解决了另一个静默登录遇到的坑，后续会讲到。
+</span><span class='line'>// const stateUrl = encodeURIComponent('http://www.demo1.com/?isLogin=true#/pageA');
+</span><span class='line'>// 连接如： `https://open.weixin.qq.com/connect/oauth2/authorize?appid=[企业号appId]&redirect_uri=[后台回调url]&response_type=code&scope=snsapi_base&state=${stateUrl}#wechat_redirect`
+</span><span class='line'>
+</span><span class='line'>Vue.beforeEach((to, from, next) =&gt; {
+</span><span class='line'>  if (!window.localStorage) {
+</span><span class='line'>    next();
+</span><span class='line'>  }
+</span><span class='line'>  const prevUrl = localStorage.getItem('prevUrl');
+</span><span class='line'>  if (prevUrl) { // 假如存在这个参数，说明是从静默登录成功后的页面跳回来的。即这里，判断为是从B页面跳回来的。
+</span><span class='line'>    localStorage.removeItem('prevUrl');
+</span><span class='line'>    next({ // 跳回静默登录成功后的页面，这里指的即是跳回到B页面。
+</span><span class='line'>      path: `${prevUrl.split('#')[1]}`,
+</span><span class='line'>      query: {
+</span><span class='line'>        cache: false
+</span><span class='line'>      }
+</span><span class='line'>    });
+</span><span class='line'>  }
+</span><span class='line'>  if (/\?isLogin=true/g.test(location.href)) {
+</span><span class='line'>    localStorage.setItem('prevUrl', `${location.hash.split('?')[0]}`); // 添加这prevUrl参数用于判断是否存在是从B跳到A的，相当于保存了B页面的连接，即静默登录成功后进入的页面连接。
+</span><span class='line'>    history.go(-2); // 回退到A页面
+</span><span class='line'>  }
+</span><span class='line'>  next();
+</span><span class='line'>})
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>三、iphone6和iphone6s中发现，静默登录后页面不刷新，或者白屏</h2>
+
+<blockquote><p>假如进入A页面时发起静默登录，成功登录后回调到A页面，要是A页面连接不变，A页面就不会刷新，导致，假如刚进入A页面，还未渲染DOM时，就发起静默的登录，重定向回来时，看起来就是白屏效果，或者假如你传给state的参数大于128字节时(即字符长度为64)。超过的话，会被截取掉。</p></blockquote>
+
+<p>想要预防state大于限制被截取掉，可以把前端的回调地址不要放在state参数里，而是自己取一个参数拼接放在后端的回调参数redirect_uri里即可，然后在跟后端约定就好，拼接如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>  const feUrl = 'http://www.demo1.com/?isLogin=true#/pageA'; // 前端地址
+</span><span class='line'>  const authCallbackUrl = `${apiSourceDomain}/wechat/zlAuthCallback.jhtml?redirectUrl=${encodeURIComponent(state)}`; // 后端地址
+</span><span class='line'>  location.replace(`https://open.weixin.qq.com/connect/oauth2/authorize?appid=[企业号appId]&redirect_uri=${authCallbackUrl}&response_type=code&scope=snsapi_base&state=${stateUrl}#wechat_redirect`); //发起微信静默登录</span></code></pre></td></tr></table></div></figure>
+
+
+<p>即静默登录成功后，后台到时候想要302重定向回来前端页面，取的参数值应该为上边的redirectUrl参数了，而不是微信拼接的state参数了，这个跟后台约定好即可。</p>
+
+<p><strong>解决方案：</strong></p>
+
+<p>发起静默登录时，在参数state指定的前端回调页面连接里，加入任意参数即可。添加如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>const feUrl = encodeURIComponent('http://www.demo1.com/?isLogin=true#/pageA');
+</span><span class='line'>location.replace(`https://open.weixin.qq.com/connect/oauth2/authorize?appid=[企业号appId]&redirect_uri=[后台回调url]&response_type=code&scope=snsapi_base&state=${feUrl}#wechat_redirect`);</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>四、ios左右边缘滑动返回前进页面动画与h5用户自定义页面切换动画冲突问题</h2>
+
+<blockquote><p>导致滑动切换页面时执行了ios的动画之后又执行自定义动画。看起来就是闪了一下自定义动画。</p></blockquote>
+
+<p><strong>解决方案:</strong></p>
+
+<p>监听左右滑动手势和touchstart事件清除掉自定义动画即可。</p>
+
+<p>同时加入滑动后多少ms后恢复动画，不然滑动后就真的没有自定义动画了 ，已防止用户不是边缘滑动时清除掉的自定义动画恢复。</p>
+
+<p>多少ms 后恢复 建议设置为切换动画执行时间的两倍即可。</p>
+
+<p>上边为什么要监听touchstart事件呢，因为经过测试发现滑动边缘返回或前进时，不一定执行滑动事件，因为封装的滑动事件是有最小距离的，超过才执行的。</p>
+
+<p>然后又为了防止用户触摸屏幕时会执行touchstart事件从而导致切换动画清除掉，在click事件发生时要回复动画。</p>
+
+<p>截取vue项目中的部分代码如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>// &lt;transition :name="transitionName"&gt; 
+</span><span class='line'>//  &lt;router-view @click.native="onClick" v-swipe="{fn:onSwipe, trigger: 'touchstart'}" &gt;&lt;/router-view&gt;
+</span><span class='line'>//&lt;/transition&gt;
+</span><span class='line'>
+</span><span class='line'>export default {
+</span><span class='line'>  data: {
+</span><span class='line'>    return {
+</span><span class='line'>      routeMap: {
+</span><span class='line'>        count: 0,
+</span><span class='line'>        '/': 0,
+</span><span class='line'>      },
+</span><span class='line'>      transitionName: '',
+</span><span class='line'>      touchHandler: null,
+</span><span class='line'>    }
+</span><span class='line'>  }
+</span><span class='line'>  watch: {
+</span><span class='line'>    $route(to, from) {
+</span><span class='line'>      // 切换路由，判断是前进页面，或后退页面，相应改变 this.transitionName = 'next'; 
+</span><span class='line'>      // 或 this.transitionName = 'prev'; 
+</span><span class='line'>
+</span><span class='line'>      const toIndex = this.routeMap[to.path];
+</span><span class='line'>      const fromIndex = this.routeMap[from.path];
+</span><span class='line'>      if (toIndex !== undefined) {
+</span><span class='line'>        if (!fromIndex || parseInt(toIndex, 10) &gt; parseInt(fromIndex, 10)) {
+</span><span class='line'>          this.transitionName = 'next';
+</span><span class='line'>        } else {
+</span><span class='line'>          this.transitionName = 'prev';
+</span><span class='line'>        }
+</span><span class='line'>      } else {
+</span><span class='line'>        this.routeMap.count += 2;
+</span><span class='line'>        this.routeMap[to.path] = this.routeMap.count;
+</span><span class='line'>        // 第一个页面不需要动画，因为每个子路由的from都是根路由（即使你第一个访问的是子路由）
+</span><span class='line'>        if (from.path !== '/') {
+</span><span class='line'>          this.transitionName = 'next';
+</span><span class='line'>        }
+</span><span class='line'>      }
+</span><span class='line'>      // 清除掉自定义动画
+</span><span class='line'>      this.touchHandler && this.touchHandler();
+</span><span class='line'>    }
+</span><span class='line'>  }
+</span><span class='line'>  methods: {
+</span><span class='line'>    ...
+</span><span class='line'>    // 监听点击事件
+</span><span class='line'>    onClick() {
+</span><span class='line'>      this.touchHandler = null; // 恢复自定义动画
+</span><span class='line'>    },
+</span><span class='line'>    //监听向左向右滑动，和touchstart事件
+</span><span class='line'>    onSwipe() { // 解决ios系统版本在11.0以上，滑动会执行原生动画和vue自定义动画冲突问题
+</span><span class='line'>      if (Device.isIOS() && (Device.iosVersionCompare('11.0') !== -1)) { // 大于11.0
+</span><span class='line'>        this.touchHandler = () =&gt; {
+</span><span class='line'>          this.transitionName = ''; // 清除掉自定义动画
+</span><span class='line'>        };
+</span><span class='line'>        this.Timer && clearTimeout(this.Timer);
+</span><span class='line'>        this.Timer = setTimeout(() =&gt; { // 恢复自定义动画
+</span><span class='line'>          this.touchHandler = null;
+</span><span class='line'>        }, 2000);
+</span><span class='line'>      }
+</span><span class='line'>    },
+</span><span class='line'>    ...
+</span><span class='line'>  }
+</span><span class='line'>}
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>ps: 这个不是微信里的坑，但是也一起记录了，触摸事件可以自己添加，vue-touch触摸插件，上边的v-swipe指令我是自己在项目里通过 Vue.derective(&lsquo;swipe&rsquo;,{&hellip;}) 这种方式自己添加的。</p>
+
+<h2>参考</h2>
+
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLCanvasElement/toDataURL">HTMLCanvasElement.toDataURL()</a></p>
+
+<p><a href="https://github.com/niklasvh/html2canvas">html2canvas</a></p>
+
+<p><a href="https://mp.weixin.qq.com/wiki?t=resource/res_main&amp;id=mp1421140842">微信网页授权</a></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">三重水</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2018-04-18T10:08:46+08:00'><span class='date'>2018年04月18日</span> <span class='time'>10:08 am</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/keng/'>坑</a>, <a class='category' href='/blog/categories/wei-xin-h5/'>微信h5</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+  
+  <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style_32x32">
+    <a class="jiathis_button_qzone"></a>
+    <a class="jiathis_button_tsina"></a>
+    <a class="jiathis_button_tqq"></a>
+    <a class="jiathis_button_weixin"></a>
+    <a class="jiathis_button_renren"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+    <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2018/01/17/adb-chrome-develop/" title="Previous Post: webview的调试方法">&laquo; webview的调试方法</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>评论</h1>
+    <div id="disqus_thread" aria-live="polite"><!-- 多说评论框 start -->
+<div class="ds-thread" data-thread-key="/blog/2018/04/18/wx-h5-develop" data-title="微信h5页面开发遇到的坑" data-url="http://wenyang12.github.io/blog/2018/04/18/wx-h5-develop/"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    var duoshuoQuery = {short_name:"ywenblog"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+        || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>近期文章</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2018/04/18/wx-h5-develop/">微信h5页面开发遇到的坑</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2018/01/17/adb-chrome-develop/">Webview的调试方法</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/12/28/csp/">CSP(内容安全策略)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/08/31/native-drag/">原生拖放</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/08/17/email-read-adaption/">邮件读信页的自适应方案</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+<section class="about-me">
+  <h1>关于我</h1>
+  <div class="thumb">
+      <span></span>
+      <p>三重水</p>
+      <p>学习，积累，反思，阅读，分享</p>
+  </div>  
+  <p><a href="https://github.com/wenyang12" target="_blank">github</a><a href="http://wenyang12.github.io/" target="_blank">博客</a><a
+          href="https://www.qdfuns.com/u/13989/works/articles" target="_blank">前端网</a>
+          <!-- <a href="http://wenyang.sinaapp.com/" target="_blank">笔记</a>
+          <a href="http://ywenblog.sinaapp.com/" target="_blank">WordPress</a> -->
+        </p>
+</section>
+<section>
+    <h1>标签</h1>
+    <div class="cloud">
+        <a style="font-size: 159%" href="/blog/categories/node-dot-jskuang-jia/">Node.js框架</a>
+<a style="font-size: 90%" href="/blog/categories/adb/">adb</a>
+<a style="font-size: 145%" href="/blog/categories/ajax/">ajax</a>
+<a style="font-size: 90%" href="/blog/categories/bootstrap/">bootstrap</a>
+<a style="font-size: 90%" href="/blog/categories/csp/">csp</a>
+<a style="font-size: 90%" href="/blog/categories/cssyu-chu-li-qi/">css预处理器</a>
+<a style="font-size: 90%" href="/blog/categories/email/">email</a>
+<a style="font-size: 90%" href="/blog/categories/es5/">es5</a>
+<a style="font-size: 90%" href="/blog/categories/express/">express</a>
+<a style="font-size: 124%" href="/blog/categories/git/">git</a>
+<a style="font-size: 90%" href="/blog/categories/grunt/">grunt</a>
+<a style="font-size: 170%" href="/blog/categories/html5/">html5</a>
+<a style="font-size: 90%" href="/blog/categories/jquerycha-jian/">jQuery插件</a>
+<a style="font-size: 145%" href="/blog/categories/javascript/">javascript</a>
+<a style="font-size: 90%" href="/blog/categories/jquery/">jquery</a>
+<a style="font-size: 90%" href="/blog/categories/jquery-dot-validation/">jquery.validation</a>
+<a style="font-size: 90%" href="/blog/categories/less/">less</a>
+<a style="font-size: 145%" href="/blog/categories/loopback/">loopback</a>
+<a style="font-size: 90%" href="/blog/categories/markdown/">markdown</a>
+<a style="font-size: 145%" href="/blog/categories/mongodb/">mongodb</a>
+<a style="font-size: 124%" href="/blog/categories/octopress/">octopress</a>
+<a style="font-size: 90%" href="/blog/categories/react/">react</a>
+<a style="font-size: 90%" href="/blog/categories/sass/">sass</a>
+<a style="font-size: 124%" href="/blog/categories/spm/">spm</a>
+<a style="font-size: 90%" href="/blog/categories/webworker/">webWorker</a>
+<a style="font-size: 90%" href="/blog/categories/websoket/">websoket</a>
+<a style="font-size: 90%" href="/blog/categories/wordpress/">wordpress</a>
+<a style="font-size: 90%" href="/blog/categories/zhong-jie-zhe-mo-shi/">中介者模式</a>
+<a style="font-size: 90%" href="/blog/categories/dai-li-mo-shi/">代理模式</a>
+<a style="font-size: 90%" href="/blog/categories/dao-ji-shi/">倒计时</a>
+<a style="font-size: 90%" href="/blog/categories/nei-rong-an-quan-ce-lue/">内容安全策略</a>
+<a style="font-size: 90%" href="/blog/categories/qian-duan-gou-jian-gong-ju/">前端构建工具</a>
+<a style="font-size: 90%" href="/blog/categories/yuan-xing-mo-shi/">原型模式</a>
+<a style="font-size: 90%" href="/blog/categories/keng/">坑</a>
+<a style="font-size: 90%" href="/blog/categories/fu-xuan-kuang-zu-jian/">复选框组件</a>
+<a style="font-size: 90%" href="/blog/categories/dan-chu-kuang/">弹出框</a>
+<a style="font-size: 90%" href="/blog/categories/wei-xin-h5/">微信h5</a>
+<a style="font-size: 90%" href="/blog/categories/tuo-fang/">拖放</a>
+<a style="font-size: 124%" href="/blog/categories/wen-jian-shang-chuan/">文件上传</a>
+<a style="font-size: 90%" href="/blog/categories/jian-ce-shu-ju-lei-xing/">检测数据类型</a>
+<a style="font-size: 124%" href="/blog/categories/mo-kuai-bao/">模块包</a>
+<a style="font-size: 90%" href="/blog/categories/gun-dong-jian-ting/">滚动监听</a>
+<a style="font-size: 145%" href="/blog/categories/pu-bu-liu/">瀑布流</a>
+<a style="font-size: 90%" href="/blog/categories/deng-lu-zhu-ce-mo-ban/">登陆注册模板</a>
+<a style="font-size: 90%" href="/blog/categories/liao-tian-shi/">聊天室</a>
+<a style="font-size: 90%" href="/blog/categories/zi-gua-ying/">自适应</a>
+<a style="font-size: 90%" href="/blog/categories/guan-cha-zhe-mo-shi/">观察者模式</a>
+<a style="font-size: 159%" href="/blog/categories/she-ji-mo-shi/">设计模式</a>
+<a style="font-size: 90%" href="/blog/categories/diao-shi-webview/">调试webview</a>
+<a style="font-size: 90%" href="/blog/categories/xuan-xiang-qia/">选项卡</a>
+<a style="font-size: 90%" href="/blog/categories/mian-shi/">面试</a>
+<a style="font-size: 90%" href="/blog/categories/shu-biao-shi-jian/">鼠标事件</a>
+
+    </div>
+</section>
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><div class="wrapper">
+<p>
+  Copyright &copy; 2018 - 三重水 -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a>&nbsp;<a href="http://tongji.baidu.com/web/welcome/ico?s=ddb3466dedfe096084bfb3626c5d2311">百度统计</a></span>
+</p>
+</div>
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">(function(){document.write(unescape('%3Cdiv id="bdcs"%3E%3C/div%3E'));var bdcs = document.createElement('script');bdcs.type = 'text/javascript';bdcs.async = true;bdcs.src = 'http://znsv.baidu.com/customer_search/api/js?sid=5545127454396687048' + '&plate_url=' + encodeURIComponent(window.location.href) + '&t=' + Math.ceil(new Date()/3600000);var s = document.getElementsByTagName('script')[0];s.parentNode.insertBefore(bdcs, s);})();</script>
+</body>
+</html>
