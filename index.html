@@ -9,7 +9,9 @@
   <meta name="author" content="三重水">
 
   
-  <meta name="description" content="一、 长按图片为base64的图片，识别图中的二维码时，base64的字符个数有限制 经过测试大于大概为258286字符(大约500KB)的时候，在识别图时可以弹出正常的菜单，但是点击菜单项“识别图中二维码”则无反应。 需求背景： 拓展业务时，都会生成一个二维码页面用于分享给别人； &hellip;">
+  <meta name="description" content="安装Node.js 安装wget，curl，get，vim（linux上的常用工具） 1
+yum install wget curl git vim 安装好这些工具后，可以利用wget或者curl来安装nvm(node的版本管理工具) 可以利用 wget安装 1
+wget -qO- https &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -95,6 +97,74 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2018/06/13/linux-install-mongodb/">CentOS7安装mongodb和Node.js</a></h1>
+      <div class="time-node">
+        <div class="golf_stick"></div>
+        <div class="golf_ball"></div>
+      </div>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2018-06-13T16:17:21+08:00'><span class='date'>2018年06月13日</span> <span class='time'>4:17 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>安装Node.js</h2>
+
+<p><strong>安装wget，curl，get，vim</strong>（linux上的常用工具）</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>yum install wget curl git vim</span></code></pre></td></tr></table></div></figure>
+
+
+<p>安装好这些工具后，可以利用wget或者curl来安装<a href="https://github.com/creationix/nvm">nvm</a>(node的版本管理工具)</p>
+
+<p>可以利用 wget安装</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash</span></code></pre></td></tr></table></div></figure>
+
+
+<p>或者 curl安装</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash</span></code></pre></td></tr></table></div></figure>
+
+
+<p>PS:安装好后，需要重新打开终端 nvm才会生效</p>
+
+<p>nvm安装好后，即可以用nvm来安装任何Node.js版本了</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>nvm install v.8.9.4</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2018/06/13/linux-install-mongodb/">阅读更多 &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -329,57 +399,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2017/08/17/email-read-adaption/">邮件读信页的自适应方案</a></h1>
-      <div class="time-node">
-        <div class="golf_stick"></div>
-        <div class="golf_ball"></div>
-      </div>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2017-08-17T14:25:10+08:00'><span class='date'>2017年08月17日</span> <span class='time'>2:25 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>背景介绍</h2>
-
-<p>邮件的读信页，要分享到别的地方，别的地方可以通过一个连接即可打开查看。</p>
-
-<p>那么问题了来了，在终端或者pc端，查看内容的时候，因为设备不一样，屏幕尺寸也都不同，那就会碰到，有些邮件内容看起来就很难看，因为邮件内容都是第三方发送过来的，都没有做自适应适配，只能是读信这边来做自适应，让它展示起来效果都高保真发件者发过来的邮件即可。此外我们会经常收到一些推广的邮件，里边的邮件就像一个小页面一样展示，这种邮件一般有个名字叫emd邮件，即“电子邮件营销”，很多都不符合标准，会带上自己的一些样式规则，而css样式不是用符合edm规范的的内联样式，这就导致了，读信页里的内容样式，影响到展示它的网页样式，通常处理这种影响，有些会把style标签过滤掉，不过，一般成熟的邮件方案是使用iframe方案插入邮件，让他自己有自己的一个空间，就可以解决影响到外部样式问题，而也高保真了发送过来的邮件展示问题。</p>
-
-<h2>edm是什么？</h2>
-
-<p>上边提到的edm邮件营销，即可以理解为，通过邮件方式，插入自己的网页源代码，然后发送给对方，对方查看邮件的时候，就会看到邮件内容跟一张网页一样，可以浏览，也可以点击调转，从而起到营销引流的作用，把流量导入自己的真实网站中，最常见的就是购物网站的edm邮件了。你去某网站购物，注册了，然后留了自己的邮箱地址，购物网站会根据你平时浏览过的，或购买过的，进行精准的邮件edm营销，定期发送一封邮件给你。
-emd邮件如图所示：</p>
-
-<p><img src="/images/email-read-pic.png" alt="edm图例" /></p>
-
-<p>这么样才算符合edm的源码写法呢，这里有个源码<a href="https://github.com/wenyang12/email-edm-template.git">事例</a>可以看看</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2017/08/17/email-read-adaption/">阅读更多 &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/2">&larr; Older</a>
@@ -395,6 +414,10 @@ emd邮件如图所示：</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2018/06/13/linux-install-mongodb/">CentOS7安装mongodb和Node.js</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2018/04/18/wx-h5-develop/">微信h5页面开发遇到的坑</a>
       </li>
     
@@ -408,10 +431,6 @@ emd邮件如图所示：</p>
     
       <li class="post">
         <a href="/blog/2017/08/31/native-drag/">原生拖放</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2017/08/17/email-read-adaption/">邮件读信页的自适应方案</a>
       </li>
     
   </ul>
@@ -436,7 +455,9 @@ emd邮件如图所示：</p>
 <section>
     <h1>标签</h1>
     <div class="cloud">
-        <a style="font-size: 159%" href="/blog/categories/node-dot-jskuang-jia/">Node.js框架</a>
+        <a style="font-size: 90%" href="/blog/categories/centos7/">CentOS7</a>
+<a style="font-size: 90%" href="/blog/categories/node-dot-js/">Node.js</a>
+<a style="font-size: 159%" href="/blog/categories/node-dot-jskuang-jia/">Node.js框架</a>
 <a style="font-size: 90%" href="/blog/categories/adb/">adb</a>
 <a style="font-size: 145%" href="/blog/categories/ajax/">ajax</a>
 <a style="font-size: 90%" href="/blog/categories/bootstrap/">bootstrap</a>
@@ -455,7 +476,7 @@ emd邮件如图所示：</p>
 <a style="font-size: 90%" href="/blog/categories/less/">less</a>
 <a style="font-size: 145%" href="/blog/categories/loopback/">loopback</a>
 <a style="font-size: 90%" href="/blog/categories/markdown/">markdown</a>
-<a style="font-size: 145%" href="/blog/categories/mongodb/">mongodb</a>
+<a style="font-size: 159%" href="/blog/categories/mongodb/">mongodb</a>
 <a style="font-size: 124%" href="/blog/categories/octopress/">octopress</a>
 <a style="font-size: 90%" href="/blog/categories/react/">react</a>
 <a style="font-size: 90%" href="/blog/categories/sass/">sass</a>
