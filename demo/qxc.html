@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>数字系统</title>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+</head>
+<style>
+    .wrap {
+        width: 90%;
+        margin: 0 auto;
+        text-align: center;
+    }
+
+    input {
+        border: 1px solid #dddddd;
+        text-align: center;
+        height: 30px;
+        margin: 5px;
+    }
+
+    input[type="text"] {
+        width: 50px;
+    }
+
+    input[type='button'] {
+        background: #ff3300;
+        color: #ffffff;
+    }
+
+    #output {
+        border: 1px dashed #dddddd;
+        padding: 15px;
+        word-break: break-all;
+        display: block;
+    }
+
+    #resultCopy {
+        height: 0;
+        border: 0;
+    }
+</style>
+
+<body>
+    <div class="wrap">
+        <input id="number1" type="text">
+        <input id="number2" type="text">
+        <input id="number3" type="text">
+        <input id="number4" type="text">
+        <input type="button" id="btn1" value="4个数的所有排列组合(方框为空默认是0)">
+        <input type="button" id="btn2" value="定位（包含）【方框为空默认是0~9】">
+        <input type="button" id="btn3" value="定位（排除）【方框为空默认是0~9】">
+        <input type="button" id="btn5" value="双色球选码！点我！点我！中大奖！！">
+        <div id="output">输出区域</div>
+        <div style="text-indent: -20em; height:2px;width: 2px;overflow: hidden;display: inline-block;"><textarea id='resultCopy' cols='10' rows='30'></textarea></div>
+
+        <input type="button" id="btn4" value="复制">
+    </div>
+
+    <script>
+        Array.prototype.unique = function () {//数组去重
+            var result = [];
+            var obj = {};
+            for (var i = 0, len = this.length; i < len; i++) {
+                if (!obj[this[i]]) {
+                    result.push(this[i]);
+                    obj[this[i]] = 1;
+                }
+            }
+            return result;
+        };
+        function System7(number) {
+            this.number = number;
+        }
+        System7.prototype.mix = function () {//4个数的所有组合排列
+            if (this.number[0].length !== 1 || this.number[1].length !== 1 || this.number[2].length !== 1 || this.number[3].length !== 1 && this.number[3].length !== 0) {
+                return "想用此功能每个框只能输入一个数字";
+            }
+            var result = [];
+            result.push(this.number[0] + this.number[1] + this.number[2] + this.number[3]);
+            result.push(this.number[0] + this.number[1] + this.number[3] + this.number[2]);
+            result.push(this.number[0] + this.number[2] + this.number[1] + this.number[3]);
+            result.push(this.number[0] + this.number[2] + this.number[3] + this.number[1]);
+            result.push(this.number[0] + this.number[3] + this.number[1] + this.number[2]);
+            result.push(this.number[0] + this.number[3] + this.number[2] + this.number[1]);
+
+            result.push(this.number[1] + this.number[0] + this.number[2] + this.number[3]);
+            result.push(this.number[1] + this.number[0] + this.number[3] + this.number[2]);
+            result.push(this.number[1] + this.number[2] + this.number[0] + this.number[3]);
+            result.push(this.number[1] + this.number[2] + this.number[3] + this.number[0]);
+            result.push(this.number[1] + this.number[3] + this.number[0] + this.number[2]);
+            result.push(this.number[1] + this.number[3] + this.number[2] + this.number[0]);
+
+            result.push(this.number[2] + this.number[0] + this.number[1] + this.number[3]);
+            result.push(this.number[2] + this.number[0] + this.number[3] + this.number[1]);
+            result.push(this.number[2] + this.number[1] + this.number[0] + this.number[3]);
+            result.push(this.number[2] + this.number[1] + this.number[3] + this.number[0]);
+            result.push(this.number[2] + this.number[3] + this.number[0] + this.number[1]);
+            result.push(this.number[2] + this.number[3] + this.number[1] + this.number[0]);
+
+            result.push(this.number[3] + this.number[0] + this.number[1] + this.number[2]);
+            result.push(this.number[3] + this.number[0] + this.number[2] + this.number[1]);
+            result.push(this.number[3] + this.number[1] + this.number[0] + this.number[2]);
+            result.push(this.number[3] + this.number[1] + this.number[2] + this.number[0]);
+            result.push(this.number[3] + this.number[2] + this.number[0] + this.number[1]);
+            result.push(this.number[3] + this.number[2] + this.number[1] + this.number[0]);
+
+            var output = result.unique();
+            return "<h2>共" + output.length + "组</h2><p id='resultCopyP'>" + output.join(' ') + "</p>";
+
+        };
+
+        System7.prototype.mixAll = function (flag) {//定位排列
+            if (this.number[0].search(/[^\d]+/) !== -1 || this.number[1].search(/[^\d]+/) !== -1 || this.number[2].search(/[^\d]+/) !== -1 || this.number[3].search(/[^\d]+/) !== -1) {
+                return "输入的框内只能为数字";
+            }
+            var result1 = [];
+            var result2 = [];
+            var a;
+            for (var i = 0; i < 10000; i++) {
+                a = i.toString();
+                if (a.length === 1) {
+                    a = "000" + a;
+                }
+                if (a.length === 2) {
+                    a = "00" + a;
+                }
+                if (a.length === 3) {
+                    a = "0" + a;
+                }
+                var aArr = a.split('');
+                //生成包含定位（即包含方框输入的数字，而且位置也要相同）
+                if (this.number[0].search(aArr[0]) !== -1 && this.number[1].search(aArr[1]) !== -1 && this.number[2].search(aArr[2]) !== -1 && this.number[3].search(aArr[3]) !== -1) {
+                    result1.push(a);
+                }
+                //生成排除定位（即排除方框输入的数字，而且位置也要相同）
+                if (this.number[0].search(aArr[0]) === -1 && this.number[1].search(aArr[1]) === -1 && this.number[2].search(aArr[2]) === -1 && this.number[3].search(aArr[3]) === -1) {
+                    result2.push(a);
+                }
+            }
+            if (flag) {
+                return "<h2>共" + result1.length + "组</h2><p>" + result1.join(' ');
+            } else {
+                return "<h2>共" + result2.length + "组</h2><p>" + result2.join(' ');
+            }
+
+        };
+
+        System7.prototype.random = function () { // 随机组合双色球
+            var redBall = [],
+                redLen = 0;
+            var ranNumber = function(s, e){
+                　var staVal = parseFloat(s);
+                　var endVal = parseFloat(e);
+                　return Math.floor(Math.random()*(endVal-staVal)+staVal);
+                }
+            while (redLen < 6) {
+                var ball = ranNumber(1, 33);
+                var flag = true;
+                for (var j = 0; j < redLen; j++) {
+                    if (redBall[j] == ball) {
+                        flag = false;
+                        break;
+                    }
+                }
+                if (flag) {
+                    if (ball < 10) {
+                        redBall.push("0" + ball);
+                    } else {
+                        redBall.push(ball);
+                    }
+                }
+                redLen = redBall.length;
+            }
+            redBall.sort();
+            var blueBall = ranNumber(1, 16);
+            if (blueBall < 10) {
+                blueBall = "0" + blueBall;
+            }
+            return redBall.join(',') + "|" + blueBall;
+        };
+
+        //运用
+        (function (System7) {
+            var btn1 = document.getElementById('btn1');
+            var btn2 = document.getElementById('btn2');
+            var btn3 = document.getElementById('btn3');
+            var btn4 = document.getElementById('btn4');
+            var btn5 = document.getElementById('btn5');
+            var output = document.getElementById('output');
+            var n1 = document.getElementById('number1');
+            var n2 = document.getElementById('number2');
+            var n3 = document.getElementById('number3');
+            var n4 = document.getElementById('number4');
+
+            var n1value, n2value, n3value, n4value, n5value;
+            btn1.addEventListener('click', function () {
+                n1value = n1.value.toString() || "0";
+                n2value = n2.value.toString() || "0";
+                n3value = n3.value.toString() || "0";
+                n4value = n4.value.toString();
+                var a = new System7([n1value, n2value, n3value, n4value]);
+                var allNumber = a.mix();
+                output.innerHTML = allNumber;
+            });
+            btn2.addEventListener('click', function () {
+                n1value = n1.value.toString() || "0123456789";
+                n2value = n2.value.toString() || "0123456789";
+                n3value = n3.value.toString() || "0123456789";
+                n4value = n4.value.toString() || "0123456789";
+                var a = new System7([n1value, n2value, n3value, n4value]);
+                var allNumber = a.mixAll(true);
+                output.innerHTML = allNumber;
+            });
+            btn3.addEventListener('click', function () {
+                n1value = n1.value.toString() || "0123456789";
+                n2value = n2.value.toString() || "0123456789";
+                n3value = n3.value.toString() || "0123456789";
+                n4value = n4.value.toString() || "0123456789";
+                var a = new System7([n1value, n2value, n3value, n4value]);
+                var allNumber = a.mixAll();
+                output.innerHTML = allNumber;
+            });
+            btn4.addEventListener('click', function () {
+                var resultCopyP = document.getElementById('resultCopyP');
+                var resultCopy = document.getElementById('resultCopy');
+                resultCopy.innerHTML =resultCopyP &&  resultCopyP.innerHTML || output.innerHTML;
+                resultCopy.select(); // 选择对象
+                document.execCommand("Copy"); // 执行浏览器复制命令 s
+                alert("已复制好，可贴粘。");
+
+            });
+            btn5.addEventListener('click', function () {
+                var a = new System7();
+                var allNumber = a.random();
+                output.innerHTML = allNumber;
+            });
+
+        })(System7)
+
+    </script>
+</body>
+
+</html>
