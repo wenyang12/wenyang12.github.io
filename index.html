@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <link rel="icon" href="/ico/favicon.d5612ea4.ico" type="image/x-icon">
+  <link rel="icon" href="/ico/favicon.fa3e7dca.ico" type="image/x-icon">
   <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
   <meta content="width=device-width,initial-scale=1,user-scalable=no" name="viewport">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -14,19 +14,24 @@
   <script>!function(n){function f(){var e=n.document.documentElement,r=e.getBoundingClientRect(),width=r.width,height=r.height,arr=[width,height].filter(function(value){return Boolean(value)}),w=Math.min.apply(Math,arr),x=40*w/750;e.style.fontSize=x>=40?"40px":x<=20?"20px":x+"px"}; n.addEventListener("resize",(function(){f()})),f()}(window);</script>
   
   <script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?1c79ef0b204dde9964b0ecfd46b371d8";
-      var s = document.getElementsByTagName("script")[0]; 
-      s.parentNode.insertBefore(hm, s);
-    })();
+    if(location.origin.match('luoshu.online')){
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?1c79ef0b204dde9964b0ecfd46b371d8";
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+      })();
+    } else {
+      console.log('开发环境下不加载百度统计代码')
+    }
   </script>
-  <script type="module" crossorigin src="/js/app.24780717.js"></script>
+  <script type="module" crossorigin src="/js/app.52a6787d.js"></script>
+  <link rel="modulepreload" crossorigin href="/js/helper.314184a3.js">
   <link rel="modulepreload" crossorigin href="/js/vue.25d5b29f.js">
-  <link rel="modulepreload" crossorigin href="/js/nutui.32878658.js">
+  <link rel="modulepreload" crossorigin href="/js/nutui.00f5da56.js">
   <link rel="modulepreload" crossorigin href="/js/swiper.637bccad.js">
-  <link rel="modulepreload" crossorigin href="/js/tarobase.ac14d6a6.js">
+  <link rel="modulepreload" crossorigin href="/js/tarobase.75d709d1.js">
   <link rel="stylesheet" href="/css/nutui.9754eb24.css">
   <link rel="stylesheet" href="/css/tarobase.8886af03.css">
   <link rel="stylesheet" href="/css/index.d56b906e.css">
