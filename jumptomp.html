@@ -175,13 +175,9 @@
         
         // 跳转到小程序的函数
         function jumpToMiniProgram() {
-            // 尝试直接跳转
-            window.location.href = jumpPath;
-            
-            // 如果跳转失败，显示提示信息
             setTimeout(() => {
-                alert('如果未成功跳转，请确保您已安装微信客户端');
-            }, 2000);
+                window.location.href = jumpPath;
+            });
         }
         
         // 页面加载完成后初始化
