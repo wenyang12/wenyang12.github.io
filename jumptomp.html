@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>数规规·数字助手</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #e8f5e9 0%, #1aad19 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 40px 30px;
+            text-align: center;
+            max-width: 90%;
+            width: 350px;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .logo {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #e8f5e9 0%, #1aad19 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        h1 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .description {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        
+        .jump-button {
+            background: linear-gradient(135deg, #e8f5e9 0%, #1aad19 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 16px 30px;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .jump-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .jump-button:active {
+            transform: translateY(0);
+        }
+        
+        .auto-tip {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #999;
+        }
+        
+        .countdown {
+            color: #667eea;
+            font-weight: 600;
+        }
+        
+        .footer {
+            margin-top: 30px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            text-align: center;
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 22px;
+            }
+            
+            .description {
+                font-size: 14px;
+            }
+            
+            .jump-button {
+                padding: 14px 25px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">数规规·数字助手</div>
+        <h1>即将跳转到小程序</h1>
+        <p class="description">点击下方按钮立即跳转到我们的小程序，享受更多功能和服务</p>
+        <button class="jump-button" id="jumpButton">立即跳转</button>
+        <p class="auto-tip">页面将在 <span class="countdown" id="countdown">3</span> 秒后自动跳转</p>
+    </div>
+    
+    <div class="footer">
+        © 2025 数规规开发团队
+    </div>
+
+    <script>
+        // 跳转路径
+        const jumpPath = "weixin://dl/business/?appid=wxcff995895e626725&path=pages/index/index";
+        
+        // 获取按钮和倒计时元素
+        const jumpButton = document.getElementById('jumpButton');
+        const countdownElement = document.getElementById('countdown');
+        
+        // 倒计时秒数
+        let countdown = 3;
+        
+        // 更新倒计时显示
+        function updateCountdown() {
+            countdownElement.textContent = countdown;
+        }
+        
+        // 自动跳转定时器
+        const autoJumpTimer = setInterval(() => {
+            countdown--;
+            updateCountdown();
+            
+            if (countdown <= 0) {
+                clearInterval(autoJumpTimer);
+                jumpToMiniProgram();
+            }
+        }, 1000);
+        
+        // 点击按钮跳转
+        jumpButton.addEventListener('click', () => {
+            clearInterval(autoJumpTimer);
+            jumpToMiniProgram();
+        });
+        
+        // 跳转到小程序的函数
+        function jumpToMiniProgram() {
+            // 尝试直接跳转
+            window.location.href = jumpPath;
+            
+            // 如果跳转失败，显示提示信息
+            setTimeout(() => {
+                alert('如果未成功跳转，请确保您已安装微信客户端');
+            }, 2000);
+        }
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCountdown();
+        });
+    </script>
+</body>
+</html>
